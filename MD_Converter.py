@@ -22,7 +22,7 @@ class MD_Converter:
         return text
 
     @staticmethod
-    def convert_md(self, md_file: Path) -> str:
+    def convert_md(md_file: Path) -> str:
         """Returns the html version of a markdown file"""
         with open(md_file, "r") as input_file:
             text = input_file.read()

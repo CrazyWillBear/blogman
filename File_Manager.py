@@ -40,7 +40,7 @@ class File_Manager(FileSystemEventHandler):
         return None
 
     @staticmethod
-    def _format_html_file(self, html_file: Path) -> None:
+    def _format_html_file(html_file: Path) -> None:
         """Formats an HTML file"""
         with open(html_file, "r") as file:
             soup = BeautifulSoup(file, "html.parser")
@@ -65,7 +65,7 @@ class File_Manager(FileSystemEventHandler):
         """Event handling logic for file modification"""
         path = Path(event.src_path)
         self.converter.convert_file(path)
-        self._format_html_file(self.home_html_path)
+        File_Manager._format_html_file(self.home_html_path)
 
     def on_deleted(self, event) -> None:
         """Event handling logic for file deletion"""
