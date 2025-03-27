@@ -1,5 +1,6 @@
 ![Static Badge](https://img.shields.io/badge/version-0.0.1-blue)
 ![GitHub License](https://img.shields.io/github/license/CrazyWillBear/blogman)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/83d6bd3faf7e4d6eb52b9eadb909b84d)](https://app.codacy.com/gh/CrazyWillBear/blogman/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 # Blogman
 
