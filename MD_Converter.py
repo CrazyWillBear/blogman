@@ -11,7 +11,7 @@ class MD_Converter:
 
     def _build_file(self, md_file: Path) -> str:
         """Builds a complete blog page file, including dealing with the headers"""
-        html = self.convert_md(md_file)
+        html = MD_Converter.convert_md(md_file)
 
         with open(self.blog_template_path, "r") as input_file:
             text = input_file.read()
@@ -20,7 +20,7 @@ class MD_Converter:
                     .replace("<!-- blog -->", html)
 
         return text
-    
+
     @staticmethod
     def convert_md(self, md_file: Path) -> str:
         """Returns the html version of a markdown file"""

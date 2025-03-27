@@ -58,8 +58,8 @@ class File_Manager(FileSystemEventHandler):
         self.converter.convert_file(path)
         self.builder.build()
 
-        self._format_html_file(self._get_html_file(path))
-        self._format_html_file(self.home_html_path)
+        File_Manager._format_html_file(self._get_html_file(path))
+        File_Manager._format_html_file(self.home_html_path)
 
     def on_modified(self, event: FileSystemEvent) -> None:
         """Event handling logic for file modification"""

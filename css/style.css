@@ -51,7 +51,7 @@ a:hover {
   border: 1px solid #3F4F44;
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0 4px 15px rgb(44 57 48 / 0.1);
+  box-shadow: 0 4px 15px rgb(44 57 48 / 10%);
   text-align: center;          /* centers the content inside */
   box-sizing: border-box;      /* prevents box from overflowing */
 }  
