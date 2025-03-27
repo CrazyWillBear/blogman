@@ -3,10 +3,8 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from blogman.MD_Converter import MD_Converter
 from blogman.Homepage_Builder import Homepage_Builder
-from blogman import BLOG_TEMPLATE_PATH
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
-
 
 class File_Manager(FileSystemEventHandler):
     """A class that manages all html, css, and markdown directories and files."""
@@ -40,7 +38,8 @@ class File_Manager(FileSystemEventHandler):
         if html_file.exists():
             return html_file
         return None
-    
+
+    @staticmethod
     def _format_html_file(self, html_file: Path) -> None:
         """Formats an HTML file"""
         with open(html_file, "r") as file:
@@ -73,7 +72,7 @@ class File_Manager(FileSystemEventHandler):
         path = Path(event.src_path)
         html_file = self._get_html_file(path)
 
-        if html_file != None:
+        if html_file is not None:
             os.remove(html_file)
             self.builder.build()
         else:

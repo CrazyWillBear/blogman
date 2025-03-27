@@ -9,12 +9,6 @@ class MD_Converter:
         self.html_dir = html_dir
         self.blog_template_path = blog_template_path
 
-    def convert_md(self, md_file: Path) -> str:
-        """Returns the html version of a markdown file"""
-        with open(md_file, "r") as input_file:
-            text = input_file.read()
-        return markdown.markdown(text)
-    
     def _build_file(self, md_file: Path) -> str:
         """Builds a complete blog page file, including dealing with the headers"""
         html = self.convert_md(md_file)
@@ -26,6 +20,13 @@ class MD_Converter:
                     .replace("<!-- blog -->", html)
 
         return text
+    
+    @staticmethod
+    def convert_md(self, md_file: Path) -> str:
+        """Returns the html version of a markdown file"""
+        with open(md_file, "r") as input_file:
+            text = input_file.read()
+        return markdown.markdown(text)
 
     def convert_file(self, md_file: Path) -> None:
         """Converts a markdown file in the specified markdown directory and places it in the specified html directory"""

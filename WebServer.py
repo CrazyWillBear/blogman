@@ -20,10 +20,10 @@ class WebServer:
             # account for requesting a stylesheet
             if (STYLE_SHEET_PATH.name in page):
                 return send_file(STYLE_SHEET_PATH)
-            
+
             # otherwise, just return the html file
             path = self.html_dir / (page + ".html")
             return send_file(path)
-        
+
     def run(self, debug: bool = False, use_reloader: bool = False):
         self.app.run(debug=debug, use_reloader=use_reloader)

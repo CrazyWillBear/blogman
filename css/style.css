@@ -51,7 +51,7 @@ a:hover {
   border: 1px solid #3F4F44;
   padding: 20px;
   border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(44, 57, 48, 0.1);
+  box-shadow: 0 4px 15px rgb(44 57 48 / 0.1);
   text-align: center;          /* centers the content inside */
   box-sizing: border-box;      /* prevents box from overflowing */
 }  
@@ -62,7 +62,7 @@ a:hover {
   margin-bottom: 0;
 }
 
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .blog-box,
   p {
     width: 90% !important;

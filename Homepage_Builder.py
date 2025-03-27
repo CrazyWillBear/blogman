@@ -32,13 +32,13 @@ class Homepage_Builder:
                         "</div>"
 
         return html
-    
+
     def _build_header(self) -> str:
         """Builds the homepage's header as a string and returns it"""
         html = self.converter.convert_md(self.home_md_path)
 
         return html
-    
+
     def build(self) -> None:
         """Builds the home page based on the template"""
         header_html = self._build_header()
