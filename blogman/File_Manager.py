@@ -6,10 +6,13 @@ from blogman.Homepage_Builder import Homepage_Builder
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
+
 class File_Manager(FileSystemEventHandler):
     """A class that manages all html, css, and markdown directories and files."""
 
-    def __init__(self, md_dir: Path, html_dir: Path, home_template_path: Path, blog_template_path: Path, home_html_path: Path, home_md_path: Path):
+    def __init__(self, md_dir: Path, html_dir: Path, home_template_path: Path,
+                 blog_template_path: Path, home_html_path: Path,
+                 home_md_path: Path):
         """Initialize a FileManager object"""
         self.md_dir = md_dir
         self.html_dir = html_dir
@@ -18,7 +21,9 @@ class File_Manager(FileSystemEventHandler):
         self.home_html_path = home_html_path
 
         self.converter = MD_Converter(self.html_dir, blog_template_path)
-        self.builder = Homepage_Builder(html_dir, home_template_path, home_html_path, home_md_path, self.converter)
+        self.builder = Homepage_Builder(html_dir, home_template_path,
+                                        home_html_path, home_md_path,
+                                        self.converter)
         self.observer = Observer()
 
     def start(self) -> None:
@@ -76,4 +81,5 @@ class File_Manager(FileSystemEventHandler):
             os.remove(html_file)
             self.builder.build()
         else:
-            raise FileNotFoundError("Attempted to delete non-existent html file")
+            raise FileNotFoundError(
+                "Attempted to delete non-existent html file")

@@ -1,10 +1,13 @@
 from blogman import MD_Converter
 from pathlib import Path
 
+
 class Homepage_Builder:
     """A class to build the blog's homepage based off of a template html file. Replaces template flag with boxes for each blog html file found"""
 
-    def __init__(self, html_dir: Path, home_template_path: Path, home_html_path: Path, home_md_path: Path, converter: MD_Converter):
+    def __init__(self, html_dir: Path, home_template_path: Path,
+                 home_html_path: Path, home_md_path: Path,
+                 converter: MD_Converter):
         """Initialize Homepage_Builder object"""
         self.home_template_path = home_template_path
         with open(home_template_path, "r") as template:
@@ -43,7 +46,10 @@ class Homepage_Builder:
         """Builds the home page based on the template"""
         header_html = self._build_header()
         blog_box_html = self._build_blog_boxes()
-        final_html = self.home_template.replace("<!-- blog boxes -->", blog_box_html).replace("<!-- header -->", header_html)
+        final_html = self.home_template.replace("<!-- blog boxes -->",
+                                                blog_box_html).replace(
+                                                    "<!-- header -->",
+                                                    header_html)
 
         with open(self.home_html_path, "w", encoding="utf-8") as output:
             output.write(final_html)

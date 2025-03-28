@@ -1,6 +1,8 @@
 from pathlib import Path
 
-# Software version (don't change)
+# Software author + version (don't change)
+AUTHOR = "William B. Chastain"
+GH = "https://github.com/CrazyWillBear/blogman"
 VERSION = "0.0.1"
 
 # This is the current working directory. For the purposes

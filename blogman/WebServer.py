@@ -2,7 +2,9 @@ from blogman import STYLE_SHEET_PATH
 from flask import Flask, send_file
 from pathlib import Path
 
+
 class WebServer:
+
     def __init__(self, html_dir: Path, homepage_file_path: Path):
         self.app = Flask(__name__)
         self.html_dir = html_dir
@@ -11,6 +13,7 @@ class WebServer:
         self._setup_routes()
 
     def _setup_routes(self):
+
         @self.app.route('/')
         def home():
             return send_file(self.homepage_file_path)

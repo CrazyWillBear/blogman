@@ -1,6 +1,7 @@
 import markdown
 from pathlib import Path
 
+
 class MD_Converter:
     """A class to convert markdown files to html files, placing them in the specified directory"""
 
