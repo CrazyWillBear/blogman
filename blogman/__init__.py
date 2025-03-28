@@ -3,10 +3,10 @@ from pathlib import Path
 # Software version (don't change)
 VERSION = "0.0.1"
 
-# This is the project root. If you plan on having your
-# directories and files outside of the project root,
-# you can safely delete this or ignore it.
-BASE_DIR = Path(__file__).resolve().parent
+# This is the current working directory. For the purposes
+# of my specific configuration, this works best. No need
+# to keep this if it doesn't work for you.
+BASE_DIR = Path.cwd()
 
 # Directory congiruation
 HTML_DIR = BASE_DIR / "html"
