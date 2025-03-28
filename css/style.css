@@ -16,9 +16,8 @@ body {
 }
 
 /* Headings */
-h1, h2, h3 {
+h1, h2, h3, h4 {
   color: #2C3930;
-  margin-bottom: 30px;
   text-align: center;
 }
 
@@ -29,6 +28,7 @@ p {
   text-align: justify;
   width: 50%;
   margin: 0 auto;
+  margin-bottom: .5em;
 }
 
 /* Links */
