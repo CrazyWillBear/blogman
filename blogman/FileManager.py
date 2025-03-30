@@ -1,15 +1,18 @@
 import os
 from pathlib import Path
 from bs4 import BeautifulSoup
-from blogman.MD_Converter import MD_Converter
-from blogman.Homepage_Builder import Homepage_Builder
+from blogman.MDConverter import MDConverter
+from blogman.HomepageBuilder import HomepageBuilder
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
 from watchdog.observers import Observer
 
-class File_Manager(FileSystemEventHandler):
+
+class FileManager(FileSystemEventHandler):
     """A class that manages all html, css, and markdown directories and files."""
 
-    def __init__(self, md_dir: Path, html_dir: Path, home_template_path: Path, blog_template_path: Path, home_html_path: Path, home_md_path: Path):
+    def __init__(self, md_dir: Path, html_dir: Path, home_template_path: Path,
+                 blog_template_path: Path, home_html_path: Path,
+                 home_md_path: Path):
         """Initialize a FileManager object"""
         self.md_dir = md_dir
         self.html_dir = html_dir
@@ -17,8 +20,10 @@ class File_Manager(FileSystemEventHandler):
         self.blog_template_path = blog_template_path
         self.home_html_path = home_html_path
 
-        self.converter = MD_Converter(self.html_dir, blog_template_path)
-        self.builder = Homepage_Builder(html_dir, home_template_path, home_html_path, home_md_path, self.converter)
+        self.converter = MDConverter(self.html_dir, blog_template_path)
+        self.builder = HomepageBuilder(html_dir, home_template_path,
+                                       home_html_path, home_md_path,
+                                       self.converter)
         self.observer = Observer()
 
     def start(self) -> None:
@@ -31,7 +36,7 @@ class File_Manager(FileSystemEventHandler):
         self.observer.stop()
         self.observer.join()
 
-    def _get_html_file(self, md_file: Path) -> Path:
+    def _get_html_file(self, md_file: Path) -> Path | None:
         """Gets the path to a markdown file's corresponding html file. Returns None if it can't be found"""
         html_file = self.html_dir / (md_file.stem.replace(" ", "-") + ".html")
 
@@ -42,6 +47,10 @@ class File_Manager(FileSystemEventHandler):
     @staticmethod
     def _format_html_file(html_file: Path) -> None:
         """Formats an HTML file"""
+        if not html_file.exists():
+            print(f"File {html_file} does not exist, skipping formatting.")
+            return
+
         with open(html_file, "r") as file:
             soup = BeautifulSoup(file, "html.parser")
 
@@ -55,17 +64,25 @@ class File_Manager(FileSystemEventHandler):
     def on_created(self, event: FileSystemEvent) -> None:
         """Event handling logic for file creation"""
         path = Path(event.src_path)
+
+        if not path.exists():
+            return
+
         self.converter.convert_file(path)
         self.builder.build()
 
-        File_Manager._format_html_file(self._get_html_file(path))
-        File_Manager._format_html_file(self.home_html_path)
+        FileManager._format_html_file(self._get_html_file(path))
+        FileManager._format_html_file(self.home_html_path)
 
     def on_modified(self, event: FileSystemEvent) -> None:
         """Event handling logic for file modification"""
         path = Path(event.src_path)
+
+        if not path.exists():
+            return
+
         self.converter.convert_file(path)
-        File_Manager._format_html_file(self.home_html_path)
+        FileManager._format_html_file(self.home_html_path)
 
     def on_deleted(self, event) -> None:
         """Event handling logic for file deletion"""
@@ -76,4 +93,5 @@ class File_Manager(FileSystemEventHandler):
             os.remove(html_file)
             self.builder.build()
         else:
-            raise FileNotFoundError("Attempted to delete non-existent html file")
+            raise FileNotFoundError(
+                "Attempted to delete non-existent html file")

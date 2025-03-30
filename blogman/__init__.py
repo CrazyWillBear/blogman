@@ -1,6 +1,8 @@
 from pathlib import Path
 
-# Software version (don't change)
+# Software author + version (don't change)
+AUTHOR = "William B. Chastain"
+GH = "https://github.com/CrazyWillBear/blogman"
 VERSION = "0.0.1"
 
 # This is the current working directory. For the purposes
@@ -8,7 +10,7 @@ VERSION = "0.0.1"
 # to keep this if it doesn't work for you.
 BASE_DIR = Path.cwd()
 
-# Directory congiruation
+# Directory configuration
 HTML_DIR = BASE_DIR / "html"
 MD_DIR = BASE_DIR / "md"
 HTML_TEMPLATE_DIR = BASE_DIR / "html_templates"
