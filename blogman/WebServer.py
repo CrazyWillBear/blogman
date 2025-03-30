@@ -1,5 +1,5 @@
 from blogman import STYLE_SHEET_PATH
-from flask import Flask, send_file
+from flask import Flask, abort, send_file
 from pathlib import Path
 
 
@@ -21,12 +21,19 @@ class WebServer:
         @self.app.route('/<page>')
         def blog(page):
             # account for requesting a stylesheet
-            if (STYLE_SHEET_PATH.name in page):
+            if STYLE_SHEET_PATH.name in page:
                 return send_file(STYLE_SHEET_PATH)
 
             # otherwise, just return the html file
             path = self.html_dir / (page + ".html")
+            
+            if not path.exists():
+                abort(404)  # tell Flask this is a 404 situation
             return send_file(path)
+        
+        @self.app.errorhandler(404)
+        def page_not_found(e):
+            return e, 404
 
     def run(self, debug: bool = False, use_reloader: bool = False):
         self.app.run(debug=debug, use_reloader=use_reloader)

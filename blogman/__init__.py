@@ -10,7 +10,7 @@ VERSION = "0.0.1"
 # to keep this if it doesn't work for you.
 BASE_DIR = Path.cwd()
 
-# Directory congiruation
+# Directory configuration
 HTML_DIR = BASE_DIR / "html"
 MD_DIR = BASE_DIR / "md"
 HTML_TEMPLATE_DIR = BASE_DIR / "html_templates"

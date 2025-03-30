@@ -1,4 +1,4 @@
-from blogman.File_Manager import File_Manager
+from blogman.FileManager import FileManager
 from blogman.WebServer import WebServer
 from blogman import AUTHOR, GH, VERSION, \
                     MD_DIR, HTML_DIR, \
@@ -35,9 +35,9 @@ if __name__ == "__main__":
     print_startup_text()
 
     print("::Loading file manager...", end="")
-    file_manager = File_Manager(MD_DIR, HTML_DIR, HOME_TEMPLATE_PATH,
-                                BLOG_TEMPLATE_PATH, HOME_HTML_PATH,
-                                HOME_MD_PATH)
+    file_manager = FileManager(MD_DIR, HTML_DIR, HOME_TEMPLATE_PATH,
+                               BLOG_TEMPLATE_PATH, HOME_HTML_PATH,
+                               HOME_MD_PATH)
     print("\r::File manager successfully loaded")
 
     print("::Creating web server...", end="")

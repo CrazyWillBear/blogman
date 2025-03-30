@@ -1,2 +1,3 @@
-# Obviously don't need this
+.idea/
 __pycache__/
+.venv/

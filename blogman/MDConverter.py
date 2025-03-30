@@ -2,17 +2,17 @@ import markdown
 from pathlib import Path
 
 
-class MD_Converter:
+class MDConverter:
     """A class to convert markdown files to html files, placing them in the specified directory"""
 
     def __init__(self, html_dir: Path, blog_template_path: Path):
-        """Initalize an MD_Converter object"""
+        """Initialize an MDConverter object"""
         self.html_dir = html_dir
         self.blog_template_path = blog_template_path
 
     def _build_file(self, md_file: Path) -> str:
         """Builds a complete blog page file, including dealing with the headers"""
-        html = MD_Converter.convert_md(md_file)
+        html = MDConverter.convert_md(md_file)
 
         with open(self.blog_template_path, "r") as input_file:
             text = input_file.read()
@@ -25,7 +25,7 @@ class MD_Converter:
     @staticmethod
     def convert_md(md_file: Path) -> str:
         """Returns the html version of a markdown file"""
-        with open(md_file, "r") as input_file:
+        with open(md_file, "r", encoding="utf-8") as input_file:
             text = input_file.read()
         return markdown.markdown(text)
 

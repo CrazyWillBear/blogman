@@ -1,14 +1,15 @@
-from blogman import MD_Converter
+from blogman import MDConverter
 from pathlib import Path
 
+# Thi
 
-class Homepage_Builder:
+class HomepageBuilder:
     """A class to build the blog's homepage based off of a template html file. Replaces template flag with boxes for each blog html file found"""
 
     def __init__(self, html_dir: Path, home_template_path: Path,
                  home_html_path: Path, home_md_path: Path,
-                 converter: MD_Converter):
-        """Initialize Homepage_Builder object"""
+                 converter: MDConverter):
+        """Initialize HomepageBuilder object"""
         self.home_template_path = home_template_path
         with open(home_template_path, "r") as template:
             self.home_template = template.read()
