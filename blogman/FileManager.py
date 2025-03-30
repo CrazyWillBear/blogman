@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+from typing import Optional
+
 from bs4 import BeautifulSoup
 from blogman.MDConverter import MDConverter
 from blogman.HomepageBuilder import HomepageBuilder
@@ -36,7 +38,7 @@ class FileManager(FileSystemEventHandler):
         self.observer.stop()
         self.observer.join()
 
-    def _get_html_file(self, md_file: Path) -> Path | None:
+    def _get_html_file(self, md_file: Path) -> Optional[Path]:
         """Gets the path to a markdown file's corresponding html file. Returns None if it can't be found"""
         html_file = self.html_dir / (md_file.stem.replace(" ", "-") + ".html")
 
