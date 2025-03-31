@@ -6,10 +6,10 @@ import unittest
 import tempfile
 from pathlib import Path
 import markdown
-from blogman.MDConverter import MDConverter
+from blogman.BlogBuilder import BlogBuilder
 
 
-class TestMDConverter(unittest.TestCase):
+class TestBlogBuilder(unittest.TestCase):
     def setUp(self):
         # Create a temporary directory for our test files.
         self.temp_dir = tempfile.TemporaryDirectory()
@@ -31,8 +31,8 @@ class TestMDConverter(unittest.TestCase):
         self.markdown_content = "# Hello World"
         self.md_file.write_text(self.markdown_content, encoding="utf-8")
 
-        # Instantiate the MDConverter.
-        self.converter = MDConverter(
+        # Instantiate the BlogBuilder.
+        self.converter = BlogBuilder(
             html_dir=self.html_dir,
             blog_template_path=self.blog_template_path
         )
@@ -58,7 +58,7 @@ class TestMDConverter(unittest.TestCase):
 
     def test_convert_file(self):
         # Test that convert_file writes the correct output file in the html_dir.
-        self.converter.convert_file(self.md_file)
+        self.converter.build_blog(self.md_file)
         expected_file_name = self.md_file.stem.replace(" ", "-") + ".html"
         output_file = self.html_dir / expected_file_name
         self.assertTrue(output_file.exists())

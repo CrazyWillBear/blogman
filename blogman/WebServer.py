@@ -21,7 +21,7 @@ class WebServer:
         @self.app.route('/<page>')
         def blog(page):
             # account for requesting a stylesheet
-            if STYLE_SHEET_PATH.name in page:
+            if STYLE_SHEET_PATH.stem == page:
                 return send_file(STYLE_SHEET_PATH)
 
             # otherwise, just return the html file

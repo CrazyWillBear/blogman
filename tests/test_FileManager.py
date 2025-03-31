@@ -101,7 +101,7 @@ class TestFileManager(unittest.TestCase):
         # Patch _format_html_file to spy on its calls.
         with patch.object(FileManager, '_format_html_file') as mock_format:
             self.fm.on_created(event)
-            self.fm.converter.convert_file.assert_called_with(md_file)
+            self.fm.converter.build_blog.assert_called_with(md_file)
             self.fm.builder.build.assert_called()
             # Ensure _format_html_file is called for both the converted file and the homepage.
             expected_html = self.html_dir / "new-post.html"
@@ -117,7 +117,7 @@ class TestFileManager(unittest.TestCase):
         event = FileModifiedEvent(str(md_file))
         with patch.object(FileManager, '_format_html_file') as mock_format:
             self.fm.on_modified(event)
-            self.fm.converter.convert_file.assert_called_with(md_file)
+            self.fm.converter.build_blog.assert_called_with(md_file)
             mock_format.assert_called_once_with(self.home_html_path)
 
     def test_on_deleted_existing(self):
