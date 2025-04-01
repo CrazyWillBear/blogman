@@ -1,22 +1,27 @@
-from blogman import STYLE_SHEET_PATH
-from flask import Flask, abort, send_file
+from blogman import STYLE_SHEET_PATH, HomepageBuilder
+from flask import Flask, abort, send_file, request
 from pathlib import Path
 
 
 class WebServer:
     """Class wrapper for the Flask webserver"""
-    def __init__(self, html_dir: Path, homepage_file_path: Path):
+    def __init__(self, html_dir: Path, homepage_file_path: Path, homepage_builder: HomepageBuilder):
         self.app = Flask(__name__)
         self.html_dir = html_dir
         self.homepage_file_path = homepage_file_path
+        self.homepage_builder = homepage_builder
 
         self._setup_routes()
 
     def _setup_routes(self):
         """Sets up routs for homepage and files"""
-        @self.app.route('/')
+        @self.app.route('/', methods=('GET', 'POST'))
         def home():
-            return send_file(self.homepage_file_path)
+            if request.method == "POST":
+                query = request.form['search']
+                return self.homepage_builder.build_homepage(query=query)
+            else:
+                return send_file(self.homepage_file_path)
 
         @self.app.route('/<page>')
         def blog(page):

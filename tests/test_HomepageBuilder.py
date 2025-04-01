@@ -79,7 +79,7 @@ class TestHomepageBuilder(unittest.TestCase):
         _build_homepage should return an HTML string that contains the HEAD_DEFAULTS,
         the blog title, description, and the homepage header.
         """
-        homepage_html = self.homepage_builder._build_homepage()
+        homepage_html = self.homepage_builder.build_homepage()
         self.assertIn(HEAD_DEFAULTS, homepage_html.lower())
         self.assertIn(f"<title>{BLOG_NAME}</title>", homepage_html)
         self.assertIn(BLOG_NAME, homepage_html)

@@ -36,7 +36,7 @@ if __name__ == "__main__":
     print("\r::File manager successfully loaded")
 
     print("::Creating web server...", end="")
-    web_server = WebServer(HTML_DIR, HOME_HTML_PATH)
+    web_server = WebServer(HTML_DIR, HOME_HTML_PATH, file_manager.homepage_builder)
     print("\r::Web server successfully created")
 
     print("::Starting web server + file manager:")
