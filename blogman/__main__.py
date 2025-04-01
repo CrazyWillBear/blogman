@@ -1,8 +1,8 @@
 from blogman.FileManager import FileManager
 from blogman.WebServer import WebServer
-from blogman import AUTHOR, GH, VERSION, \
+from blogman import GH, VERSION, \
                     MD_DIR, HTML_DIR, \
-                    HOME_HTML_PATH, HOME_MD_PATH
+                    HOME_HTML_PATH
 
 
 def print_startup_text():
@@ -21,11 +21,9 @@ Welcome to...
                |___/
 
 GitHub: {GH}
-Author: {AUTHOR}
 Version: {VERSION}
 -=-=-=-"""
         .replace("{GH}", GH)
-        .replace("{AUTHOR}", AUTHOR)
         .replace("{VERSION}", VERSION)
     )
 
@@ -34,8 +32,7 @@ if __name__ == "__main__":
     print_startup_text()
 
     print("::Loading file manager...", end="")
-    file_manager = FileManager(MD_DIR, HTML_DIR,
-                               HOME_HTML_PATH, HOME_MD_PATH)
+    file_manager = FileManager(MD_DIR, HTML_DIR, HOME_HTML_PATH)
     print("\r::File manager successfully loaded")
 
     print("::Creating web server...", end="")

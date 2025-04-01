@@ -1,9 +1,8 @@
 import markdown
-from dominate.tags import html, body, div, link, title, head, ul, nav, a, footer, p, meta
+from dominate.tags import html, body, div, title, head, nav, a
 from dominate.util import raw
 from pathlib import Path
-
-from blogman import STYLE_SHEET_PATH
+from blogman import HEAD_DEFAULTS
 
 
 class BlogBuilder:
@@ -21,15 +20,15 @@ class BlogBuilder:
 
         doc = html()
         with doc:
-            with head():
-                meta(charset="UTF-8")
-                meta(name="viewport", content="width=device-width, initial-scale=1.0")
+            with head() as h:
+                h.add(raw(HEAD_DEFAULTS))
                 title(blog_title)
-                link(rel="stylesheet", href=STYLE_SHEET_PATH.stem)
 
             with body():
-                nav(a("Home", href="/"))
-                div(raw(raw_blog_html))
+                with div(cls="nav-wrapper"):
+                    nav(a("Home", href="/"))
+                with div() as d:
+                    d.add(raw(raw_blog_html))
 
         return str(doc)
 
