@@ -7,6 +7,11 @@
 
 Blogman is a blog manager software that allows posts to be written in Markdown and displayed on the web. It works by converting the Markdown files into HTML files and hosting them on a Flask web server. It also builds a homepage that lists all blog posts. The structure of the HTML files is templatable.
 
+### To do:
+- [ ] Implement search feature using POST requests
+- [ ] Implement tags for blog posts (such as tech, politics, etc)
+- [ ] Set up docker containers (maybe, not familiar with them but thought this would be good opportunity to learn)
+
 ### How it works
 
 In the `__init__.py` file, you configure directory and file paths for a few things, but the most important are:
