@@ -55,4 +55,4 @@ HEAD_DEFAULTS = """\
 # Software Github link + version (don't change).
 # -=-=-=-=-=-
 GH = "https://github.com/CrazyWillBear/blogman"
-VERSION = "0.0.2-alpha"
+VERSION = "0.0.3-alpha"
