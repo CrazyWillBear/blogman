@@ -43,7 +43,7 @@ class TestFileManager(unittest.TestCase):
         try:
             os.unlink(self.temp_home_html_file)
         except Exception:
-            pass
+            print(Exception)
 
     def test_get_html_file_exists(self):
         # Create a dummy markdown file.

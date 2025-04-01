@@ -44,7 +44,7 @@ class TestHomepageBuilder(unittest.TestCase):
         try:
             os.unlink(self.temp_home_html_path)
         except Exception:
-            pass
+            print(Exception)
 
     def test_get_page_list_excludes_home(self):
         """
