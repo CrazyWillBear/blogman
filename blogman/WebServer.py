@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 class WebServer:
-
+    """Class wrapper for the Flask webserver"""
     def __init__(self, html_dir: Path, homepage_file_path: Path):
         self.app = Flask(__name__)
         self.html_dir = html_dir
@@ -13,7 +13,7 @@ class WebServer:
         self._setup_routes()
 
     def _setup_routes(self):
-
+        """Sets up routs for homepage and files"""
         @self.app.route('/')
         def home():
             return send_file(self.homepage_file_path)
@@ -21,7 +21,7 @@ class WebServer:
         @self.app.route('/<page>')
         def blog(page):
             # account for requesting a stylesheet
-            if STYLE_SHEET_PATH.name in page:
+            if STYLE_SHEET_PATH.stem == page:
                 return send_file(STYLE_SHEET_PATH)
 
             # otherwise, just return the html file
@@ -36,4 +36,5 @@ class WebServer:
             return e, 404
 
     def run(self, debug: bool = False, use_reloader: bool = False):
+        """Runs the webserver"""
         self.app.run(debug=debug, use_reloader=use_reloader)

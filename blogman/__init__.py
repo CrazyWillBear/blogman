@@ -1,26 +1,58 @@
 from pathlib import Path
 
-# Software author + version (don't change)
-AUTHOR = "William B. Chastain"
-GH = "https://github.com/CrazyWillBear/blogman"
-VERSION = "0.0.1"
+# -=-=-=-=-=-
+# This is where you configure blogman. All types of configuration are sectioned off using comments like this one. It's
+# recommended to adjust the BASE_DIR to the directory you plan to put your HTML, Markdown, and CSS directories in. This
+# allows you to simply adjust the names of each directory as opposed to putting the full paths to each file/directory.
+#
+# Please don't change the GitHub link and version variables.
+# -=-=-=-=-=-
 
-# This is the current working directory. For the purposes
-# of my specific configuration, this works best. No need
-# to keep this if it doesn't work for you.
+
+# -=-=-=-=-=-
+# Start of name and description configuration. These show up on your homepage.
+# -=-=-=-=-=-
+BLOG_NAME = "My Blog"
+BLOG_DESCRIPTION = \
+"""This is my blog's description. It should be a solid paragraph, perhaps about the origin of your blog.
+
+You can make it multiple paragraphs, with spacing between them like this!"""
+# -=-=-=-=-=-
+# End of name and description configuration.
+# -=-=-=-=-=-
+
+
+# -=-=-=-=-=-
+# Start of directory/file configuration.
+# -=-=-=-=-=-
 BASE_DIR = Path.cwd()
+# you should set this to be the directory encompassing your other directories (for example, /var/www/my-blog)
 
-# Directory configuration
 HTML_DIR = BASE_DIR / "html"
 MD_DIR = BASE_DIR / "md"
-HTML_TEMPLATE_DIR = BASE_DIR / "html_templates"
 CSS_DIR = BASE_DIR / "css"
 
-# File configuration (recommend leaving as default, just make
-# sure the template, style, and markdown files exist)
-HOME_HTML_PATH = HTML_DIR / "home.html"  # this doesn't have to already exist
-HOME_MD_PATH = MD_DIR / "home.md"
+HOME_HTML_PATH = HTML_DIR / "home.html"
 STYLE_SHEET_PATH = CSS_DIR / "style.css"
+# -=-=-=-=-=-
+# End of directory/file configuration.
+# -=-=-=-=-=-
 
-BLOG_TEMPLATE_PATH = HTML_TEMPLATE_DIR / "blog-template.html"
-HOME_TEMPLATE_PATH = HTML_TEMPLATE_DIR / "home-template.html"
+
+# -=-=-=-=-=-
+# Start of <head> configuration for HTML files.
+# -=-=-=-=-=-
+HEAD_DEFAULTS = """\
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<link href="style" rel="stylesheet">"""
+# -=-=-=-=-=-
+# End of <head> configuration for HTML files.
+# -=-=-=-=-=-
+
+
+# -=-=-=-=-=-
+# Software Github link + version (don't change).
+# -=-=-=-=-=-
+GH = "https://github.com/CrazyWillBear/blogman"
+VERSION = "0.0.2-alpha"
