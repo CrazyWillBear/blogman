@@ -1,6 +1,4 @@
 from pathlib import Path
-from dominate.tags import meta, link
-from dominate.util import raw
 
 # -=-=-=-=-=-
 # This is where you configure blogman. All types of configuration are sectioned off using comments like this one. It's
