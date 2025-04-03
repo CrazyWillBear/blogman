@@ -12,11 +12,11 @@ class Blog:
         self.blog_md = MD_DIR / (blog_name + ".md")
 
         # check if blog's json already exists
-        self.json_file = Blog.get_json_file_path(self.blog_md)
+        self.json_file = self.get_json_file_path()
 
         if self.json_file.exists():
             # if so, just load from that file
-            self.load_from_json(self.json_file)
+            self._load_from_json(self.json_file)
 
         # otherwise start fresh
         else:
@@ -30,11 +30,10 @@ class Blog:
 
         self.save_json()
 
-    @staticmethod
-    def get_json_file_path(blog_md: Path):
-        return BLOG_DIR / (blog_md.stem + ".json")
+    def get_json_file_path(self):
+        return BLOG_DIR / (self.blog_md.stem + ".json")
 
-    def load_from_json(self, json_file: Path) -> None:
+    def _load_from_json(self, json_file: Path) -> None:
         """Reads a blog's JSON file and applies it to the Blog object"""
         with open(json_file, "r", encoding="utf-8") as f:
             json_file_str = f.read()

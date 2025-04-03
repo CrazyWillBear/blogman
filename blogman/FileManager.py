@@ -1,6 +1,5 @@
 import os
 from pathlib import Path
-from typing import Optional
 
 from blogman.Blog import Blog
 from blogman.BlogPageBuilder import BlogPageBuilder
@@ -58,7 +57,6 @@ class FileManager(FileSystemEventHandler):
             blog.update_date_last_modified()
             blog.update_md_content()
 
-
     def on_deleted(self, event) -> None:
         """Event handling logic for file deletion"""
         path = Path(event.src_path)
@@ -69,7 +67,8 @@ class FileManager(FileSystemEventHandler):
 
         # deal with Markdown files by deleting the corresponding Blog json file
         if path.suffix == ".md":
-            json_path = Blog.get_json_file_path(path)
+            blog = Blog(path.stem)
+            json_path = blog.get_json_file_path()
 
             if json_path.exists():
                 os.remove(json_path)

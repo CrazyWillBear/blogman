@@ -25,14 +25,14 @@ You can make it multiple paragraphs, with spacing between them like this!"""
 # -=-=-=-=-=-
 # Start of directory/file configuration.
 # -=-=-=-=-=-
-BASE_DIR = Path.cwd()
-# you should set this to be the directory encompassing your other directories (for example, /var/www/my-blog)
+BASE_DIR = Path.cwd() # the parent directory of the following:
 
 BLOG_DIR = BASE_DIR / "blogs"
 MD_DIR = BASE_DIR / "md"
 CSS_DIR = BASE_DIR / "css"
 
 STYLE_SHEET_PATH = CSS_DIR / "style.css"
+FAVICON_ICO_PATH = BASE_DIR / "logo.ico"
 # -=-=-=-=-=-
 # End of directory/file configuration.
 # -=-=-=-=-=-
