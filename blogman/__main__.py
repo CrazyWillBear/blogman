@@ -1,8 +1,6 @@
 from blogman.FileManager import FileManager
 from blogman.WebServer import WebServer
-from blogman import GH, VERSION, \
-                    MD_DIR, HTML_DIR, \
-                    HOME_HTML_PATH
+from blogman import GH, VERSION, MD_DIR
 
 
 def print_startup_text():
@@ -32,11 +30,11 @@ if __name__ == "__main__":
     print_startup_text()
 
     print("::Loading file manager...", end="")
-    file_manager = FileManager(MD_DIR, HTML_DIR, HOME_HTML_PATH)
+    file_manager = FileManager(MD_DIR)
     print("\r::File manager successfully loaded")
 
     print("::Creating web server...", end="")
-    web_server = WebServer(HTML_DIR, HOME_HTML_PATH, file_manager.homepage_builder)
+    web_server = WebServer(file_manager.homepage_builder)
     print("\r::Web server successfully created")
 
     print("::Starting web server + file manager:")

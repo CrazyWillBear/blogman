@@ -28,11 +28,10 @@ You can make it multiple paragraphs, with spacing between them like this!"""
 BASE_DIR = Path.cwd()
 # you should set this to be the directory encompassing your other directories (for example, /var/www/my-blog)
 
-HTML_DIR = BASE_DIR / "html"
+BLOG_DIR = BASE_DIR / "blogs"
 MD_DIR = BASE_DIR / "md"
 CSS_DIR = BASE_DIR / "css"
 
-HOME_HTML_PATH = HTML_DIR / "home.html"
 STYLE_SHEET_PATH = CSS_DIR / "style.css"
 # -=-=-=-=-=-
 # End of directory/file configuration.

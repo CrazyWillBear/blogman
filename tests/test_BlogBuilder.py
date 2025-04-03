@@ -8,7 +8,7 @@ from pathlib import Path
 import markdown
 
 import blogman
-from blogman.BlogBuilder import BlogBuilder
+from blogman.BlogPageBuilder import BlogPageBuilder
 
 # set HEAD_DEFAULTS
 blogman.HEAD_DEFAULTS = '<meta charset="utf-8">'
@@ -37,12 +37,12 @@ class TestBlogBuilder(unittest.TestCase):
     def test_convert_md(self):
         """Test that _convert_md correctly converts markdown to HTML."""
         expected_html = markdown.markdown(self.sample_md_content)
-        actual_html = BlogBuilder._convert_md(self.temp_md_path)
+        actual_html = BlogPageBuilder._convert_md(self.temp_md_path)
         self.assertEqual(actual_html, expected_html)
 
     def test_build_page(self):
         """Test that _build_page returns a full HTML document with the expected elements."""
-        html_output = BlogBuilder._build_page(self.temp_md_path)
+        html_output = BlogPageBuilder._build_page(self.temp_md_path)
         blog_title = self.temp_md_path.stem
 
         # Check that the <title> tag includes the blog title.
@@ -59,7 +59,7 @@ class TestBlogBuilder(unittest.TestCase):
     def test_build_blog(self):
         """Test that build_blog writes the expected HTML file to the output directory."""
         html_dir_path = Path(self.temp_html_dir.name)
-        builder = BlogBuilder(html_dir=html_dir_path)
+        builder = BlogPageBuilder(html_dir=html_dir_path)
         builder.build_blog(self.temp_md_path)
 
         # Expected file name: replace spaces with hyphens and add .html extension.
@@ -89,7 +89,7 @@ class TestBlogBuilder(unittest.TestCase):
 
         try:
             html_dir_path = Path(self.temp_html_dir.name)
-            builder = BlogBuilder(html_dir=html_dir_path)
+            builder = BlogPageBuilder(html_dir=html_dir_path)
             builder.build_blog(tmp_file_path)
             expected_filename = tmp_file_path.stem.replace(" ", "-") + ".html"
             output_file_path = html_dir_path / expected_filename
