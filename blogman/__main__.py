@@ -4,8 +4,7 @@ from blogman import GH, VERSION, MD_DIR
 
 
 def print_startup_text():
-    # I use a raw string instead of a formatted string and \\
-    # because I think it looks nicer, so I just use a .replace()
+    # I use a raw string instead of a formatted string and \\ because I think it looks nicer, so I just use a .replace()
     # at the end as opposed to a formatted string
     print(r"""
 Welcome to...

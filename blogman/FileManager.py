@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+from blogman import BLOG_DIR
 from blogman.Blog import Blog
 from blogman.BlogPageBuilder import BlogPageBuilder
 from blogman.HomepageBuilder import HomepageBuilder
@@ -67,8 +68,7 @@ class FileManager(FileSystemEventHandler):
 
         # deal with Markdown files by deleting the corresponding Blog json file
         if path.suffix == ".md":
-            blog = Blog(path.stem)
-            json_path = blog.get_json_file_path()
+            json_path = BLOG_DIR / (path.stem + ".json")
 
             if json_path.exists():
                 os.remove(json_path)

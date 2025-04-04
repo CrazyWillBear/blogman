@@ -32,7 +32,7 @@ class HomepageBuilder:
         - date_created_asc
         - date_created_desc
         - date_modified_asc
-        -date_modified_desc
+        - date_modified_desc
         """
         blog_list = []
 
@@ -61,8 +61,6 @@ class HomepageBuilder:
         blog_boxes = html()
         with (blog_boxes):
             for blog in self.blog_list:
-                print(blog.title)
-
                 # this is for search feature, only adds blogs that match query in content or name (case-insensitive)
                 if query is not None:
                     query_lower = query.lower()
@@ -77,10 +75,14 @@ class HomepageBuilder:
                     a(
                         div(
                             h3(blog.title),
+
                             span("Created: " + blog.date_created.strftime("%m/%d/%Y"), _class="timestamp_created"),
                             span("Last modified: " + blog.date_last_modified.strftime("%m/%d/%Y"), _class="timestamp_modified"),
-                            _class="blog-box"
-                    ), href=url)
+
+                            span("" if blog.tags_empty() else "Tags: ", _class="tag_label"),
+                            span("" if blog.tags_empty() else blog.get_formatted_tags(), _class="tag_list"), _class="blog-box"
+                        )
+                    , href=url)
                 )
 
         return blog_boxes
@@ -92,8 +94,17 @@ class HomepageBuilder:
             with form(method="post"):
                 input_(type="hidden", name="form_name", value="search_form")
                 label("Search: ", fr="search")
-                input_(type="text", id="search", name="search", placeholder="Search query...")
-                input_(type="image", src="https://images.vexels.com/media/users/3/132068/isolated/preview/f9bb81e576c1a361c61a8c08945b2c48-search-icon.png", style="height: 1em; width: auto")
+                input_(
+                    type="text",
+                    id="search",
+                    name="search",
+                    placeholder="Search query..."
+                )
+                input_(
+                    type="image",
+                    src="https://images.vexels.com/media/users/3/132068/isolated/preview/f9bb81e576c1a361c61a8c08945b2c48-search-icon.png",
+                    style="height: 1em; width: auto"
+                )
 
             with form(method="post"):
                 input_(type="hidden", name="form_name", value="sort_form")
@@ -110,7 +121,6 @@ class HomepageBuilder:
     def build_homepage(self, query: str = None, sort_by: str = None) -> str:
         """Builds and returns the homepage given a title and said title's subtext as a string. Takes optional arguments
         for the search and sort features, the only places outside this class where this function is used."""
-        print("Building homepage")
         blog_boxes = self._build_blog_boxes(query=query, sort_by=sort_by)
         search_and_sort_forms = self._build_search_and_sort_forms(sort_by)
 

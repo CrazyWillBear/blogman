@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
 /* ============================
    Base Styles
@@ -7,22 +8,26 @@ body {
   margin: 0;
   padding: 2%;
   font-family: Roboto, sans-serif;
-  background-color: #48A6A7; /* cream tan */
-  color: #9ACBD0; /* olive gray for readable text */
+  background-color: #99BC85; /* cream tan */
+  color: #FAF1E6; /* olive gray for readable text */
+}
+
+#blog {
+  font-family: 'Merriweather', serif;
 }
 
 /* ============================
    Typography
 ============================ */
 h1, h2, h3, h4 {
-  color: #F2EFE7;
+  color: #FAF1E6;
   text-align: center;
   margin-top: 0.5em;
 }
 
 p {
-  color: #F2EFE7;
-  line-height: 1.6;
+  color: #FAF1E6;
+  line-height: 1;
   text-align: justify;
   width: 50%;
   margin: 0 auto 1em;
@@ -32,7 +37,7 @@ p {
    Links
 ============================ */
 a {
-  color: #F2EFE7; /* warm taupe */
+  color: #FDFAF6; /* warm taupe */
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s ease;
@@ -46,35 +51,33 @@ nav {
   margin: 0 auto;
   padding: 10px 20px;
   text-align: center;
-  border: 2px solid #006A71;
+  border: 2px solid #FAF1E6;
   border-radius: 20px;
   background-color: transparent; /* soft contrast nav area */
-  box-shadow: 0 4px 12px rgba(112, 109, 84, 0.1);
 }
 
 /* ============================
    Forms & Inputs
 ============================ */
 option {
-  background-color: #F2EFE7;
-  color: #9ACBD0;
+  background-color: #E4EFE7;
+  color: #99BC85;
   padding: 10px;
 }
 
 select,
 input[type="text"] {
   background-color: #F2EFE7;
-  border: 2px solid #006A71;
-  border-radius: 999px;
   padding: 10px 15px;
   font-size: 16px;
-  color: #48A6A7;
-  outline: none;
-  transition: border-color 0.3s;
+  color: #99BC85;
+  box-shadow: none;
+  border-radius: 10em;
+  border: none;
 }
 
 input::placeholder {
-  color: #48A6A7; /* Use any color you like */
+  color: #99BC85; /* Use any color you like */
   opacity: 1;     /* Optional: makes sure it's fully visible */
 }
 
@@ -85,8 +88,9 @@ input::placeholder {
 .timestamp_modified {
   position: absolute;
   font-size: 0.8em;
-  color: #48A6A7;
+  color: #99BC85;
   opacity: 0.6;
+  padding-right: 1em;
 }
 
 .timestamp_created {
@@ -100,6 +104,28 @@ input::placeholder {
 }
 
 /* ============================
+   Tags
+============================ */
+.tag_label,
+.tag_list {
+  position: absolute;
+  font-size: 0.8em;
+  color: #99BC85;
+  opacity: 0.6;
+  padding-left: 1em;
+}
+
+.tag_label {
+  top: 0.5em;
+  left: 0.8em;
+}
+
+.tag_list {
+  bottom: 0.5em;
+  left: 0.8em;
+}
+
+/* ============================
    Layout Wrappers
 ============================ */
 .form_wrapper,
@@ -107,6 +133,7 @@ input::placeholder {
   text-align: center;
   margin: 0 auto;
   color: #F2EFE7;
+  padding: 1em;
 }
 
 /* ============================
@@ -116,19 +143,17 @@ input::placeholder {
   position: relative;
   width: 50%;
   margin: 0 auto 2em;
-  background-color: #9ACBD0;
-  border: 2px solid #006A71;
+  background-color: #FAF1E6;
   padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(112,109,84,0.15);
+  border-radius: 10em;
   text-align: center;
   box-sizing: border-box;
 }
 
 .blog-box h3 {
-  color: #F2EFE7; /* light gray to stand out on taupe */
+  color: #99BC85; /* light gray to stand out on taupe */
   margin-top: 0;
-  margin-bottom: 0.5em;
+  margin-bottom: 0;
 }
 
 /* ============================

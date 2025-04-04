@@ -21,8 +21,9 @@ class BlogPageBuilder:
                 title(blog_title)
 
             with body():
-                with div(cls="nav-wrapper"):
-                    nav(a("Home", href="/"))
+                with a(href="/"):
+                    with div(cls="nav-wrapper"):
+                        nav("Home")
                 with div(id="blog") as d:
                     d.add(raw(raw_blog_html))
 
