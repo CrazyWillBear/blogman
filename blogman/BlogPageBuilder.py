@@ -1,16 +1,30 @@
 import markdown
-from dominate.tags import html, body, div, title, head, nav, a
+
+from dominate.tags import a, body, div, head, html, nav, title
 from dominate.util import raw
+
 from blogman import HEAD_DEFAULTS
 from blogman.Blog import Blog
 
 
 class BlogPageBuilder:
-    """A class to convert to build Blogs into HTML webpages"""
+    """
+    Builds individual Blog pages.
+
+    All methods are static, the only one you need to use is build_blog_page(Blog).
+    """
 
     @staticmethod
     def build_blog_page(blog: Blog) -> str:
-        """Builds and returns a blog HTML page given said blog's Blog object."""
+        """
+        Builds an HTML page for a given Blog.
+
+        Args:
+            blog (Blog): the Blog whose page you want to build
+
+        Returns:
+            str: the HTML for the page
+        """
         blog_title = blog.title
         raw_blog_html = BlogPageBuilder._convert_md(blog.md_content)
 
@@ -31,5 +45,13 @@ class BlogPageBuilder:
 
     @staticmethod
     def _convert_md(md: str) -> str:
-        """Returns the HTML version of a Markdown file"""
+        """
+        Returns the HTML conversion of a Markdown file.
+
+        Args:
+            md (str): the Markdown you wish to convert
+
+        Returns:
+            str: the HTML code
+        """
         return markdown.markdown(md)
