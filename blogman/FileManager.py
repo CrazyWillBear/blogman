@@ -124,11 +124,11 @@ class FileManager(FileSystemEventHandler):
         elif sort_by == "date_created_asc":
             return sorted(blog_list, key=lambda blog: blog.date_created)
         elif sort_by == "date_modified_desc":
-            return sorted(blog_list, key=lambda blog: blog.date_created, reverse=True)
+            return sorted(blog_list, key=lambda blog: blog.date_last_modified, reverse=True)
         elif sort_by == "date_modified_asc":
             return sorted(blog_list, key=lambda blog: blog.date_last_modified)
-        else: # sort must be date_created_desc, which is what we want as default anyways
-            return sorted(blog_list, key=lambda blog: blog.date_last_modified, reverse=True)
+        else: # sort must be date_created_desc, which is what we want as default anyway
+            return sorted(blog_list, key=lambda blog: blog.date_created, reverse=True)
 
     # --- Public Methods --- #
     def start(self) -> None:
