@@ -1,0 +1,7 @@
+files:
+  include:
+    - "blogman/**"
+  exclude:
+    - "blogs/**"
+    - "css/**"
+    - "md/**"
