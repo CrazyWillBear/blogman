@@ -25,15 +25,14 @@ You can make it multiple paragraphs, with spacing between them like this!"""
 # -=-=-=-=-=-
 # Start of directory/file configuration.
 # -=-=-=-=-=-
-BASE_DIR = Path.cwd()
-# you should set this to be the directory encompassing your other directories (for example, /var/www/my-blog)
+BASE_DIR = Path.cwd() # the parent directory of the following:
 
-HTML_DIR = BASE_DIR / "html"
+BLOG_DIR = BASE_DIR / "blogs"
 MD_DIR = BASE_DIR / "md"
 CSS_DIR = BASE_DIR / "css"
 
-HOME_HTML_PATH = HTML_DIR / "home.html"
 STYLE_SHEET_PATH = CSS_DIR / "style.css"
+FAVICON_ICO_PATH = BASE_DIR / "logo.ico"
 # -=-=-=-=-=-
 # End of directory/file configuration.
 # -=-=-=-=-=-
@@ -42,7 +41,8 @@ STYLE_SHEET_PATH = CSS_DIR / "style.css"
 # -=-=-=-=-=-
 # Start of <head> configuration for HTML files.
 # -=-=-=-=-=-
-HEAD_DEFAULTS = """\
+HEAD_DEFAULTS = \
+"""\
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <link href="style" rel="stylesheet">"""
@@ -55,4 +55,4 @@ HEAD_DEFAULTS = """\
 # Software Github link + version (don't change).
 # -=-=-=-=-=-
 GH = "https://github.com/CrazyWillBear/blogman"
-VERSION = "0.0.2-alpha"
+VERSION = "0.0.3-beta"

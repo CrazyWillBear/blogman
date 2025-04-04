@@ -1,13 +1,10 @@
+from blogman import GH, VERSION, MD_DIR
 from blogman.FileManager import FileManager
 from blogman.WebServer import WebServer
-from blogman import GH, VERSION, \
-                    MD_DIR, HTML_DIR, \
-                    HOME_HTML_PATH
 
 
 def print_startup_text():
-    # I use a raw string instead of a formatted string and \\
-    # because I think it looks nicer, so I just use a .replace()
+    # I use a raw string instead of a formatted string and \\ because I think it looks nicer, so I just use a .replace()
     # at the end as opposed to a formatted string
     print(r"""
 Welcome to...
@@ -32,16 +29,16 @@ if __name__ == "__main__":
     print_startup_text()
 
     print("::Loading file manager...", end="")
-    file_manager = FileManager(MD_DIR, HTML_DIR, HOME_HTML_PATH)
+    file_manager = FileManager(MD_DIR)
     print("\r::File manager successfully loaded")
 
     print("::Creating web server...", end="")
-    web_server = WebServer(HTML_DIR, HOME_HTML_PATH)
+    web_server = WebServer()
     print("\r::Web server successfully created")
 
     print("::Starting web server + file manager:")
     file_manager.start()
-    web_server.run(debug=True, use_reloader=False)
+    web_server.run()
 
     # ^ if you set `use_reloader` as True, the program will restart
     # after launching and display the intro sequence twice. Doesn't
