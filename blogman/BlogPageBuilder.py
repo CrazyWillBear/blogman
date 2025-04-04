@@ -1,5 +1,4 @@
 import markdown
-
 from dominate.tags import a, body, div, head, html, nav, title
 from dominate.util import raw
 

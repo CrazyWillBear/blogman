@@ -1,6 +1,6 @@
+from blogman import GH, VERSION, MD_DIR
 from blogman.FileManager import FileManager
 from blogman.WebServer import WebServer
-from blogman import GH, VERSION, MD_DIR
 
 
 def print_startup_text():
@@ -33,12 +33,12 @@ if __name__ == "__main__":
     print("\r::File manager successfully loaded")
 
     print("::Creating web server...", end="")
-    web_server = WebServer(file_manager.homepage_builder)
+    web_server = WebServer()
     print("\r::Web server successfully created")
 
     print("::Starting web server + file manager:")
     file_manager.start()
-    web_server.run(debug=True, use_reloader=False)
+    web_server.run()
 
     # ^ if you set `use_reloader` as True, the program will restart
     # after launching and display the intro sequence twice. Doesn't

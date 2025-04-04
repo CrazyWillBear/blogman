@@ -41,7 +41,8 @@ FAVICON_ICO_PATH = BASE_DIR / "logo.ico"
 # -=-=-=-=-=-
 # Start of <head> configuration for HTML files.
 # -=-=-=-=-=-
-HEAD_DEFAULTS = """\
+HEAD_DEFAULTS = \
+"""\
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
 <link href="style" rel="stylesheet">"""
@@ -54,4 +55,4 @@ HEAD_DEFAULTS = """\
 # Software Github link + version (don't change).
 # -=-=-=-=-=-
 GH = "https://github.com/CrazyWillBear/blogman"
-VERSION = "0.0.3-alpha"
+VERSION = "0.0.3-beta"

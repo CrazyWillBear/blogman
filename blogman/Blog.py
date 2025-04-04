@@ -31,9 +31,6 @@ class Blog:
 
         Args:
             blog_name (str): The Blog's Markdown file's name without suffix
-
-        Returns:
-            Blog: A new Blog object
         """
         self.blog_md = MD_DIR / (blog_name + ".md")  # this should be the Blog's Markdown file
 
@@ -42,7 +39,7 @@ class Blog:
         self.title = blog_name  # this can be updated now
 
         # get the Blog's json path
-        self.json_file = self._get_json_file_path()
+        self.json_file = self.get_json_file_path()
 
         # if it already exists, load the dates from the json
         if self.json_file.exists():
@@ -57,7 +54,7 @@ class Blog:
 
         self._save_json()  # write the json
 
-    # --- Static Methods --- #
+    # --- Static Method(s) --- #
     @staticmethod
     def _get_tags(line: str) -> list:
         """
@@ -91,7 +88,6 @@ class Blog:
             str: The tags formatted nicely
         """
         tags_str = ""
-        print(self.tags)
 
         for tag in self.tags:
             tags_str += f"({tag}),"
@@ -121,6 +117,10 @@ class Blog:
         with open(self.blog_md, "r", encoding="utf-8") as f:
             self.md_content = f.readlines()  # this starts out at a list
 
+        # if markdown content is empty the file was created blank; do nothing
+        if not self.md_content:
+            return
+
         top_line = self.md_content[0]  # the tags can only be on the top line
         self.tags = self._get_tags(top_line)
 
@@ -134,7 +134,7 @@ class Blog:
         self._save_json()
 
     # --- Internal Methods --- #
-    def _get_json_file_path(self) -> Path:
+    def get_json_file_path(self) -> Path:
         """
         Gets the json file path for the Blog.
 
@@ -154,8 +154,6 @@ class Blog:
             json_file_str = f.read()
 
         json_dict = json.loads(json_file_str)
-
-        print(json_dict)
 
         return (datetime.fromisoformat(json_dict["date_created"]),
                 datetime.fromisoformat(json_dict["date_last_modified"]))

@@ -2,17 +2,28 @@ from dominate.tags import title, body, div, head, a, html, main, p, header, h1, 
     h3, span
 from dominate.util import raw
 
-from blogman import BLOG_NAME, BLOG_DESCRIPTION, HEAD_DEFAULTS, BLOG_DIR
-
-from blogman.Blog import Blog
+from blogman import BLOG_NAME, BLOG_DESCRIPTION, HEAD_DEFAULTS
+from blogman.FileManager import FileManager
 
 
 class HomepageBuilder:
-    """A class to build the blog's homepage based off of a template html file. Replaces template flag with boxes for each blog html file found"""
+    """
+    Builds the homepage.
 
+    Provides methods for building the homepage's HTML. Provides optional arguments for queries and sorting.
+
+    Attributes:
+        blog_list (list): list of blogs in blog directory
+        home_header (header): the HTML header for the homepage
+        sort_options (list): options for sorting the blogs
+    """
+
+    # --- Constructor --- #
     def __init__(self):
-        """Initialize HomepageBuilder object"""
-        self.blog_list = self._get_blog_list()
+        """
+        Constructor for HomepageBuilder object.
+        """
+        self.blog_list = FileManager.blog_list
 
         self.home_header = header(
             h1(BLOG_NAME),
@@ -26,41 +37,25 @@ class HomepageBuilder:
             ("date_modified_asc", "Date modified (ascending)")
         ]
 
+    # --- Static Method(s) --- #
     @staticmethod
-    def _get_blog_list(sort_by: str = None) -> list[Blog] | None:
-        """Creates and returns the list of Blogs in the blog directory. You can pass the following into sort_by:
-        - date_created_asc
-        - date_created_desc
-        - date_modified_asc
-        - date_modified_desc
-        """
-        blog_list = []
-
-        for file in BLOG_DIR.iterdir():
-            print(file)
-            blog = Blog(file.stem)
-            blog_list.append(blog)
-
-        if sort_by is None:
-            return blog_list
-
-        if sort_by == "date_created_asc":
-            return sorted(blog_list, key=lambda blog_: blog_.date_created)
-        elif sort_by == "date_created_desc":
-            return sorted(blog_list, key=lambda blog_: blog_.date_created, reverse=True)
-        elif sort_by == "date_modified_asc":
-            return sorted(blog_list, key=lambda blog_: blog_.date_last_modified)
-        elif sort_by == "date_modified_desc":
-            return sorted(blog_list, key=lambda blog_: blog_.date_last_modified, reverse=True)
-
     def _build_blog_boxes(self, query: str = None, sort_by: str = None) -> html:
-        """Builds the html for the blog boxes as a string and returns it"""
+        """
+        Builds the html for the blog boxes as a string and returns it.
+
+        Args:
+            query (str): the search query, can be None
+            sort_by (str): what to sort by, can be None
+
+        Returns:
+            html: the HTML for blog boxes
+        """
         # update the blog list
-        self.blog_list = HomepageBuilder._get_blog_list(sort_by=sort_by)
+        FileManager.update_blog_list(query=query, sort_by=sort_by)
 
         blog_boxes = html()
         with (blog_boxes):
-            for blog in self.blog_list:
+            for blog in FileManager.blog_list:
                 # this is for search feature, only adds blogs that match query in content or name (case-insensitive)
                 if query is not None:
                     query_lower = query.lower()
@@ -87,7 +82,51 @@ class HomepageBuilder:
 
         return blog_boxes
 
-    def _build_search_and_sort_forms(self, sort_by: str = None):
+    # --- Public Methods --- #
+    def build_homepage(self, query: str = None, sort_by: str = None) -> str:
+        """
+        Builds and returns the homepage.
+
+        Args:
+            query (str): the search query, can be None
+            sort_by (str): what to sort by, can be None
+
+
+        """
+        blog_boxes = self._build_blog_boxes(query=query, sort_by=sort_by)
+        search_and_sort_forms = self._build_forms(sort_by)
+
+        doc = html()
+
+        with doc:
+            with head() as h:
+                h.add(raw(HEAD_DEFAULTS))
+                title(BLOG_NAME)
+
+            with body():
+                div(self.home_header)
+
+                div(search_and_sort_forms, cls="form_wrapper")
+
+                main(blog_boxes)
+
+        return str(doc)
+
+    # --- Internal Methods --- #
+    def _build_forms(self, sort_by: str = None) -> html:
+        """
+        Builds the search and sort forms for the homepage.
+
+        Args:
+            sort_by (str): what to sort by, here are your options:
+                - 'date_created_asc'
+                - 'date_created_desc'
+                - 'date_modified_asc'
+                - 'date_modified_desc'
+
+        Returns:
+            html: the HTML for the search and sort forms
+        """
         forms = html()
 
         with forms:
@@ -117,25 +156,3 @@ class HomepageBuilder:
                                 option(label_text, value=value)
 
         return forms
-
-    def build_homepage(self, query: str = None, sort_by: str = None) -> str:
-        """Builds and returns the homepage given a title and said title's subtext as a string. Takes optional arguments
-        for the search and sort features, the only places outside this class where this function is used."""
-        blog_boxes = self._build_blog_boxes(query=query, sort_by=sort_by)
-        search_and_sort_forms = self._build_search_and_sort_forms(sort_by)
-
-        doc = html()
-
-        with doc:
-            with head() as h:
-                h.add(raw(HEAD_DEFAULTS))
-                title(BLOG_NAME)
-
-            with body():
-                div(self.home_header)
-
-                div(search_and_sort_forms, cls="form_wrapper")
-
-                main(blog_boxes)
-
-        return str(doc)
