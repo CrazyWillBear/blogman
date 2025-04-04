@@ -58,33 +58,26 @@ class FileManager(FileSystemEventHandler):
             blog = Blog(file.stem)
 
             # if query is not None we need to only add matches to the list
-            if query is not None:
-                query_lower = query.lower()
-                content_lower = blog.md_content.lower()
-                name_lower = blog.title.lower()
+            if query:
+                if not FileManager._matches_query(blog, query):
+                    continue
 
-                # check if query appears in the content, name, or tags
-                if (query_lower in content_lower or
-                        query_lower in name_lower or
-                        query_lower in ' '.join(blog.tags).lower()):
-                    blog_list.append(blog)
+            print(f"appending {blog.title} to list")
+            blog_list.append(blog)
 
-            else:
-                blog_list.append(blog)
 
         # sort the list by specified criteria
-        if sort_by == "date_created_asc":
-            FileManager.blog_list = sorted(blog_list, key=lambda blog_: blog_.date_created)
-        elif sort_by == "date_created_desc":
-            FileManager.blog_list = sorted(blog_list, key=lambda blog_: blog_.date_created, reverse=True)
-        elif sort_by == "date_modified_asc":
-            FileManager.blog_list = sorted(blog_list, key=lambda blog_: blog_.date_last_modified)
-        elif sort_by == "date_modified_desc":
-            FileManager.blog_list = sorted(blog_list, key=lambda blog_: blog_.date_last_modified, reverse=True)
-        else:  # sort must be None or unrecognized
-            FileManager.blog_list = blog_list
+        FileManager.blog_list = FileManager._sort_blog_list(blog_list, sort_by)
 
     # --- Static Internal Method(s) --- #
+    @staticmethod
+    def _clean_blog_dir() -> None:
+        for file in BLOG_DIR.iterdir():
+            md_path = MD_DIR / (file.stem + ".md")
+
+            if not md_path.exists():
+                FileManager._delete_json(md_path)
+
     @staticmethod
     def _delete_json(md_path: Path) -> None:
         """
@@ -101,12 +94,41 @@ class FileManager(FileSystemEventHandler):
             raise FileNotFoundError("Attempted to delete non-existent Blog json")
 
     @staticmethod
-    def _clean_blog_dir():
-        for file in BLOG_DIR.iterdir():
-            md_path = MD_DIR / (file.stem + ".md")
+    def _matches_query(blog: Blog, query: str) -> bool:
+        """
+        Matches a query to a blog.
 
-            if not md_path.exists():
-                FileManager._delete_json(md_path)
+        Args:
+            blog (Blog): the blog object
+            query (str): the query to match with
+        """
+        query_lower = query.lower()
+        tags_str = ''.join(blog.tags).lower()
+
+        print(query_lower, tags_str)
+        print(query_lower in tags_str)
+
+        return (
+                query_lower in blog.md_content.lower() or
+                query_lower in blog.title.lower() or
+                query_lower in tags_str
+        )
+
+    @staticmethod
+    def _sort_blog_list(blog_list: list, sort_by: str) -> list:
+        """
+        Sorts a given blog list by the specified criteria
+        """
+        if len(blog_list) <= 1:
+            return blog_list
+        elif sort_by == "date_created_asc":
+            return sorted(blog_list, key=lambda blog: blog.date_created)
+        elif sort_by == "date_modified_desc":
+            return sorted(blog_list, key=lambda blog: blog.date_created, reverse=True)
+        elif sort_by == "date_modified_asc":
+            return sorted(blog_list, key=lambda blog: blog.date_last_modified)
+        else: # sort must be date_created_desc, which is what we want as default anyways
+            return sorted(blog_list, key=lambda blog: blog.date_last_modified, reverse=True)
 
     # --- Public Methods --- #
     def start(self) -> None:

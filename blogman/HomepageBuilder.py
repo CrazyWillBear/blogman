@@ -39,7 +39,7 @@ class HomepageBuilder:
 
     # --- Static Method(s) --- #
     @staticmethod
-    def _build_blog_boxes(self, query: str = None, sort_by: str = None) -> html:
+    def _build_blog_boxes(query: str = None, sort_by: str = None) -> html:
         """
         Builds the html for the blog boxes as a string and returns it.
 
@@ -56,14 +56,6 @@ class HomepageBuilder:
         blog_boxes = html()
         with (blog_boxes):
             for blog in FileManager.blog_list:
-                # this is for search feature, only adds blogs that match query in content or name (case-insensitive)
-                if query is not None:
-                    query_lower = query.lower()
-                    content_lower = blog.md_content.lower()
-                    name_lower = blog.title.lower()
-
-                    if query_lower not in content_lower and query_lower not in name_lower:
-                        continue
 
                 url = blog.title.replace(" ", "-")
                 blog_boxes.add(
@@ -93,7 +85,7 @@ class HomepageBuilder:
 
 
         """
-        blog_boxes = self._build_blog_boxes(query=query, sort_by=sort_by)
+        blog_boxes = HomepageBuilder._build_blog_boxes(query=query, sort_by=sort_by)
         search_and_sort_forms = self._build_forms(sort_by)
 
         doc = html()

@@ -1,6 +1,6 @@
 from flask import Flask, send_file, request
 
-from blogman import STYLE_SHEET_PATH, HomepageBuilder
+from blogman import STYLE_SHEET_PATH
 from blogman.Blog import Blog
 from blogman.BlogPageBuilder import BlogPageBuilder
 from blogman.HomepageBuilder import HomepageBuilder
