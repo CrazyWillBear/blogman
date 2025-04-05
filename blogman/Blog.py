@@ -127,9 +127,9 @@ class Blog:
         # now we join the markdown content into one string
         if len(self.tags) > 0:
             lines = self.md_content[1:]
-            self.md_content = "\n".join(lines)
+            self.md_content = "".join(lines)
         else:
-            self.md_content = "\n".join(self.md_content)
+            self.md_content = "".join(self.md_content)
 
         self._save_json()
 

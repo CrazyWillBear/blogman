@@ -27,7 +27,7 @@ h1, h2, h3, h4 {
 
 p {
   color: #FAF1E6;
-  line-height: 1;
+  line-height: 1.5em;
   text-align: justify;
   width: 50%;
   margin: 0 auto 1em;
