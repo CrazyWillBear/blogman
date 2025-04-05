@@ -10,7 +10,7 @@ your Markdown directory, which is where you place your blog posts written in Mar
 and renders each blog when visited. Blogman also supports tagging your posts, which is explained later.
 
 ### Screenshots:
-<img src="https://i.imgur.com/dgY7l0D.png" alt="Screenshot 1" width="510" height="300"/>
+<img src="https://i.imgur.com/DTgdgCe.png" alt="Screenshot 1" width="510" height="300"/>
 <img src="https://i.imgur.com/IYX7ngT.png" alt="Screenshot 2" width="510" height="300"/>
 
 ### How it works:
