@@ -1,6 +1,6 @@
 from flask import Flask, send_file, request
 
-from blogman import STYLE_SHEET_PATH
+from blogman import STYLE_SHEET_PATH, FAVICON_ICO_PATH
 from blogman.Blog import Blog
 from blogman.BlogPageBuilder import BlogPageBuilder
 from blogman.HomepageBuilder import HomepageBuilder
@@ -50,8 +50,7 @@ class WebServer:
 
                 if form_name == "search_form":
                     query = request.form['search']
-
-                if form_name == "sort_form":
+                elif form_name == "sort_form":
                     sort_by = request.form.get("sort_by")
 
             return self.homepage_builder.build_homepage(query=query, sort_by=sort_by)
@@ -62,7 +61,7 @@ class WebServer:
             if STYLE_SHEET_PATH.stem == page:
                 return send_file(STYLE_SHEET_PATH)
             if "favicon.ico" in page:
-                return "e"
+                return FAVICON_ICO_PATH
 
             blog_name = Blog(page.replace("-", " "))
             return BlogPageBuilder.build_blog_page(blog_name)

@@ -4,8 +4,6 @@ from blogman.WebServer import WebServer
 
 
 def print_startup_text():
-    # I use a raw string instead of a formatted string and \\ because I think it looks nicer, so I just use a .replace()
-    # at the end as opposed to a formatted string
     print(r"""
 Welcome to...
  ____  _
@@ -40,7 +38,6 @@ if __name__ == "__main__":
     file_manager.start()
     web_server.run()
 
-    # ^ if you set `use_reloader` as True, the program will restart
-    # after launching and display the intro sequence twice. Doesn't
-    # break the program and is useful during development, but when
-    # deployed, I'd recommend turning it off.
+    # ^ if you set `use_reloader` as True, the program will restart after launching and display the intro sequence
+    # twice. Doesn't break the program and is useful during development, but when deployed, I'd recommend turning it
+    # off.
