@@ -22,19 +22,19 @@ In the `__init__.py` file, you configure directory and file paths for a few thin
   - Your blog directory, where blog JSON files are stored
   - Your Markdown directory, where blog posts written in Markdown are stored
   - Your style sheet
-- Your default <head> for webpages
+- Your default `<head>` section for webpages
 
 The program works by monitoring changes in the Markdown directory. When detected, it acts accordingly by updating a
 blog's JSON file. Those blogs are then listed on the homepage, sortable by date created or date last modified and
-searchable by content, title, and/or tags.
+searchable by content, title, and/or tag(s).
 
 ### How to use it:
 
-- Use as-is
+- As-is!
 
 The directories `blogs/` and `md/` as well as the stylesheet in `css/style.css` are pre-configured in `__init__.py` to
 serve their respective purposes. You can simply run `python -m blogman` and place your Markdown blog files in the `md/`
-directory. Just be sure to configure your blog name and description. I've left a sample blog, titled `Leaving The
+directory. Just be sure to configure your blog name and description. I've left a sample 'blog', titled `Leaving The
 Forest.md` and its accompanying JSON file.
 
 - Customize it!
@@ -48,8 +48,7 @@ and configure freely.
 You can follow standard markdown practices and even include basic HTML in your post. The only extra information you need
 to know is in regard to *tagging*.
 
-You can add tags to your post by using `{tag_1}...{tag_n}` at the top of your Markdown file. You don't need to add tags,
-but it can be helpful, as the search feature checks tags.
+You can add tags to your post by using `{tag_1}...{tag_n}` at the top of your Markdown file. Tags aren't required.
 
 Here are some examples:
 ```markdown aiignore
