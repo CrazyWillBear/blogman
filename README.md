@@ -9,7 +9,11 @@ Blogman is a blog managing software that allows posts to be written in Markdown 
 your Markdown directory, which is where you place your blog posts written in Markdown. Blogman lists those on a homepage
 and renders each blog when visited. Blogman also supports tagging your posts, which is explained later.
 
-### How it works
+### Screenshots:
+<img src="https://i.imgur.com/dgY7l0D.png" alt="Screenshot 1" width="510" height="300"/>
+<img src="https://i.imgur.com/RfBVeny.png" alt="Screenshot 2" width="510" height="300"/>
+
+### How it works:
 
 In the `__init__.py` file, you configure directory and file paths for a few things, but the most important are:
 
@@ -24,21 +28,22 @@ The program works by monitoring changes in the Markdown directory. When detected
 blog's JSON file. Those blogs are then listed on the homepage, sortable by date created or date last modified and
 searchable by content, title, and/or tags.
 
-### How to use
+### How to use it:
 
-- As is
+- Use as-is
 
-The directories `css/`, `blogs/`, and `md/` in the project root have sample files and are configured in `__init__.py` to
+The directories `blogs/` and `md/` as well as the stylesheet in `css/style.css` are pre-configured in `__init__.py` to
 serve their respective purposes. You can simply run `python -m blogman` and place your Markdown blog files in the `md/`
-directory. Just be sure to configure your blog name and description.
+directory. Just be sure to configure your blog name and description. I've left a sample blog, titled `Leaving The
+Forest.md` and its accompanying JSON file.
 
-- Customize
+- Customize it!
 
 As-is, this configuration may not be ideal for you. If this is the case, all you have to do is configure the directory
 and file paths in `__init__.py` to fit your needs. If you want to edit the HTML itself, go into the `*Builder.py` files
 and configure freely.
 
-### How to write a blog in Markdown
+### How to write a blog in Markdown:
 
 You can follow standard markdown practices and even include basic HTML in your post. The only extra information you need
 to know is in regard to *tagging*.
@@ -46,7 +51,7 @@ to know is in regard to *tagging*.
 You can add tags to your post by using `{tag_1}...{tag_n}` at the top of your Markdown file. You don't need to add tags,
 but it can be helpful, as the search feature checks tags.
 
-Examples:
+Here are some examples:
 ```markdown aiignore
 {tag}{tag2}
 # My Blog
