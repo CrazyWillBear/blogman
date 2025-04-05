@@ -33,7 +33,7 @@ and renders each blog when visited. Blogman also supports tagging your posts, wh
 
 ## Quickstart
 
-Clone the repository and run `pip install requirements.txt` followed by `python -m blogman`. Then, just drop your blog
+Clone the repository and run `pip install -r requirements.txt` followed by `python -m blogman`. Then, just drop your blog
 posts into the `md/` directory. In deployment, it's recommended that you use [Gunicorn](https://gunicorn.org/) or
 [Waitress](https://pypi.org/project/waitress/) for Windows.
 
