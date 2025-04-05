@@ -63,13 +63,26 @@ class HomepageBuilder:
                         div(
                             h3(blog.title),
 
-                            span("Created: " + blog.date_created.strftime("%m/%d/%Y"), _class="timestamp_created"),
-                            span("Last modified: " + blog.date_last_modified.strftime("%m/%d/%Y"), _class="timestamp_modified"),
+                            span(
+                                "Created: " + blog.date_created.strftime("%m/%d/%Y"),
+                                _class="timestamp_created"
+                            ),
+                            span(
+                                "Last modified: " + blog.date_last_modified.strftime("%m/%d/%Y"),
+                                _class="timestamp_modified"
+                            ),
 
-                            span("" if blog.tags_empty() else "Tags: ", _class="tag_label"),
-                            span("" if blog.tags_empty() else blog.get_formatted_tags(), _class="tag_list"), _class="blog-box"
-                        )
-                    , href=url)
+                            span(
+                                "" if blog.tags_empty() else "Tags: ",
+                                _class="tag_label"
+                            ),
+                            span(
+                                "" if blog.tags_empty() else blog.get_formatted_tags(),
+                                _class="tag_list"
+                            ),
+
+                        _class="blog-box"),
+                    href=url)
                 )
 
         return blog_boxes

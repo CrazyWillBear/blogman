@@ -21,7 +21,7 @@ class FileManager(FileSystemEventHandler):
         md_observer (Observer): the Observer object for the Markdown directory
     """
 
-    blog_list = []  # consistent across all instances of FileManager
+    blog_list = []  # static across all instances of FileManager
 
     # --- Constructor --- #
     def __init__(self, md_dir: Path):
@@ -34,13 +34,8 @@ class FileManager(FileSystemEventHandler):
         self.md_dir = md_dir
         self.md_observer = Observer()
 
-        # need to initialize it first
-        self.blog_list = None
-        # then update it
-        FileManager.update_blog_list()
-
-        # clean the blog directory
-        FileManager._clean_blog_dir()
+        FileManager.update_blog_list()  # update the blog_list
+        FileManager._clean_blog_dir()  # clean the blog directory
 
     # --- Static Public Method(s) --- #
     @staticmethod
@@ -62,7 +57,6 @@ class FileManager(FileSystemEventHandler):
                 if not FileManager._matches_query(blog, query):
                     continue
 
-            print(f"appending {blog.title} to list")
             blog_list.append(blog)
 
 

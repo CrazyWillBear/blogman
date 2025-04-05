@@ -1,7 +1,7 @@
 from pathlib import Path
 
 # -=-=-=-=-=-
-# This is where you configure blogman. All types of configuration are sectioned off using comments like this one. It's
+# This is where you configure Blogman. All types of configuration are sectioned off using comments like this one. It's
 # recommended to adjust the BASE_DIR to the directory you plan to put your HTML, Markdown, and CSS directories in. This
 # allows you to simply adjust the names of each directory as opposed to putting the full paths to each file/directory.
 #
