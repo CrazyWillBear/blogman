@@ -1,4 +1,5 @@
 import markdown
+from bs4 import BeautifulSoup
 from dominate.tags import a, body, div, head, html, nav, title
 from dominate.util import raw
 
@@ -45,7 +46,7 @@ class BlogPageBuilder:
     @staticmethod
     def _convert_md(md: str) -> str:
         """
-        Returns the HTML conversion of a Markdown file.
+        Returns the HTML conversion of a Markdown file, getting rid of <script> elements.
 
         Args:
             md (str): the Markdown you wish to convert
@@ -53,4 +54,10 @@ class BlogPageBuilder:
         Returns:
             str: the HTML code
         """
+        html_converted = markdown.markdown(md)
+        soup = BeautifulSoup(html_converted, 'html.parser')
+
+        for script in soup.find_all('script'):
+            script.decompose()
+
         return markdown.markdown(md)
