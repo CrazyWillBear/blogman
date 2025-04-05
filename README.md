@@ -11,7 +11,7 @@ and renders each blog when visited. Blogman also supports tagging your posts, wh
 
 ### Screenshots:
 <img src="https://i.imgur.com/dgY7l0D.png" alt="Screenshot 1" width="510" height="300"/>
-<img src="https://i.imgur.com/RfBVeny.png" alt="Screenshot 2" width="510" height="300"/>
+<img src="https://i.imgur.com/IYX7ngT.png" alt="Screenshot 2" width="510" height="300"/>
 
 ### How it works:
 
