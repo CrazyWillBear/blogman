@@ -6,6 +6,7 @@
 
 <!-- TOC -->
 * [Blogman](#blogman)
+  * [Todo:](#todo)
   * [Summary](#summary)
   * [Quickstart](#quickstart)
   * [Configuration guide](#configuration-guide)
@@ -24,6 +25,9 @@
   * [License](#license)
     * [MIT License](#mit-license)
 <!-- TOC -->
+
+## Todo:
+- [ ] Add a pin feature for blogs, possibly sortable?
 
 ## Summary
 
