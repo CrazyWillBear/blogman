@@ -1,6 +1,5 @@
-from dominate.svg import svg_tag
 from dominate.tags import title, body, div, head, a, html, main, p, header, h1, form, label, input_, select, option, \
-    h3, span, small
+    h3, span
 from dominate.util import raw
 
 from blogman import BLOG_NAME, BLOG_DESCRIPTION, HEAD_DEFAULTS
