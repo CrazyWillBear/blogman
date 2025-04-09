@@ -95,7 +95,8 @@ class HomepageBuilder:
                                 _class="tag_list"
                             ),
                         _class="blog-box"),
-                    href=url)
+                    href=url,
+                    _class="blog-link")
                 )
 
         return blog_boxes

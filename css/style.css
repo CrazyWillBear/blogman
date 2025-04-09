@@ -42,6 +42,12 @@ a {
   transition: color 0.3s ease;
 }
 
+.blog-link {
+  display: block;
+  width: 50%;
+  margin: 0 auto 1em;
+}
+
 /* ============================
    Navigation
 ============================ */
@@ -140,7 +146,6 @@ input::placeholder {
 ============================ */
 .blog-box {
   position: relative;
-  width: 50%;
   margin: 0 auto 2em;
   background-color: #FAF1E6;
   padding: 20px;
