@@ -49,6 +49,24 @@ a {
 }
 
 /* ============================
+   Lists
+============================ */
+ul > li {
+  width: 50%;
+  margin: 0 auto;
+  padding: 1em;
+}
+
+ul > li > ul {
+  width: auto;
+  padding-left: 1em;
+}
+
+ul > li > ul > li {
+  width: auto;
+}
+
+/* ============================
    Navigation
 ============================ */
 nav {
@@ -173,7 +191,9 @@ input::placeholder {
 ============================ */
 @media (width <= 768px) {
   .blog-box,
-  p {
+  .blog-link,
+  p,
+  ul {
     width: 90% !important;
   }
 }
