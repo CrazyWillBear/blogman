@@ -39,7 +39,6 @@ p {
 a {
   color: #FDFAF6; /* warm taupe */
   text-decoration: none;
-  font-weight: bold;
   transition: color 0.3s ease;
 }
 
@@ -151,9 +150,17 @@ input::placeholder {
 }
 
 .blog-box h3 {
-  color: #99BC85; /* light gray to stand out on taupe */
+  color: #99BC85;
   margin-top: 0;
   margin-bottom: 0;
+}
+
+.pin_h3 {
+  display: inline;
+}
+
+.pin_icon {
+  padding-right: 0.5em;
 }
 
 /* ============================

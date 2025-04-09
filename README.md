@@ -6,7 +6,6 @@
 
 <!-- TOC -->
 * [Blogman](#blogman)
-  * [Todo:](#todo)
   * [Summary](#summary)
   * [Quickstart](#quickstart)
   * [Configuration guide](#configuration-guide)
@@ -16,6 +15,7 @@
   * [How to write a blog in Markdown](#how-to-write-a-blog-in-markdown)
     * [Markdown guide](#markdown-guide)
     * [Tags](#tags)
+    * [Pinning](#pinning)
     * [HTML](#html)
     * [Examples](#examples)
   * [Screenshots](#screenshots)
@@ -25,9 +25,6 @@
   * [License](#license)
     * [MIT License](#mit-license)
 <!-- TOC -->
-
-## Todo:
-- [ ] Add a pin feature for blogs, possibly sortable?
 
 ## Summary
 
@@ -82,6 +79,10 @@ serve as searchable categories within your blog.
 You can add tags to your post by using the form `{tag_1}...{tag_n}` at the top of your Markdown file. There should be no
 spaces between your tags and they should all be on one line, the top line of the Markdown file.
 
+### Pinning
+
+If you'd like to pin a post, add the tag `{pinned}` to your Markdown.
+
 ### HTML
 
 You can write HTML in your Markdown file and have it render.
@@ -95,6 +96,7 @@ This is an example of a blog!
 ```
 
 ```markdown aiignore
+{pinned}
 # My Other Blog
 
 I can add

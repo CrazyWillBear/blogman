@@ -1,10 +1,15 @@
+from dominate.svg import svg_tag
 from dominate.tags import title, body, div, head, a, html, main, p, header, h1, form, label, input_, select, option, \
-    h3, span
+    h3, span, small
 from dominate.util import raw
 
 from blogman import BLOG_NAME, BLOG_DESCRIPTION, HEAD_DEFAULTS
 from blogman.FileManager import FileManager
 
+# This is used below to place a pinned icon next to pinned blogs
+GOOGLE_PINNED_ICON_CODE = """<svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 -960 960 960" width="1em\
+" fill="#99BC85"><path d="m640-480 80 80v80H520v240l-40 40-40-40v-240H240v-80l80-80v-280h-40v-80h400v80h-40v280Zm-286 8\
+0h252l-46-46v-314H400v314l-46 46Zm126 0Z"/></svg>"""
 
 class HomepageBuilder:
     """
@@ -61,7 +66,17 @@ class HomepageBuilder:
                 blog_boxes.add(
                     a(
                         div(
-                            h3(blog.title),
+                            div(
+                                span(
+                                    raw(GOOGLE_PINNED_ICON_CODE),
+                                    _class="pin_icon"
+                                ),
+
+                                h3(
+                                    blog.title,
+                                    _class="pin_h3"
+                                )
+                            ) if blog.pinned else h3(blog.title),
 
                             span(
                                 "Created: " + blog.date_created.strftime("%m/%d/%Y"),
@@ -80,7 +95,6 @@ class HomepageBuilder:
                                 "" if blog.tags_empty() else blog.get_formatted_tags(),
                                 _class="tag_list"
                             ),
-
                         _class="blog-box"),
                     href=url)
                 )

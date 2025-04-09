@@ -37,6 +37,7 @@ class Blog:
         self.md_content, self.tags = None, None  # these are updated later
         self.date_created, self.date_last_modified = None, None  # these are also updated later
         self.title = blog_name  # this can be updated now
+        self.pinned = False  # default is False
 
         # get the Blog's json path
         self.json_file = self.get_json_file_path()
@@ -50,7 +51,7 @@ class Blog:
             self.date_created = datetime.now()
             self.date_last_modified = datetime.now()
 
-        self.update_md_content()  # this updates tags and md_content
+        self.read_apply_md()  # this updates tags and md_content
 
         self._save_json()  # write the json
 
@@ -110,9 +111,9 @@ class Blog:
         self.date_last_modified = datetime.now()
         self._save_json()
 
-    def update_md_content(self) -> None:
+    def read_apply_md(self) -> None:
         """
-        Reads and applies the Markdown file to the Blog. Updates the markdown content and tags.
+        Reads and applies the Markdown file to the Blog. Updates the markdown content, tags, and pin status.
         """
         with open(self.blog_md, "r", encoding="utf-8") as f:
             self.md_content = f.readlines()  # this starts out at a list
@@ -122,7 +123,15 @@ class Blog:
             return
 
         top_line = self.md_content[0]  # the tags can only be on the top line
+
         self.tags = self._get_tags(top_line)
+
+        # apply pinned tag
+        if "pinned" in self.tags:
+            self.tags.remove("pinned")
+            self.pinned = True
+        else:
+            self.pinned = False
 
         # now we join the markdown content into one string
         if len(self.tags) > 0:
@@ -166,6 +175,7 @@ class Blog:
             "title": self.title,
             "md_content": self.md_content,
             "tags": self.tags,
+            "pinned": self.pinned,
             "date_created": self.date_created.isoformat(),
             "date_last_modified": self.date_last_modified.isoformat()
         }

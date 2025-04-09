@@ -113,16 +113,33 @@ class FileManager(FileSystemEventHandler):
         """
         Sorts a given blog list by the specified criteria
         """
+        # initialize as empty lists
+        pinned_blogs, unpinned_blogs = [], []
+
+        for blog in blog_list:
+            if blog.pinned:
+                pinned_blogs.append(blog)
+            else:
+                unpinned_blogs.append(blog)
+
         if len(blog_list) <= 1:
             return blog_list
         elif sort_by == "date_created_asc":
-            return sorted(blog_list, key=lambda blog: blog.date_created)
+            return \
+                    sorted(pinned_blogs, key=lambda blog: blog.date_created) + \
+                    sorted(unpinned_blogs, key=lambda blog: blog.date_created)
         elif sort_by == "date_modified_desc":
-            return sorted(blog_list, key=lambda blog: blog.date_last_modified, reverse=True)
+            return \
+                    sorted(pinned_blogs, key=lambda blog: blog.date_last_modified, reverse=True) + \
+                    sorted(unpinned_blogs, key=lambda blog: blog.date_last_modified, reverse=True)
         elif sort_by == "date_modified_asc":
-            return sorted(blog_list, key=lambda blog: blog.date_last_modified)
+            return \
+                    sorted(pinned_blogs, key=lambda blog: blog.date_last_modified) + \
+                    sorted(unpinned_blogs, key=lambda blog: blog.date_last_modified)
         else: # sort must be date_created_desc, which is what we want as default anyway
-            return sorted(blog_list, key=lambda blog: blog.date_created, reverse=True)
+            return \
+                    sorted(pinned_blogs, key=lambda blog: blog.date_created, reverse=True) + \
+                    sorted(unpinned_blogs, key=lambda blog: blog.date_created, reverse=True)
 
     # --- Public Methods --- #
     def start(self) -> None:
@@ -177,7 +194,7 @@ class FileManager(FileSystemEventHandler):
             # we want to update its md_content and date_last_modified
             blog = Blog(path.stem)
             blog.update_date_last_modified()
-            blog.update_md_content()
+            blog.read_apply_md()
 
     def on_deleted(self, event) -> None:
         """
