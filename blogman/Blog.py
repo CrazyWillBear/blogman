@@ -134,7 +134,7 @@ class Blog:
             self.pinned = False
 
         # now we join the markdown content into one string
-        if len(self.tags) > 0:
+        if len(self.tags) > 0 or self.pinned:
             lines = self.md_content[1:]
             self.md_content = "".join(lines)
         else:
