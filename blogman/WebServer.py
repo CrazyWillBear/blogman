@@ -61,7 +61,7 @@ class WebServer:
             if STYLE_SHEET_PATH.stem == page:
                 return send_file(STYLE_SHEET_PATH)
             if "favicon.ico" in page:
-                return FAVICON_ICO_PATH
+                return send_file(FAVICON_ICO_PATH)
 
             blog_name = Blog(page.replace("-", " "))
             return BlogPageBuilder.build_blog_page(blog_name)
