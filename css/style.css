@@ -10,6 +10,8 @@ body {
   font-family: Roboto, sans-serif;
   background-color: #99BC85; /* cream tan */
   color: #FAF1E6; /* olive gray for readable text */
+  background-image: url(https://mirrors.capbear.net/images/green-paper.png);
+  background-repeat: repeat;
 }
 
 #blog {
