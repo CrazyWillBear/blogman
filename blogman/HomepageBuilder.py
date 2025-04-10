@@ -65,16 +65,16 @@ class HomepageBuilder:
                 blog_boxes.add(
                     a(
                         div(
+
                             div(
+                                h3(blog.title),
+
                                 span(
                                     raw(GOOGLE_PINNED_ICON_CODE),
                                     _class="pin_icon"
                                 ),
 
-                                h3(
-                                    blog.title,
-                                    _class="pin_h3"
-                                )
+                                _class="pin_header"
                             ) if blog.pinned else h3(blog.title),
 
                             span(

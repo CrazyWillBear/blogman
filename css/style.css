@@ -149,6 +149,21 @@ input::placeholder {
 }
 
 /* ============================
+   Pins
+============================ */
+.pin_icon {
+  color: #99BC85;
+  font-size: 1.3em;
+  text-align: center;
+  position: absolute;
+  left: 1.5em;
+}
+
+.pin_header {
+  display: inline;
+}
+
+/* ============================
    Layout Wrappers
 ============================ */
 .form_wrapper,
@@ -174,16 +189,8 @@ input::placeholder {
 
 .blog-box h3 {
   color: #99BC85;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.pin_h3 {
-  display: inline;
-}
-
-.pin_icon {
-  padding-right: 0.5em;
+  width: 60%;
+  margin: 0 auto;
 }
 
 /* ============================
@@ -192,6 +199,10 @@ input::placeholder {
 @media (width <= 768px) {
   .blog-box,
   .blog-link,
+  h1,
+  h2,
+  h3,
+  h4,
   p,
   ul > li {
     width: 90% !important;
