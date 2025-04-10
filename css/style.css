@@ -25,6 +25,10 @@ h1, h2, h3, h4 {
   margin-top: 0.5em;
 }
 
+h1, h2 {
+  padding-top: 1em;
+}
+
 p {
   color: #FAF1E6;
   line-height: 1.5em;
@@ -37,7 +41,7 @@ p {
    Links
 ============================ */
 a {
-  color: #FDFAF6; /* warm taupe */
+  color: #00FFFF;
   text-decoration: none;
   transition: color 0.3s ease;
 }
@@ -55,6 +59,7 @@ ul > li {
   width: 50%;
   margin: 0 auto;
   padding: 1em;
+  text-align: left;
 }
 
 ul > li > ul {
@@ -199,12 +204,10 @@ input::placeholder {
 @media (width <= 768px) {
   .blog-box,
   .blog-link,
-  h1,
-  h2,
-  h3,
-  h4,
   p,
   ul > li {
     width: 90% !important;
+    margin-right: auto;
+    margin-left: auto;
   }
 }
