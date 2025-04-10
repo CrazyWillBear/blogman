@@ -206,5 +206,6 @@ input::placeholder {
   p,
   ul > li {
     width: 90% !important;
+    margin: 0 auto;
   }
 }
