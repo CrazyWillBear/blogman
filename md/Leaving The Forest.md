@@ -3,6 +3,7 @@
 
 #### By William B. Chastain
 
+<hr>
 
 At the crossroads
 

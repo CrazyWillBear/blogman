@@ -1,5 +1,5 @@
 # Blogman
-![Static Badge](https://img.shields.io/badge/version-0.0.4_beta-blue)
+![Static Badge](https://img.shields.io/badge/version-1.0.0-blue)
 ![GitHub License](https://img.shields.io/github/license/CrazyWillBear/blogman)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/83d6bd3faf7e4d6eb52b9eadb909b84d)](https://app.codacy.com/gh/CrazyWillBear/blogman/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![Python package](https://github.com/CrazyWillBear/blogman/actions/workflows/python-package.yml/badge.svg)
@@ -34,10 +34,9 @@ and renders each blog when visited. Blogman also supports tagging your posts, wh
 
 ## Quickstart
 
-Clone the repository and run `pip install -r requirements.txt` followed by `python -m blogman`. Then, just drop your blog
-posts into the `md/` directory. In deployment, it's recommended that you use [Gunicorn](https://gunicorn.org/) or
-[Waitress](https://pypi.org/project/waitress/) for Windows.
-
+Clone the repository and run `pip install -r requirements.txt` followed by `python -m blogman`.
+Then, just drop your blog posts into the `md/` directory. In deployment, it's recommended that you use [Gunicorn](https://gunicorn.org/)
+or [Waitress](https://pypi.org/project/waitress/) for Windows.
 
 ## Configuration guide
 
@@ -86,6 +85,7 @@ If you'd like to pin a post, add the tag `{pinned}` to your Markdown.
 ### HTML
 
 You can write HTML in your Markdown file and have it render.
+
 ### Examples
 
 ```markdown aiignore
@@ -108,11 +108,11 @@ some HTML!
 
 ### Screenshot 1
 
-<img src="https://i.imgur.com/DTgdgCe.png" alt="Screenshot 1" width="510" height="300"/>
+<img src="https://i.imgur.com/K64awkB.png" alt="Screenshot 1" width="535" height="500"/>
 
 ### Screenshot 2
 
-<img src="https://i.imgur.com/IYX7ngT.png" alt="Screenshot 2" width="510" height="300"/>
+<img src="https://i.imgur.com/zfdKWFK.png" alt="Screenshot 2" width="605" height="500"/>
 
 ## How it works
 

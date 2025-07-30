@@ -1,6 +1,6 @@
 import markdown
 from bs4 import BeautifulSoup
-from dominate.tags import a, body, div, head, html, nav, title
+from dominate.tags import a, body, div, head, html, p, title
 from dominate.util import raw
 
 from blogman import HEAD_DEFAULTS
@@ -34,11 +34,11 @@ class BlogPageBuilder:
                 h.add(raw(HEAD_DEFAULTS))
                 title(blog_title)
 
-            with body():
+            with body(_class="mx-8 mb-8 lg:mx-64"):
                 with a(href="/"):
-                    with div(cls="nav-wrapper"):
-                        nav("Home")
-                with div(id="blog") as d:
+                    with div(_class="mx-auto my-2 w-fit py-1 px-4 border-2 rounded-md border-gray-400 bg-transparent md:hover:bg-neutral-700 transition-colors duration-300 md:hover:text-stone-100"):
+                        p("Home")
+                with div(_class="raw-blog") as d:
                     d.add(raw(raw_blog_html))
 
         return str(doc)
@@ -60,4 +60,4 @@ class BlogPageBuilder:
         for script in soup.find_all('script'):
             script.decompose()
 
-        return markdown.markdown(md)
+        return markdown.markdown(md, extensions=['extra', 'fenced_code', 'codehilite'])
