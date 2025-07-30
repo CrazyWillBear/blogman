@@ -34,7 +34,7 @@ class BlogPageBuilder:
                 h.add(raw(HEAD_DEFAULTS))
                 title(blog_title)
 
-            with body(_class="m-8 lg:mx-64"):
+            with body(_class="mb-8 mx-8 mt-4 lg:mx-64"):
                 with a(href="/"):
                     with div(_class="mx-auto my-2 w-fit py-1 px-4 border-2 rounded-md border-gray-400 bg-transparent md:hover:bg-neutral-700 transition-colors duration-300 md:hover:text-stone-100"):
                         p("Home")
