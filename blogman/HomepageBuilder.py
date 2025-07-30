@@ -28,7 +28,7 @@ class HomepageBuilder:
         self.blog_list = FileManager.blog_list
 
         self.home_header = header(
-            h1(BLOG_NAME, _class="text-center text-3xl font-bold pb-2"),
+            h1(BLOG_NAME, _class="text-center text-3xl font-bold pb-2 mx-10"),
             p(BLOG_DESCRIPTION,  _class="text-justify")
         )
 
@@ -64,7 +64,7 @@ class HomepageBuilder:
                     a(
                         div(
                             div(
-                                h3(blog.title, _class="text-xl font-bold text-center pt-1"),
+                                h3(blog.title, _class="text-xl font-bold text-center mx-5 pt-1"),
 
                                 span(
                                     raw(GOOGLE_PINNED_ICON_CODE),
