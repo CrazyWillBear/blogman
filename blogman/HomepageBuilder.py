@@ -29,7 +29,7 @@ class HomepageBuilder:
 
         self.home_header = header(
             h1(BLOG_NAME, _class="text-center text-3xl font-bold pb-2 mx-10"),
-            *[p(raw(line), _class="text-center p-1") for line in BLOG_DESCRIPTION]
+            *[p(raw(line), _class="text-justify lg:text-center p-1") for line in BLOG_DESCRIPTION]
         )
 
         self.sort_options = [
