@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     print("::Starting web server + file manager:")
     file_manager.start()
-    web_server.run(debug=True)
+    web_server.run()
 
     # ^ if you set `use_reloader` as True, the program will restart after launching and display the intro sequence
     # twice. Doesn't break the program and is useful during development, but when deployed, I'd recommend turning it
