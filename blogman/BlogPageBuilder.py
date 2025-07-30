@@ -28,7 +28,7 @@ class BlogPageBuilder:
         blog_title = blog.title
         raw_blog_html = BlogPageBuilder._convert_md(blog.md_content)
 
-        doc = html()
+        doc = html(lang="en")
         with doc:
             with head() as h:
                 h.add(raw(HEAD_DEFAULTS))
