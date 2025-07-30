@@ -13,10 +13,10 @@ from pathlib import Path
 # Start of name and description configuration. These show up on your homepage.
 # -=-=-=-=-=-
 BLOG_NAME = "My Blog"
-BLOG_DESCRIPTION = \
-"""This is my blog's description. It should be a solid paragraph, perhaps about the origin of your blog.
-
-You can make it multiple paragraphs, with spacing between them like this!"""
+BLOG_DESCRIPTION = [  # each item in this list represents a paragraph
+    "This is my blog's description. It should be a solid paragraph, perhaps about the origin of your blog.",
+    "You can make it multiple paragraphs, with spacing between them like this!"
+]
 # -=-=-=-=-=-
 # End of name and description configuration.
 # -=-=-=-=-=-
