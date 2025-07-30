@@ -8,208 +8,223 @@ body {
   margin: 0;
   padding: 2%;
   font-family: Roboto, sans-serif;
-  background-color: #99BC85; /* cream tan */
-  color: #FAF1E6; /* olive gray for readable text */
-  background-image: url(https://mirrors.capbear.net/images/green-paper.png);
-  background-repeat: repeat;
+  background-color: #F2F0EF; /* off white */
+  color: #4A4A4A; /* charcoal */
 }
 
-#blog {
-  font-family: 'Merriweather', serif;
+.raw-blog h1 {
+  font-size: 2.25rem;       /* Tailwind: text-4xl */
+  font-weight: 700;         /* font-bold */
+  line-height: 1.25;        /* leading-tight */
+  padding-top: 0.75rem;  /* Tailwind: pt-3 */
 }
 
-/* ============================
-   Typography
-============================ */
-h1, h2, h3, h4 {
-  color: #FAF1E6;
-  text-align: center;
-  margin-top: 0.5em;
+.raw-blog h2 {
+  font-size: 1.875rem;      /* Tailwind: text-3xl */
+  font-weight: 600;         /* font-semibold */
+  padding-top: 0.75rem;  /* Tailwind: pt-3 */
 }
 
-h1, h2 {
-  padding-top: 1em;
+.raw-blog h3 {
+  font-size: 1.5rem;        /* Tailwind: text-2xl */
+  font-weight: 600;         /* font-semibold */
+  padding-top: 0.75rem;  /* Tailwind: pt-3 */
 }
 
-p {
-  color: #FAF1E6;
-  line-height: 1.5em;
-  text-align: justify;
-  width: 50%;
-  margin: 0 auto 1em;
+.raw-blog h4 {
+  font-size: 1.25rem;       /* Tailwind: text-xl */
+  font-weight: 600;         /* font-semibold */
+  padding-top: 0.75rem;  /* Tailwind: pt-3 */
 }
 
-/* ============================
-   Links
-============================ */
-a {
-  color: #00FFFF;
-  text-decoration: none;
-  transition: color 0.3s ease;
+.raw-blog h5 {
+  font-size: 1.125rem;      /* Tailwind: text-lg */
+  font-weight: 500;         /* Tailwind: font-medium */
+  padding-top: 0.75rem;  /* Tailwind: pt-3 */
 }
 
-.blog-link {
+.raw-blog h6 {
+  font-size: 1rem;          /* Tailwind: text-base */
+  font-weight: 500;         /* Tailwind: font-medium */
+  padding-top: 0.75rem;  /* Tailwind: pt-3 */
+}
+
+.raw-blog p {
+  font-size: 1rem;          /* Tailwind: text-base */
+  line-height: 1.75rem;     /* leading-relaxed */
+  padding-top: 0.75rem;  /* Tailwind: pt-3 */
+}
+
+.raw-blog a {
+  color: #ADD8E6;           /* Tailwind: text-blue-500 */
+  text-decoration: underline;
+}
+
+.raw-blog ul {
+  list-style-type: disc;
+}
+
+.raw-blog ol {
+  list-style-type: decimal;
+}
+
+.raw-blog ul,
+.raw-blog ol {
+  padding-left: 1.25rem;    /* Tailwind: pl-5 */
+  padding-top: 0.75rem;  /* Tailwind: pt-3 */
+}
+
+.raw-blog ol ol {
+  padding-top: 0;
+}
+
+.raw-blog ol ul {
+  padding-top: 0;
+}
+
+.raw-blog ul ol {
+  padding-top: 0;
+}
+
+.raw-blog ul ul {
+  padding-top: 0;
+}
+
+.raw-blog li {
+  font-size: 1rem;          /* Tailwind: text-base */
+}
+
+.raw-blog blockquote {
+  margin-top: 0.75rem;
+  padding-left: 1rem;       /* Tailwind: pl-4 */
+  border-left: 4px solid #e5e7eb; /* border-l-4, border-gray-200 */
+  color: #6b7280;           /* Tailwind: text-gray-600 */
+}
+
+.raw-blog blockquote blockquote {
+  margin-top: 0;
+}
+
+.raw-blog blockquote p {
+  padding-top: 0;
+}
+
+.raw-blog pre {
+  margin-top: 0.75rem;  /* Tailwind: mt-3 */
+  white-space: pre;
+  background-color: #E0E0E0; /* Tailwind: bg-gray-50 */
+  border-radius: 0.25rem;   /* Tailwind: rounded */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  line-height: 1.5rem;      /* Tailwind: leading-normal */
+  overflow-x: auto;
+  padding: 0.50rem;  /* Tailwind: pt-3 */
+}
+
+.raw-blog code {
+  white-space: pre;
+  background-color: #E0E0E0; /* Tailwind: bg-gray-100 */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  border-radius: 0.25rem;   /* Tailwind: rounded */
+  padding: 0.25rem;
+}
+
+.raw-blog pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-family: inherit; /* Optional: match <pre> font */
+}
+
+.raw-blog img {
+  max-width: 100%;
+  height: auto;
   display: block;
-  width: 50%;
-  margin: 0 auto 1em;
+  padding-top: 0.75rem;  /* Tailwind: pt-3 */
 }
 
-/* ============================
-   Lists
-============================ */
-ul > li {
-  width: 50%;
-  margin: 0 auto;
-  padding: 1em;
-  text-align: left;
-}
-
-ul > li > ul {
-  width: auto;
-  padding-left: 1em;
-}
-
-ul > li > ul > li {
-  width: auto;
-}
-
-/* ============================
-   Navigation
-============================ */
-nav {
-  display: inline-block;
-  margin: 0 auto;
-  padding: 10px 20px;
-  text-align: center;
-  border: 2px solid #FAF1E6;
-  border-radius: 20px;
-  background-color: transparent; /* soft contrast nav area */
-}
-
-/* ============================
-   Forms & Inputs
-============================ */
-option {
-  background-color: #E4EFE7;
-  color: #99BC85;
-  padding: 10px;
-}
-
-select,
-input[type="text"] {
-  background-color: #F2EFE7;
-  padding: 10px 15px;
-  font-size: 16px;
-  color: #99BC85;
-  box-shadow: none;
-  border-radius: 10em;
+.raw-blog hr {
   border: none;
+  margin-block: 0.5rem;
+  border-top: 1px solid #4A4A4A; /* Tailwind: border-gray-200 */
 }
 
-input::placeholder {
-  color: #99BC85; /* Use any color you like */
-  opacity: 1;     /* Optional: makes sure it's fully visible */
-}
+/**
+  Pygments generated styling:
+ */
 
-/* ============================
-   Timestamps
-============================ */
-.timestamp_created,
-.timestamp_modified {
-  position: absolute;
-  font-size: 0.8em;
-  color: #99BC85;
-  opacity: 0.6;
-  padding-right: 1em;
-}
+pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #ffffcc }
+.codehilite { background: #f8f8f8; }
+.codehilite .c { color: #3D7B7B; font-style: italic } /* Comment */
+.codehilite .err { border: 1px solid #F00 } /* Error */
+.codehilite .k { color: #008000; font-weight: bold } /* Keyword */
+.codehilite .o { color: #666 } /* Operator */
+.codehilite .ch { color: #3D7B7B; font-style: italic } /* Comment.Hashbang */
+.codehilite .cm { color: #3D7B7B; font-style: italic } /* Comment.Multiline */
+.codehilite .cp { color: #9C6500 } /* Comment.Preproc */
+.codehilite .cpf { color: #3D7B7B; font-style: italic } /* Comment.PreprocFile */
+.codehilite .c1 { color: #3D7B7B; font-style: italic } /* Comment.Single */
+.codehilite .cs { color: #3D7B7B; font-style: italic } /* Comment.Special */
+.codehilite .gd { color: #A00000 } /* Generic.Deleted */
+.codehilite .ge { font-style: italic } /* Generic.Emph */
+.codehilite .ges { font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #E40000 } /* Generic.Error */
+.codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+.codehilite .gi { color: #008400 } /* Generic.Inserted */
+.codehilite .go { color: #717171 } /* Generic.Output */
+.codehilite .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+.codehilite .gt { color: #04D } /* Generic.Traceback */
+.codehilite .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+.codehilite .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+.codehilite .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+.codehilite .kp { color: #008000 } /* Keyword.Pseudo */
+.codehilite .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+.codehilite .kt { color: #B00040 } /* Keyword.Type */
+.codehilite .m { color: #666 } /* Literal.Number */
+.codehilite .s { color: #BA2121 } /* Literal.String */
+.codehilite .na { color: #687822 } /* Name.Attribute */
+.codehilite .nb { color: #008000 } /* Name.Builtin */
+.codehilite .nc { color: #00F; font-weight: bold } /* Name.Class */
+.codehilite .no { color: #800 } /* Name.Constant */
+.codehilite .nd { color: #A2F } /* Name.Decorator */
+.codehilite .ni { color: #717171; font-weight: bold } /* Name.Entity */
+.codehilite .ne { color: #CB3F38; font-weight: bold } /* Name.Exception */
+.codehilite .nf { color: #00F } /* Name.Function */
+.codehilite .nl { color: #767600 } /* Name.Label */
+.codehilite .nn { color: #00F; font-weight: bold } /* Name.Namespace */
+.codehilite .nt { color: #008000; font-weight: bold } /* Name.Tag */
+.codehilite .nv { color: #19177C } /* Name.Variable */
+.codehilite .ow { color: #A2F; font-weight: bold } /* Operator.Word */
+.codehilite .w { color: #BBB } /* Text.Whitespace */
+.codehilite .mb { color: #666 } /* Literal.Number.Bin */
+.codehilite .mf { color: #666 } /* Literal.Number.Float */
+.codehilite .mh { color: #666 } /* Literal.Number.Hex */
+.codehilite .mi { color: #666 } /* Literal.Number.Integer */
+.codehilite .mo { color: #666 } /* Literal.Number.Oct */
+.codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
+.codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
+.codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+.codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+.codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
+.codehilite .se { color: #AA5D1F; font-weight: bold } /* Literal.String.Escape */
+.codehilite .sh { color: #BA2121 } /* Literal.String.Heredoc */
+.codehilite .si { color: #A45A77; font-weight: bold } /* Literal.String.Interpol */
+.codehilite .sx { color: #008000 } /* Literal.String.Other */
+.codehilite .sr { color: #A45A77 } /* Literal.String.Regex */
+.codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
+.codehilite .ss { color: #19177C } /* Literal.String.Symbol */
+.codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #00F } /* Name.Function.Magic */
+.codehilite .vc { color: #19177C } /* Name.Variable.Class */
+.codehilite .vg { color: #19177C } /* Name.Variable.Global */
+.codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+.codehilite .vm { color: #19177C } /* Name.Variable.Magic */
+.codehilite .il { color: #666 } /* Literal.Number.Integer.Long */
 
-.timestamp_created {
-  top: 0.5em;
-  right: 0.8em;
-}
-
-.timestamp_modified {
-  bottom: 0.5em;
-  right: 0.8em;
-}
-
-/* ============================
-   Tags
-============================ */
-.tag_label,
-.tag_list {
-  position: absolute;
-  font-size: 0.8em;
-  color: #99BC85;
-  opacity: 0.6;
-  padding-left: 1em;
-}
-
-.tag_label {
-  top: 0.5em;
-  left: 0.8em;
-}
-
-.tag_list {
-  bottom: 0.5em;
-  left: 0.8em;
-}
-
-/* ============================
-   Pins
-============================ */
-.pin_icon {
-  color: #99BC85;
-  font-size: 1.3em;
-  position: absolute;
-  left: 1.5em;
-  margin: auto auto;
-}
-
-.pin_header {
-  display: flex;
-}
-
-/* ============================
-   Layout Wrappers
-============================ */
-.form_wrapper,
-.nav-wrapper {
-  text-align: center;
-  margin: 0 auto;
-  color: #F2EFE7;
-  padding: 1em;
-}
-
-/* ============================
-   Blog Box
-============================ */
-.blog-box {
-  position: relative;
-  margin: 0 auto 2em;
-  background-color: #FAF1E6;
-  padding: 20px;
-  border-radius: 10em;
-  text-align: center;
-  box-sizing: border-box;
-}
-
-.blog-box h3 {
-  color: #99BC85;
-  width: 60%;
-  margin: 0 auto;
-}
-
-/* ============================
-   Responsive
-============================ */
-@media (width <= 768px) {
-  .blog-box,
-  .blog-link,
-  p,
-  ul > li {
-    width: 90% !important;
-    margin-right: auto;
-    margin-left: auto;
-  }
-}

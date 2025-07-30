@@ -45,7 +45,8 @@ HEAD_DEFAULTS = \
 """\
 <meta charset="utf-8">
 <meta content="width=device-width, initial-scale=1.0" name="viewport">
-<link href="style" rel="stylesheet">"""
+<link href="style" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>"""
 # -=-=-=-=-=-
 # End of <head> configuration for HTML files.
 # -=-=-=-=-=-
@@ -55,4 +56,4 @@ HEAD_DEFAULTS = \
 # Software Github link + version (don't change).
 # -=-=-=-=-=-
 GH = "https://github.com/CrazyWillBear/blogman"
-VERSION = "0.0.4-beta"
+VERSION = "1.0.0"
