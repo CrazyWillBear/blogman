@@ -112,7 +112,7 @@ some HTML!
 
 ### Screenshot 2
 
-<img src="https://i.imgur.com/AWf8s1s.png" alt="Screenshot 2" width="715" height="500"/>
+<img src="https://i.imgur.com/zfdKWFK.png" alt="Screenshot 2" width="605" height="500"/>
 
 ## How it works
 
