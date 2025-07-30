@@ -53,6 +53,12 @@ body {
   font-size: 1rem;          /* Tailwind: text-base */
   line-height: 1.75rem;     /* leading-relaxed */
   padding-top: 0.75rem;  /* Tailwind: pt-3 */
+
+  text-align: justify;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: normal;
+
 }
 
 .raw-blog a {
@@ -62,10 +68,20 @@ body {
 
 .raw-blog ul {
   list-style-type: disc;
+
+  text-align: justify;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .raw-blog ol {
   list-style-type: decimal;
+
+  text-align: justify;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .raw-blog ul,
@@ -99,6 +115,11 @@ body {
   padding-left: 1rem;       /* Tailwind: pl-4 */
   border-left: 4px solid #e5e7eb; /* border-l-4, border-gray-200 */
   color: #6b7280;           /* Tailwind: text-gray-600 */
+
+  text-align: justify;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .raw-blog blockquote blockquote {
