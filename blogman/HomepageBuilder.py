@@ -119,7 +119,7 @@ class HomepageBuilder:
         blog_boxes = HomepageBuilder._build_blog_boxes(query=query, sort_by=sort_by)
         search_and_sort_forms = self._build_forms(sort_by)
 
-        doc = html(_class="m-8 lg:mx-64")
+        doc = html(lang="en", _class="m-8 lg:mx-64")
 
         with doc:
             with head() as h:
