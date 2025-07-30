@@ -108,11 +108,11 @@ some HTML!
 
 ### Screenshot 1
 
-<img src="https://i.imgur.com/DTgdgCe.png" alt="Screenshot 1" width="510" height="300"/>
+<img src="https://i.imgur.com/K64awkB.png" alt="Screenshot 1" width="535" height="500"/>
 
 ### Screenshot 2
 
-<img src="https://i.imgur.com/IYX7ngT.png" alt="Screenshot 2" width="510" height="300"/>
+<img src="https://i.imgur.com/AWf8s1s.png" alt="Screenshot 2" width="715" height="500"/>
 
 ## How it works
 
