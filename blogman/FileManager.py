@@ -198,6 +198,7 @@ class FileManager(FileSystemEventHandler):
 
         # if a Markdown file is created
         if path.suffix == ".md":
+            print("::Recaching", path.stem)
             # automatically updates HTML and MD content
             blog = Blog(path.stem)
             # doesn't update dates, so do that manually

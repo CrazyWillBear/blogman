@@ -43,7 +43,7 @@ class Blog:
          self.tags,
          self.date_created,
          self.date_last_modified,
-         self.pinned) = None, None, [], None, None, None  # initialize these
+         self.pinned) = None, None, None, None, None, None  # initialize these
 
         # get the Blog's json path
         self.json_file = self._get_json_file_path()
@@ -54,7 +54,8 @@ class Blog:
 
             # check to see if Markdown needs to be reapplied
             raw_md = self.read_md()
-            if not self._compare_md_hashes(raw_md):
+            raw_md_top_line = raw_md.split("\n")[0]
+            if not self._compare_md_hashes(raw_md) or self._get_tags(raw_md_top_line) != self.tags:
                 self.apply_md(raw_md)  # this updates tags, md_content, and html_content
 
         else:  # if the file doesn't exist set values to default
@@ -156,8 +157,8 @@ class Blog:
         md_lines = raw_md.split("\n")  # this starts out at a list
 
         # if markdown content is empty the file was created blank; do nothing
-        if not raw_md.strip():
-            return
+        #if not raw_md.strip():
+        #    return
 
         top_line = md_lines[0]  # the tags can only be on the top line
 

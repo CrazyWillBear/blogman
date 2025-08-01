@@ -1,4 +1,4 @@
-{poetry}{example}{pinned}
+{poetry}{pinned}{example}
 # Leaving The Forest
 
 #### By William B. Chastain
