@@ -22,6 +22,12 @@
     * [Screenshot 1](#screenshot-1)
     * [Screenshot 2](#screenshot-2)
   * [How it works](#how-it-works)
+    * [Right away](#right-away)
+    * [Rendering + caching blogs](#rendering--caching-blogs)
+      * [Creation](#creation)
+      * [Modification](#modification)
+      * [Deletion](#deletion)
+    * [Serving web pages](#serving-web-pages)
   * [License](#license)
     * [MIT License](#mit-license)
 <!-- TOC -->
