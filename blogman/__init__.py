@@ -4,8 +4,6 @@ from pathlib import Path
 # This is where you configure Blogman. All types of configuration are sectioned off using comments like this one. It's
 # recommended to adjust the BASE_DIR to the directory you plan to put your HTML, Markdown, and CSS directories in. This
 # allows you to simply adjust the names of each directory as opposed to putting the full paths to each file/directory.
-#
-# Please don't change the GitHub link and version variables.
 # -=-=-=-=-=-
 
 
@@ -25,7 +23,7 @@ BLOG_DESCRIPTION = [  # each item in this list represents a paragraph
 # -=-=-=-=-=-
 # Start of directory/file configuration.
 # -=-=-=-=-=-
-BASE_DIR = Path.cwd() # the parent directory of the following:
+BASE_DIR = Path.cwd()  # the parent directory of the following:
 
 BLOG_DIR = BASE_DIR / "blogs"
 MD_DIR = BASE_DIR / "md"
@@ -37,23 +35,22 @@ FAVICON_ICO_PATH = BASE_DIR / "logo.ico"
 # End of directory/file configuration.
 # -=-=-=-=-=-
 
+# -=-=-=-=-=-
+# WARNING: All further values should be left as-is. Changing these could cause issues.
+# -=-=-=-=-=-
 
 # -=-=-=-=-=-
-# Start of <head> configuration for HTML files.
+# <head> configuration for HTML files.
 # -=-=-=-=-=-
 HEAD_DEFAULTS = \
-"""\
-<meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0" name="viewport">
-<link href="style" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>"""
-# -=-=-=-=-=-
-# End of <head> configuration for HTML files.
-# -=-=-=-=-=-
-
+    """\
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="style" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>"""
 
 # -=-=-=-=-=-
-# Software Github link + version (don't change).
+# Software Github link + version.
 # -=-=-=-=-=-
 GH = "https://github.com/CrazyWillBear/blogman"
-VERSION = "1.0.0"
+VERSION = "1.1.0"

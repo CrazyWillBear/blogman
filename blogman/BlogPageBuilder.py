@@ -4,29 +4,28 @@ from dominate.tags import a, body, div, head, html, p, title
 from dominate.util import raw
 
 from blogman import HEAD_DEFAULTS
-from blogman.Blog import Blog
 
 
 class BlogPageBuilder:
     """
     Builds individual Blog pages.
 
-    All methods are static, the only one you need to use is build_blog_page(Blog).
+    All methods are static, the only one you need to use is build_blog_page().
     """
 
     @staticmethod
-    def build_blog_page(blog: Blog) -> str:
+    def build_blog_page(md: str, blog_title: str) -> str:
         """
         Builds an HTML page for a given Blog.
 
         Args:
-            blog (Blog): the Blog whose page you want to build
+            md (str): the Blog's Markdown content
+            blog_title (str): the Blog's title
 
         Returns:
             str: the HTML for the page
         """
-        blog_title = blog.title
-        raw_blog_html = BlogPageBuilder._convert_md(blog.md_content)
+        raw_blog_html = BlogPageBuilder._convert_md(md)
 
         doc = html(lang="en")
         with doc:
@@ -36,7 +35,8 @@ class BlogPageBuilder:
 
             with body(_class="mb-8 mx-8 mt-4 lg:mx-64"):
                 with a(href="/"):
-                    with div(_class="mx-auto my-2 w-fit py-1 px-4 border-2 rounded-md border-gray-400 bg-transparent md:hover:bg-neutral-700 transition-colors duration-300 md:hover:text-stone-100"):
+                    with div(
+                            _class="mx-auto my-2 w-fit py-1 px-4 border-2 rounded-md border-gray-400 bg-transparent md:hover:bg-neutral-700 transition-colors duration-300 md:hover:text-stone-100"):
                         p("Home")
                 with div(_class="raw-blog") as d:
                     d.add(raw(raw_blog_html))
@@ -54,10 +54,10 @@ class BlogPageBuilder:
         Returns:
             str: the HTML code
         """
-        html_converted = markdown.markdown(md)
+        html_converted = markdown.markdown(md, extensions=['extra', 'fenced_code', 'codehilite'])
         soup = BeautifulSoup(html_converted, 'html.parser')
 
         for script in soup.find_all('script'):
             script.decompose()
 
-        return markdown.markdown(md, extensions=['extra', 'fenced_code', 'codehilite'])
+        return str(soup)

@@ -4,19 +4,22 @@ from datetime import datetime
 from pathlib import Path
 
 from blogman import BLOG_DIR, MD_DIR
+from blogman.BlogPageBuilder import BlogPageBuilder
+from blogman.Hash import Hash
 
 
 class Blog:
     """
     Represents a Blog itself.
 
-    Holds data such as file paths associated with the Blog, its title, markdown content, tags, and date data (including
-    creation and recent modification dates). Assumes JSON files are stored in BLOG_DIR and blog markdown files are
-    stored in MD_DIR (which they should be).
+    Holds data such as file paths associated with the Blog, its title, markdown content, HTML content, tags, and date
+    data (including creation and recent modification dates). Assumes JSON files are stored in BLOG_DIR and blog markdown
+    files are stored in MD_DIR (which they should be).
 
     Attributes:
         blog_md (Path): path to the Blog's markdown file
         md_content (str): the Blog's markdown content
+        html_content (str): the Blog's HTML content
         tags (list): the Blog's self-described tags
         date_created (datetime): the date of the Blog's creation
         date_last_modified (datetime): the date of the Blog's last modification
@@ -33,25 +36,31 @@ class Blog:
             blog_name (str): The Blog's Markdown file's name without suffix
         """
         self.blog_md = MD_DIR / (blog_name + ".md")  # this should be the Blog's Markdown file
-
-        self.md_content, self.tags = None, None  # these are updated later
-        self.date_created, self.date_last_modified = None, None  # these are also updated later
         self.title = blog_name  # this can be updated now
-        self.pinned = False  # default is False
+
+        (self.md_content,
+         self.html_content,
+         self.tags,
+         self.date_created,
+         self.date_last_modified,
+         self.pinned) = None, None, [], None, None, None  # initialize these
 
         # get the Blog's json path
-        self.json_file = self.get_json_file_path()
+        self.json_file = self._get_json_file_path()
 
-        # if it already exists, load the dates from the json
         if self.json_file.exists():
-            self.date_created, self.date_last_modified = self._load_dates_from_json()
+            # load the json
+            self._load_json()
 
-        # otherwise, create new dates
-        else:
-            self.date_created = datetime.now()
-            self.date_last_modified = datetime.now()
+            # check to see if Markdown needs to be reapplied
+            raw_md = self.read_md()
+            if not self._compare_md_hashes(raw_md):
+                self.apply_md(raw_md)  # this updates tags, md_content, and html_content
 
-        self.read_apply_md()  # this updates tags and md_content
+        else:  # if the file doesn't exist set values to default
+            cur_date = datetime.now()
+            self.date_created, self.date_last_modified = cur_date, cur_date
+            self.pinned = False  # false by default
 
         self._save_json()  # write the json
 
@@ -80,6 +89,23 @@ class Blog:
 
         return []  # if it didn't match, then there are no tags so return an empty list
 
+    @staticmethod
+    def _remove_tags(md: str) -> str:
+        """
+        From a string, detect is tags are present and if so return a string with them removed.
+
+        Args:
+            md (str): the Markdown content to remove tags from
+
+        Returns:
+            str: The Markdown content with the tags removed
+        """
+        md_split = md.split("\n")
+        if not Blog._get_tags(md_split[0]):
+            return md
+        else:
+            return "\n".join(md_split[1:])
+
     # --- Public Methods --- #
     def get_formatted_tags(self) -> str:
         """
@@ -94,6 +120,17 @@ class Blog:
             tags_str += f"({tag}),"
 
         return tags_str[:-1]
+
+    def read_md(self) -> str:
+        """
+        Reads and returns the Blog's raw Markdown file.
+
+        Returns:
+            str: The Blog's Raw Markdown.
+        """
+        with open(self.blog_md, "r", encoding="utf-8") as file:
+            raw_md = file.read()
+        return raw_md
 
     def tags_empty(self) -> bool:
         """
@@ -111,18 +148,17 @@ class Blog:
         self.date_last_modified = datetime.now()
         self._save_json()
 
-    def read_apply_md(self) -> None:
+    def apply_md(self, raw_md) -> None:
         """
         Reads and applies the Markdown file to the Blog. Updates the markdown content, tags, and pin status.
         """
-        with open(self.blog_md, "r", encoding="utf-8") as f:
-            self.md_content = f.readlines()  # this starts out at a list
+        md_lines = raw_md.split("\n")  # this starts out at a list
 
         # if markdown content is empty the file was created blank; do nothing
-        if not self.md_content:
+        if not raw_md.strip():
             return
 
-        top_line = self.md_content[0]  # the tags can only be on the top line
+        top_line = md_lines[0]  # the tags can only be on the top line
 
         self.tags = self._get_tags(top_line)
 
@@ -135,15 +171,29 @@ class Blog:
 
         # now we join the markdown content into one string
         if len(self.tags) > 0 or self.pinned:
-            lines = self.md_content[1:]
-            self.md_content = "".join(lines)
+            lines = md_lines[1:]
+            self.md_content = "\n".join(lines)
         else:
-            self.md_content = "".join(self.md_content)
+            self.md_content = "\n".join(md_lines)
+
+        self.html_content = BlogPageBuilder.build_blog_page(self.md_content, self.title)
 
         self._save_json()
 
     # --- Internal Methods --- #
-    def get_json_file_path(self) -> Path:
+    def _compare_md_hashes(self, raw_md) -> bool:
+        """
+        Compares the cached Markdown hash to what's currently stored in Markdown directory.
+
+        Returns:
+            bool: True if hashes match, false otherwise.
+        """
+        if self.md_content is None or raw_md is None:
+            return False
+
+        return Hash.hash(self.md_content) == Hash.hash(Blog._remove_tags(raw_md))
+
+    def _get_json_file_path(self) -> Path:
         """
         Gets the json file path for the Blog.
 
@@ -152,20 +202,21 @@ class Blog:
         """
         return BLOG_DIR / (self.blog_md.stem + ".json")
 
-    def _load_dates_from_json(self) -> (datetime, datetime):
+    def _load_json(self) -> None:
         """
-        Reads a blog's JSON file and extracts the date created and date last modified and returns them as a tuple.
-
-        Returns:
-            (datetime, datetime): The date created and the date last modified (in that order) as a tuple
+        Reads a blog's JSON file and sets class variables to match. Doesn't set title as this is set when constructed.
         """
         with open(self.json_file, "r", encoding="utf-8") as f:
             json_file_str = f.read()
 
         json_dict = json.loads(json_file_str)
 
-        return (datetime.fromisoformat(json_dict["date_created"]),
-                datetime.fromisoformat(json_dict["date_last_modified"]))
+        self.md_content = json_dict["md_content"]
+        self.html_content = json_dict["html_content"]
+        self.tags = json_dict["tags"]
+        self.pinned = json_dict["pinned"]
+        self.date_created = datetime.fromisoformat(json_dict["date_created"])
+        self.date_last_modified = datetime.fromisoformat(json_dict["date_last_modified"])
 
     def _save_json(self) -> None:
         """
@@ -174,6 +225,7 @@ class Blog:
         json_dict = {
             "title": self.title,
             "md_content": self.md_content,
+            "html_content": self.html_content,
             "tags": self.tags,
             "pinned": self.pinned,
             "date_created": self.date_created.isoformat(),
@@ -182,4 +234,4 @@ class Blog:
 
         json_file = BLOG_DIR / (self.title + ".json")
         with open(json_file, "w", encoding="utf-8") as f:
-            f.write(json.dumps(json_dict))
+            f.write(json.dumps(json_dict, indent=2))

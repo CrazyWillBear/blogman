@@ -8,6 +8,7 @@ from blogman.FileManager import FileManager
 # This is used below to place a pinned icon next to pinned blogs
 GOOGLE_PINNED_ICON_CODE = """<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#4A4A4A"><path d="m640-480 80 80v80H520v240l-40 40-40-40v-240H240v-80l80-80v-280h-40v-80h400v80h-40v280Zm-286 80h252l-46-46v-314H400v314l-46 46Zm126 0Z"/></svg>"""
 
+
 class HomepageBuilder:
     """
     Builds the homepage.
@@ -58,7 +59,6 @@ class HomepageBuilder:
         blog_boxes = div()
         with (blog_boxes):
             for blog in FileManager.blog_list:
-
                 url = blog.title.replace(" ", "-")
                 blog_boxes.add(
                     a(
@@ -99,7 +99,7 @@ class HomepageBuilder:
 
                             _class="mb-4 w-full h-auto border-2 border-gray-400 rounded-2xl mx-auto pt-3 px-3 pb-1 bg-transparent md:hover:bg-neutral-700 transition-colors duration-300 md:hover:text-stone-100"
                         ),
-                    href=url
+                        href=url
                     )
                 )
 
@@ -172,7 +172,8 @@ class HomepageBuilder:
             with form(method="post", _class="my-1"):
                 input_(type="hidden", name="form_name", value="sort_form")
                 with label("Sort:  ", fr="sort_by"):
-                    with select(id="sort_by", name="sort_by", onchange="this.form.submit()", _class="h-6 w-auto rounded-md text-gray-400"):
+                    with select(id="sort_by", name="sort_by", onchange="this.form.submit()",
+                                _class="h-6 w-auto rounded-md text-gray-400"):
                         for value, label_text in self.sort_options:
                             if sort_by == value:
                                 option(label_text, value=value, selected=True)

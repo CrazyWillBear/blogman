@@ -1,5 +1,5 @@
 # Blogman
-![Static Badge](https://img.shields.io/badge/version-1.0.0-blue)
+![Static Badge](https://img.shields.io/badge/version-1.1.0-blue)
 ![GitHub License](https://img.shields.io/github/license/CrazyWillBear/blogman)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/83d6bd3faf7e4d6eb52b9eadb909b84d)](https://app.codacy.com/gh/CrazyWillBear/blogman/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![Python package](https://github.com/CrazyWillBear/blogman/actions/workflows/python-package.yml/badge.svg)
@@ -28,13 +28,13 @@
 
 ## Summary
 
-Blogman is a blog managing software that allows posts to be written in Markdown and displayed on the web. You configure
-your Markdown directory, which is where you place your blog posts written in Markdown. Blogman lists those on a homepage
-and renders each blog when visited. Blogman also supports tagging your posts, which is explained later.
+Blogman is a simple, Python-based blog engine that renders Markdown posts into static HTML, with a customizable homepage
+that includes search and sorting. You configure your Markdown directory (`MD_DIR`), which is where you place your blog
+posts written in Markdown. Blogman also supports tagging, pinning, and sorting your posts.
 
 ## Quickstart
 
-Clone the repository and run `pip install -r requirements.txt` followed by `python -m blogman`.
+Clone the repository and run `pip install -r requirements.txt` followed by `python -m blogman` (Python >=3.11).
 Then, just drop your blog posts into the `md/` directory. In deployment, it's recommended that you use [Gunicorn](https://gunicorn.org/)
 or [Waitress](https://pypi.org/project/waitress/) for Windows.
 
@@ -60,8 +60,10 @@ page title in a browser's tab).
 
 ### Misc.
 
-- `HEAD_DEFAULTS`: You can just leave this as-is, unless you have a specific `<head>` you wish to use.
-- `GH` + `VERSION`: These are not meant to be configured, but technically can be for whatever reason.
+These are not meant to be configured, changing them could lead to issues.
+
+- `HEAD_DEFAULTS`
+- `GH` + `VERSION`
 
 ## How to write a blog in Markdown
 
@@ -76,7 +78,7 @@ Tags are optional, but helpful. The homepage's search feature will compare the s
 serve as searchable categories within your blog.
 
 You can add tags to your post by using the form `{tag_1}...{tag_n}` at the top of your Markdown file. There should be no
-spaces between your tags and they should all be on one line, the top line of the Markdown file.
+spaces between your tags and they should all be on the top line of the Markdown file.
 
 ### Pinning
 
@@ -84,7 +86,7 @@ If you'd like to pin a post, add the tag `{pinned}` to your Markdown.
 
 ### HTML
 
-You can write HTML in your Markdown file and have it render.
+You can write HTML in your Markdown file and have it render. `<script>` blocks are ignored to prevent malicious use.
 
 ### Examples
 
@@ -102,6 +104,8 @@ This is an example of a blog!
 I can add
 <br />
 some HTML!
+
+> And a quote
 ```
 
 ## Screenshots
@@ -116,9 +120,43 @@ some HTML!
 
 ## How it works
 
-The program works by monitoring changes in the Markdown directory. When detected, it acts accordingly by updating a
-blog's JSON file. Those blogs are then listed on the homepage, sortable by date created or date last modified and
-searchable by content, title, and/or tag(s).
+### Right away
+
+The program, when first run, will go through each Markdown file in `MD_DIR` and compare it to our cached value. If a
+difference is detected, the blog is re-rendered and the output HTML is cached. This accounts for new blogs or changes
+to existing ones when the program isn't running.
+
+### Rendering + caching blogs
+
+Blogs are rendered using the `[markdown](https://pypi.org/project/Markdown/)` package and are cached as JSON files in
+`BLOG_DIR`. The following data is stored for each blog:
+
+- Title
+- Markdown content (raw blog post Markdown)
+- HTML content (the rendered webpage)
+- Tags
+- Pinned status
+- Date created / Date last modified
+
+The program waits for changes in `MD_DIR`, including creations, deletions, and modifications.
+
+#### Creation
+
+When a Markdown file is created, we render and cache it.
+
+#### Modification
+
+Upon modification, we reset the modification date then re-render and cache the blog.
+
+#### Deletion
+
+For deletions, we simply delete the respective blog's JSON file.
+
+### Serving web pages
+
+For individual blogs, Flask reads the blog's JSON and serves its cached HTML content. The home page, however, is
+different because of search and sorting options, so we render it live and then serve it. In the future, we may cache
+the default homepage (no search or sort) for better performance.
 
 ## License
 

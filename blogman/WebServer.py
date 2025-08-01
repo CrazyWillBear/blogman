@@ -2,7 +2,6 @@ from flask import Flask, send_file, request
 
 from blogman import STYLE_SHEET_PATH, FAVICON_ICO_PATH
 from blogman.Blog import Blog
-from blogman.BlogPageBuilder import BlogPageBuilder
 from blogman.HomepageBuilder import HomepageBuilder
 
 
@@ -38,8 +37,9 @@ class WebServer:
     # --- Internal Methods --- #
     def _setup_routes(self) -> None:
         """
-        Sets up routs for homepage and files.
+        Sets up routes for homepage and files.
         """
+
         @self.app.route('/', methods=('GET', 'POST'))
         def home():
             query = None
@@ -57,15 +57,15 @@ class WebServer:
 
         @self.app.route('/<page>')
         def blog(page):
-            # account for requesting a stylesheet
+            # account for requesting a stylesheet or icon
             if STYLE_SHEET_PATH.stem == page:
                 return send_file(STYLE_SHEET_PATH)
             if "favicon.ico" in page:
                 return send_file(FAVICON_ICO_PATH)
 
-            blog_name = Blog(page.replace("-", " "))
-            return BlogPageBuilder.build_blog_page(blog_name)
-        
+            blog_obj = Blog(page.replace("-", " "))
+            return blog_obj.html_content
+
         @self.app.errorhandler(404)
         def page_not_found(e):
             return e, 404

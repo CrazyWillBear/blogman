@@ -59,7 +59,6 @@ class FileManager(FileSystemEventHandler):
 
             blog_list.append(blog)
 
-
         # sort the list by specified criteria
         FileManager.blog_list = FileManager._sort_blog_list(blog_list, sort_by)
 
@@ -67,6 +66,10 @@ class FileManager(FileSystemEventHandler):
     @staticmethod
     def _clean_blog_dir() -> None:
         for file in BLOG_DIR.iterdir():
+            # don't want to delete random files
+            if file.suffix != ".json":
+                continue
+
             md_path = MD_DIR / (file.stem + ".md")
 
             if not md_path.exists():
@@ -85,7 +88,7 @@ class FileManager(FileSystemEventHandler):
         if json_path.exists():
             os.remove(json_path)
         else:
-            raise FileNotFoundError("Attempted to delete non-existent Blog json")
+            print("WARNING: Attempted to delete non-existent Blog json")
 
     @staticmethod
     def _matches_query(blog: Blog, query: str) -> bool:
@@ -99,9 +102,6 @@ class FileManager(FileSystemEventHandler):
         query_lower = query.lower()
         tags_str = ''.join(blog.tags).lower()
 
-        print(query_lower, tags_str)
-        print(query_lower in tags_str)
-
         return (
                 query_lower in blog.md_content.lower() or
                 query_lower in blog.title.lower() or
@@ -111,7 +111,14 @@ class FileManager(FileSystemEventHandler):
     @staticmethod
     def _sort_blog_list(blog_list: list, sort_by: str) -> list:
         """
-        Sorts a given blog list by the specified criteria
+        Sorts a given blog list by the specified criteria.
+
+        Args:
+            blog_list (list): the list of Blogs.
+            sort_by (str): how to sort the Blogs
+
+        Returns:
+            list: The sorted Blogs.
         """
         # initialize as empty lists
         pinned_blogs, unpinned_blogs = [], []
@@ -136,7 +143,7 @@ class FileManager(FileSystemEventHandler):
             return \
                     sorted(pinned_blogs, key=lambda blog: blog.date_last_modified) + \
                     sorted(unpinned_blogs, key=lambda blog: blog.date_last_modified)
-        else: # sort must be date_created_desc, which is what we want as default anyway
+        else:  # sort must be date_created_desc, which is what we want as default anyway
             return \
                     sorted(pinned_blogs, key=lambda blog: blog.date_created, reverse=True) + \
                     sorted(unpinned_blogs, key=lambda blog: blog.date_created, reverse=True)
@@ -172,7 +179,7 @@ class FileManager(FileSystemEventHandler):
 
         # if a Markdown file is created
         if path.suffix == ".md":
-            # we want to convert it into a Blog json file
+            # handles creation of JSON
             Blog(path.stem)
 
     def on_modified(self, event: FileSystemEvent) -> None:
@@ -191,10 +198,10 @@ class FileManager(FileSystemEventHandler):
 
         # if a Markdown file is created
         if path.suffix == ".md":
-            # we want to update its md_content and date_last_modified
+            # automatically updates HTML and MD content
             blog = Blog(path.stem)
+            # doesn't update dates, so do that manually
             blog.update_date_last_modified()
-            blog.read_apply_md()
 
     def on_deleted(self, event) -> None:
         """

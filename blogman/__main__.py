@@ -18,9 +18,9 @@ Welcome to...
 GitHub: {GH}
 Version: {VERSION}
 -=-=-=-"""
-        .replace("{GH}", GH)
-        .replace("{VERSION}", VERSION)
-    )
+          .replace("{GH}", GH)
+          .replace("{VERSION}", VERSION)
+          )
 
 
 if __name__ == "__main__":
