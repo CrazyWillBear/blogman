@@ -32,6 +32,8 @@ Blogman is a simple, Python-based blog engine that renders Markdown posts into s
 that includes search and sorting. You configure your Markdown directory (`MD_DIR`), which is where you place your blog
 posts written in Markdown. Blogman also supports tagging, pinning, and sorting your posts.
 
+I currently host [my own blog](https://writing.capbear.net) using this software, so check it out to see how it looks!
+
 ## Quickstart
 
 Clone the repository and run `pip install -r requirements.txt` followed by `python -m blogman` (Python >=3.11).
