@@ -1,5 +1,5 @@
 # Blogman
-![Static Badge](https://img.shields.io/badge/version-1.1.0-blue)
+![Static Badge](https://img.shields.io/badge/version-1.1.1-blue)
 ![GitHub License](https://img.shields.io/github/license/CrazyWillBear/blogman)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/83d6bd3faf7e4d6eb52b9eadb909b84d)](https://app.codacy.com/gh/CrazyWillBear/blogman/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 ![Python package](https://github.com/CrazyWillBear/blogman/actions/workflows/python-package.yml/badge.svg)
@@ -22,6 +22,12 @@
     * [Screenshot 1](#screenshot-1)
     * [Screenshot 2](#screenshot-2)
   * [How it works](#how-it-works)
+    * [Right away](#right-away)
+    * [Rendering + caching blogs](#rendering--caching-blogs)
+      * [Creation](#creation)
+      * [Modification](#modification)
+      * [Deletion](#deletion)
+    * [Serving web pages](#serving-web-pages)
   * [License](#license)
     * [MIT License](#mit-license)
 <!-- TOC -->

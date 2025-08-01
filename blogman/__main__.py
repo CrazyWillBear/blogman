@@ -1,3 +1,5 @@
+import argparse
+
 from blogman import GH, VERSION, MD_DIR
 from blogman.FileManager import FileManager
 from blogman.WebServer import WebServer
@@ -24,11 +26,23 @@ Version: {VERSION}
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--recache_html", action="store_true", help="Re-render and cache blog HTML")
+
+    args = parser.parse_args()
+
     print_startup_text()
 
     print("::Loading file manager...", end="")
     file_manager = FileManager(MD_DIR)
     print("\r::File manager successfully loaded")
+
+    # if `--recache_html` is passed we need to do this
+    if args.recache_html:
+        print("::Recaching HTML..")
+        for blog in FileManager.blog_list:
+            print("  - Recached", blog.title)
+            blog.apply_md(blog.md_content)
 
     print("::Creating web server...", end="")
     web_server = WebServer()
