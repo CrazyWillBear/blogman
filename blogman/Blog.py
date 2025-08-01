@@ -117,7 +117,8 @@ class Blog:
         tags_str = ""
 
         for tag in self.tags:
-            tags_str += f"({tag}),"
+            if tag != "pinned":
+                tags_str += f"({tag}),"
 
         return tags_str[:-1]
 
@@ -164,7 +165,6 @@ class Blog:
 
         # apply pinned tag
         if "pinned" in self.tags:
-            self.tags.remove("pinned")
             self.pinned = True
         else:
             self.pinned = False
