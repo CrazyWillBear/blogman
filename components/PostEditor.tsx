@@ -5,7 +5,7 @@ import type { Post } from "@/db/schema";
 import { previewAction } from "@/app/admin/actions";
 
 const inputClass =
-  "w-full border border-hairline-faint bg-ink-well/70 px-4 py-2.5 text-parchment placeholder:text-parchment-faint focus:border-gold focus:outline-none transition-colors duration-300";
+  "w-full border border-hairline bg-transparent px-3.5 py-2.5 placeholder:text-faint focus:border-ink focus:outline-none transition-colors duration-200";
 
 /** Editor form with a live preview pane, used by /admin/new and /admin/[slug]/edit. */
 export function PostEditor({
@@ -36,7 +36,7 @@ export function PostEditor({
     <div className="grid gap-8 lg:grid-cols-2">
       <form action={action} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1.5">
-          <span className="smallcaps text-xs text-gold">Title</span>
+          <span className="smallcaps text-sm text-muted">Title</span>
           <input
             name="title"
             required
@@ -47,8 +47,8 @@ export function PostEditor({
         </label>
 
         <label className="flex flex-col gap-1.5">
-          <span className="smallcaps text-xs text-gold">
-            Tags <span className="normal-case text-parchment-faint">(comma-separated)</span>
+          <span className="smallcaps text-sm text-muted">
+            Tags <span className="normal-case text-faint">(comma-separated)</span>
           </span>
           <input
             name="tags"
@@ -58,18 +58,18 @@ export function PostEditor({
           />
         </label>
 
-        <label className="flex items-center gap-2.5 text-sm text-parchment-dim">
+        <label className="flex items-center gap-2.5 text-sm text-muted">
           <input
             type="checkbox"
             name="pinned"
             defaultChecked={post?.pinned ?? false}
-            className="h-4 w-4 accent-[var(--oxblood)]"
+            className="h-4 w-4 accent-[var(--ink)]"
           />
-          <span className="smallcaps">Pin to the top of the archive</span>
+          <span className="smallcaps">Pin to the top</span>
         </label>
 
         <label className="flex flex-1 flex-col gap-1.5">
-          <span className="smallcaps text-xs text-gold">Manuscript</span>
+          <span className="smallcaps text-sm text-muted">Markdown</span>
           <textarea
             name="mdContent"
             value={md}
@@ -82,22 +82,22 @@ export function PostEditor({
 
         <button
           type="submit"
-          className="smallcaps self-start border border-hairline bg-transparent px-6 py-2.5 text-sm text-gold-bright transition-colors duration-300 hover:border-oxblood hover:bg-oxblood hover:text-parchment"
+          className="smallcaps self-start border border-ink px-6 py-2.5 transition-colors duration-200 hover:bg-ink hover:text-paper"
         >
           {submitLabel}
         </button>
       </form>
 
       <section aria-label="Preview" className="min-w-0">
-        <p className="smallcaps mb-3 text-xs text-gold">Preview</p>
-        <div className="border border-hairline-faint bg-ink-raised/40 px-6 py-5">
+        <p className="smallcaps mb-3 text-sm text-muted">Preview</p>
+        <div className="border border-hairline px-6 py-5">
           {previewHtml ? (
             <div
-              className="prose prose-dropcap"
+              className="prose"
               dangerouslySetInnerHTML={{ __html: previewHtml }}
             />
           ) : (
-            <p className="italic text-parchment-faint">
+            <p className="italic text-faint">
               The preview appears as you write.
             </p>
           )}

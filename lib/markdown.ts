@@ -41,7 +41,7 @@ const processor = unified()
   .use(remarkRehype, { allowDangerousHtml: true })
   .use(rehypeRaw)
   .use(rehypePrettyCode, {
-    theme: "vesper",
+    theme: "min-light",
     keepBackground: false,
     defaultLang: "text",
   })

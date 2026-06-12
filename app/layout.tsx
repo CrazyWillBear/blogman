@@ -1,22 +1,12 @@
 import type { Metadata } from "next";
-import {
-  Cormorant_Garamond,
-  JetBrains_Mono,
-  Source_Serif_4,
-} from "next/font/google";
+import { JetBrains_Mono, Merriweather } from "next/font/google";
 import { blogConfig } from "@/blog.config";
 import "./globals.css";
 
-const display = Cormorant_Garamond({
-  variable: "--font-display",
+const serif = Merriweather({
+  variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-});
-
-const body = Source_Serif_4({
-  variable: "--font-body",
-  subsets: ["latin"],
+  weight: ["300", "400", "700"],
   style: ["normal", "italic"],
 });
 
@@ -39,26 +29,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
-    >
-      <body className="relative min-h-full">
-        <div className="relative z-10 flex min-h-screen flex-col">
+    <html lang="en" className={`${serif.variable} ${mono.variable} antialiased`}>
+      <body>
+        <div className="flex min-h-screen flex-col">
           <main className="flex-1">{children}</main>
-          <footer className="mt-16 border-t border-hairline-faint py-8">
-            <div className="mx-auto flex max-w-3xl flex-col items-center gap-2 px-6 text-sm text-parchment-faint">
-              <span aria-hidden className="text-gold">
-                ❦
-              </span>
+          <footer className="mt-20 border-t border-hairline py-8">
+            <div className="mx-auto flex w-full max-w-3xl flex-col gap-1.5 px-6 text-sm text-faint">
               <p>{blogConfig.footer}</p>
               <nav className="flex gap-4">
                 {blogConfig.links.map((link) => (
-                  <a
-                    key={link.href}
-                    href={link.href}
-                    className="gold-underline text-parchment-dim"
-                  >
+                  <a key={link.href} href={link.href} className="ink-link">
                     {link.label}
                   </a>
                 ))}

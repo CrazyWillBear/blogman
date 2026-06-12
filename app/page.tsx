@@ -19,14 +19,14 @@ export default async function HomePage({
 
   return (
     <div className="mx-auto max-w-3xl px-6 pt-16 sm:pt-24">
-      <header className="fade-up text-center" style={{ "--stagger": 0 } as React.CSSProperties}>
-        <p aria-hidden className="smallcaps text-xs text-gold">
-          Ex Libris
-        </p>
-        <h1 className="font-display mt-3 text-5xl font-semibold tracking-tight text-parchment sm:text-6xl">
+      <header
+        className="fade-up"
+        style={{ "--stagger": 0 } as React.CSSProperties}
+      >
+        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
           {blogConfig.name}
         </h1>
-        <div className="mx-auto mt-6 max-w-xl space-y-3 text-parchment-dim">
+        <div className="mt-5 max-w-2xl space-y-3 text-lg text-muted">
           {blogConfig.description.map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
@@ -34,14 +34,9 @@ export default async function HomePage({
       </header>
 
       <div
-        aria-hidden
-        className="ornament-divider fade-up my-10"
+        className="fade-up mt-12"
         style={{ "--stagger": 1 } as React.CSSProperties}
       >
-        ❦
-      </div>
-
-      <div className="fade-up" style={{ "--stagger": 2 } as React.CSSProperties}>
         <Suspense>
           <SearchControls query={query} sort={sort} />
         </Suspense>
@@ -49,15 +44,15 @@ export default async function HomePage({
 
       {posts.length === 0 ? (
         <p
-          className="fade-up mt-14 text-center italic text-parchment-faint"
-          style={{ "--stagger": 3 } as React.CSSProperties}
+          className="fade-up mt-14 italic text-faint"
+          style={{ "--stagger": 2 } as React.CSSProperties}
         >
-          Nothing in the archive matches{query ? ` “${query}”` : ""}.
+          Nothing here matches{query ? ` “${query}”` : ""}.
         </p>
       ) : (
-        <ul className="mt-10 space-y-4">
+        <ul className="mt-10 divide-y divide-hairline border-t border-hairline">
           {posts.map((post, index) => (
-            <PostCard key={post.slug} post={post} stagger={index + 3} />
+            <PostCard key={post.slug} post={post} stagger={index + 2} />
           ))}
         </ul>
       )}

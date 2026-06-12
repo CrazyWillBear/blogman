@@ -7,8 +7,8 @@ import { SORT_OPTIONS, type SortOption } from "@/lib/sort";
 const SORT_LABELS: Record<SortOption, string> = {
   "created-desc": "Newest first",
   "created-asc": "Oldest first",
-  "modified-desc": "Recently amended",
-  "modified-asc": "Least recently amended",
+  "modified-desc": "Recently updated",
+  "modified-asc": "Least recently updated",
 };
 
 /** Search box + sort dropdown; state lives in GET params so results are linkable. */
@@ -53,16 +53,16 @@ export function SearchControls({
         type="search"
         name="q"
         defaultValue={query}
-        placeholder="Search the archive…"
+        placeholder="Search…"
         aria-label="Search posts"
-        className="flex-1 border border-hairline-faint bg-ink-well/70 px-4 py-2.5 text-parchment placeholder:text-parchment-faint focus:border-gold focus:outline-none transition-colors duration-300"
+        className="flex-1 border-b border-hairline bg-transparent py-2 placeholder:text-faint focus:border-ink focus:outline-none transition-colors duration-200"
       />
       <select
         name="sort"
         defaultValue={sort}
         aria-label="Sort posts"
         onChange={readForm}
-        className="border border-hairline-faint bg-ink-well/70 px-3 py-2.5 text-parchment-dim focus:border-gold focus:outline-none transition-colors duration-300"
+        className="border-b border-hairline bg-transparent py-2 text-muted focus:border-ink focus:outline-none transition-colors duration-200"
       >
         {SORT_OPTIONS.map((option) => (
           <option key={option} value={option}>
@@ -72,9 +72,9 @@ export function SearchControls({
       </select>
       <button
         type="submit"
-        className="smallcaps border border-hairline bg-transparent px-5 py-2.5 text-sm text-gold-bright transition-colors duration-300 hover:bg-oxblood hover:border-oxblood hover:text-parchment"
+        className="smallcaps border-b border-hairline py-2 text-left text-muted transition-colors duration-200 hover:border-ink hover:text-ink sm:px-2"
       >
-        Seek
+        Search
       </button>
     </form>
   );

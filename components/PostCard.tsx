@@ -1,9 +1,9 @@
 import Link from "next/link";
 import type { Post } from "@/db/schema";
 import { formatDate } from "@/lib/format";
-import { WaxSeal } from "./WaxSeal";
+import { PinMark } from "./PinMark";
 
-/** Catalog-card entry for a post on the homepage index. */
+/** One ruled row in the homepage post index. */
 export function PostCard({ post, stagger }: { post: Post; stagger: number }) {
   return (
     <li
@@ -12,32 +12,30 @@ export function PostCard({ post, stagger }: { post: Post; stagger: number }) {
     >
       <Link
         href={`/${post.slug}`}
-        className="group block border border-hairline-faint bg-ink-raised/60 px-6 py-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-hairline hover:bg-ink-raised"
+        className="group flex items-baseline justify-between gap-6 py-5"
       >
-        <div className="flex items-start justify-between gap-4">
-          <h2 className="font-display text-2xl font-semibold leading-snug text-parchment group-hover:text-gold-bright transition-colors duration-300">
+        <div className="min-w-0">
+          <h2 className="text-2xl font-bold leading-snug underline decoration-transparent decoration-1 underline-offset-4 transition-colors duration-200 group-hover:decoration-ink">
             {post.title}
+            {post.pinned && (
+              <>
+                {" "}
+                <PinMark />
+              </>
+            )}
           </h2>
-          {post.pinned && <WaxSeal />}
+          {post.tags.length > 0 && (
+            <p className="mt-1 text-sm text-faint">
+              {post.tags.join(" · ")}
+            </p>
+          )}
         </div>
-        {post.tags.length > 0 && (
-          <p className="smallcaps mt-1.5 text-xs text-gold">
-            {post.tags.join(" · ")}
-          </p>
-        )}
-        <p className="mt-3 text-xs text-parchment-faint">
-          <span className="smallcaps">Penned</span>{" "}
-          <time dateTime={post.createdAt.toISOString()}>
-            {formatDate(post.createdAt)}
-          </time>
-          <span aria-hidden className="mx-2 text-gold">
-            ·
-          </span>
-          <span className="smallcaps">Amended</span>{" "}
-          <time dateTime={post.updatedAt.toISOString()}>
-            {formatDate(post.updatedAt)}
-          </time>
-        </p>
+        <time
+          dateTime={post.createdAt.toISOString()}
+          className="shrink-0 text-sm text-faint"
+        >
+          {formatDate(post.createdAt)}
+        </time>
       </Link>
     </li>
   );
