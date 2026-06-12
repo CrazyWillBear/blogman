@@ -28,16 +28,16 @@ export default async function PostPage({ params }: Props) {
   return (
     <article className="mx-auto max-w-3xl px-6 pt-12 sm:pt-16">
       <nav className="fade-up" style={{ "--stagger": 0 } as React.CSSProperties}>
-        <Link href="/" className="ink-link smallcaps text-sm text-muted">
+        <Link href="/" className="ink-link smallcaps text-lg text-muted">
           ← Home
         </Link>
       </nav>
 
       <header
-        className="fade-up mt-12"
+        className="fade-up mt-14 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 text-sm text-faint"
         style={{ "--stagger": 1 } as React.CSSProperties}
       >
-        <p className="text-sm text-faint">
+        <p>
           {post.pinned && (
             <>
               <PinMark />
@@ -61,15 +61,11 @@ export default async function PostPage({ params }: Props) {
             </>
           )}
         </p>
-        {post.tags.length > 0 && (
-          <p className="mt-1.5 text-sm text-faint">
-            {post.tags.join(" · ")}
-          </p>
-        )}
+        {post.tags.length > 0 && <p>{post.tags.join(" · ")}</p>}
       </header>
 
       <div
-        className="prose fade-up mt-10 border-t border-hairline pt-10 pb-4"
+        className="prose fade-up mt-4 border-t border-hairline pt-10 pb-4"
         style={{ "--stagger": 2 } as React.CSSProperties}
         dangerouslySetInnerHTML={{ __html: html }}
       />

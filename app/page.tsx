@@ -16,6 +16,8 @@ export default async function HomePage({
   const sort =
     params.sort && isSortOption(params.sort) ? params.sort : DEFAULT_SORT;
   const posts = await listPosts(query, sort);
+  const pinned = posts.filter((post) => post.pinned);
+  const rest = posts.filter((post) => !post.pinned);
 
   return (
     <div className="mx-auto max-w-3xl px-6 pt-16 sm:pt-24">
@@ -49,12 +51,49 @@ export default async function HomePage({
         >
           Nothing here matches{query ? ` “${query}”` : ""}.
         </p>
-      ) : (
+      ) : pinned.length === 0 ? (
         <ul className="mt-10 divide-y divide-hairline border-t border-hairline">
-          {posts.map((post, index) => (
+          {rest.map((post, index) => (
             <PostCard key={post.slug} post={post} stagger={index + 2} />
           ))}
         </ul>
+      ) : (
+        <>
+          <section className="mt-10">
+            <h2
+              className="smallcaps fade-up text-sm text-faint"
+              style={{ "--stagger": 2 } as React.CSSProperties}
+            >
+              Pinned
+            </h2>
+            <ul className="mt-3 divide-y divide-hairline border-t border-hairline">
+              {pinned.map((post, index) => (
+                <PostCard key={post.slug} post={post} stagger={index + 3} />
+              ))}
+            </ul>
+          </section>
+          {rest.length > 0 && (
+            <section className="mt-12">
+              <h2
+                className="smallcaps fade-up text-sm text-faint"
+                style={
+                  { "--stagger": pinned.length + 3 } as React.CSSProperties
+                }
+              >
+                All posts
+              </h2>
+              <ul className="mt-3 divide-y divide-hairline border-t border-hairline">
+                {rest.map((post, index) => (
+                  <PostCard
+                    key={post.slug}
+                    post={post}
+                    stagger={pinned.length + index + 4}
+                  />
+                ))}
+              </ul>
+            </section>
+          )}
+        </>
       )}
     </div>
   );
