@@ -1,173 +1,124 @@
-# Blogman
-![Static Badge](https://img.shields.io/badge/version-1.1.1-blue)
-![GitHub License](https://img.shields.io/github/license/CrazyWillBear/blogman)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/83d6bd3faf7e4d6eb52b9eadb909b84d)](https://app.codacy.com/gh/CrazyWillBear/blogman/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-![Python package](https://github.com/CrazyWillBear/blogman/actions/workflows/python-package.yml/badge.svg)
+# blogman
 
-<!-- TOC -->
-* [Blogman](#blogman)
-  * [Summary](#summary)
-  * [Quickstart](#quickstart)
-  * [Configuration guide](#configuration-guide)
-    * [Name + description](#name--description)
-    * [Files + directories](#files--directories)
-    * [Misc.](#misc)
-  * [How to write a blog in Markdown](#how-to-write-a-blog-in-markdown)
-    * [Markdown guide](#markdown-guide)
-    * [Tags](#tags)
-    * [Pinning](#pinning)
-    * [HTML](#html)
-    * [Examples](#examples)
-  * [Screenshots](#screenshots)
-    * [Screenshot 1](#screenshot-1)
-    * [Screenshot 2](#screenshot-2)
-  * [How it works](#how-it-works)
-    * [Right away](#right-away)
-    * [Rendering + caching blogs](#rendering--caching-blogs)
-      * [Creation](#creation)
-      * [Modification](#modification)
-      * [Deletion](#deletion)
-    * [Serving web pages](#serving-web-pages)
-  * [License](#license)
-    * [MIT License](#mit-license)
-<!-- TOC -->
+A reusable, self-hostable blog engine. Write Markdown in a web editor, store it
+in Postgres, deploy anywhere Next.js runs (built Vercel-first). Dark academia
+out of the box; restyle it with an AI agent in minutes (see
+[Customizing with an AI agent](#customizing-with-an-ai-agent)).
 
-## Summary
+**Stack:** Next.js (App Router, TypeScript) · Tailwind CSS v4 · Drizzle ORM +
+Neon Postgres · Auth.js (GitHub OAuth) · remark/rehype Markdown pipeline with
+syntax highlighting.
 
-Blogman is a simple, Python-based blog engine that renders Markdown posts into static HTML, with a customizable homepage
-that includes search and sorting. You configure your Markdown directory (`MD_DIR`), which is where you place your blog
-posts written in Markdown. Blogman also supports tagging, pinning, and sorting your posts.
+**Features**
 
-I currently host [my own blog](https://blog.williamchastain.com) using this software, so check it out to see how it looks!
+- Markdown posts with GFM (tables, fenced code + syntax highlighting) and safe
+  inline HTML (`<script>` is always stripped).
+- Homepage search (title, content, tags) and sorting (created/modified,
+  asc/desc) via GET params — results are linkable.
+- Pinned posts always sort first, marked with a wax seal.
+- Auth-protected `/admin` editor: live preview, tag input, pin toggle.
+- Single-table Postgres schema; no filesystem storage, serverless-friendly.
 
 ## Quickstart
 
-Clone the repository and run `pip install -r requirements.txt` followed by `python -m blogman` (Python >=3.11).
-Then, just drop your blog posts into the `md/` directory. In deployment, it's recommended that you use [Gunicorn](https://gunicorn.org/)
-or [Waitress](https://pypi.org/project/waitress/) for Windows.
+1. **Clone and install**
 
-## Configuration guide
+   ```sh
+   git clone https://github.com/CrazyWillBear/blogman && cd blogman
+   npm install
+   ```
 
-Blogman is meant to be configured, and you can do so in the `blogman/__init__.py` file.
+2. **Create a Neon database** at [neon.tech](https://neon.tech) (free tier is
+   fine) and copy the connection string.
 
-### Name + description
+3. **Create a GitHub OAuth app** at GitHub → Settings → Developer settings →
+   OAuth Apps. Callback URL for local dev:
+   `http://localhost:3000/api/auth/callback/github` (add a second app or
+   update the URL for production).
 
-- `BLOG_NAME`: This is your blog's name. It will display on your homepage above your blogs.
-- `BLOG_DESCRIPTION`: This is your blog's description. It will display below your blog's name on the homepage.
+4. **Configure env**: `cp .env.example .env.local` and fill it in.
+   `ADMIN_GITHUB_LOGINS` is a comma-separated list of GitHub usernames allowed
+   into the editor. Generate `AUTH_SECRET` with `npx auth secret` or
+   `openssl rand -base64 32`.
 
-### Files + directories
+5. **Create the schema**
 
-- `BASE_DIR`: This is the parent directory of the following config options:
-  - `BLOG_DIR`: This is where blog JSON files will be generated and stored.
-  - `MD_DIR`: This is where your blog post Markdown files will go.
-  - `CSS_DIR`: This is where you should place your CSS stylesheet. If you'd rather just hardcode the path to your style
-sheet, you can do so using the following variable.
-  - `STYLE_SHEET_PATH`: This is the path to your style sheet (.css file).
-  - `FAVICON_ICO_PATH`: This is the path to whatever `.ico` you wish to use (this is the image that displays next to the
-page title in a browser's tab).
+   ```sh
+   npm run db:migrate
+   ```
 
-### Misc.
+6. **Run**
 
-These are not meant to be configured, changing them could lead to issues.
+   ```sh
+   npm run dev
+   ```
 
-- `HEAD_DEFAULTS`
-- `GH` + `VERSION`
+   Sign in at `/admin` and write your first post.
 
-## How to write a blog in Markdown
+7. **Make it yours**: edit `blog.config.ts` (name, description, footer links).
 
-### Markdown guide
+## Deploying to Vercel
 
-This isn't a guide to Markdown, but [this is](https://www.markdownguide.org/). There are a couple things to keep in mind
-that are additional/supplemental to standard Markdown.
+Import the repo in Vercel, set the same env vars (`DATABASE_URL`,
+`AUTH_SECRET`, `AUTH_GITHUB_ID`, `AUTH_GITHUB_SECRET`,
+`ADMIN_GITHUB_LOGINS`), and point your production GitHub OAuth app's callback
+at `https://<your-domain>/api/auth/callback/github`. No other config — there
+is no filesystem storage or long-lived process.
 
-### Tags
+## Migrating from blogman v1
 
-Tags are optional, but helpful. The homepage's search feature will compare the search query against tags. Thus, tags
-serve as searchable categories within your blog.
+v1 stored posts as Markdown files in `md/` with rendered JSON caches in
+`blogs/`. To bring that content into the database:
 
-You can add tags to your post by using the form `{tag_1}...{tag_n}` at the top of your Markdown file. There should be no
-spaces between your tags and they should all be on the top line of the Markdown file.
+1. Put your v1 `md/` and `blogs/` directories at the repo root (sample content
+   ships in this repo as a demo).
+2. Run:
 
-### Pinning
+   ```sh
+   npx tsx scripts/migrate-v1.ts
+   ```
 
-If you'd like to pin a post, add the tag `{pinned}` to your Markdown.
+The script parses the v1 first-line `{tag}{tag2}` syntax (the magic `pinned`
+tag becomes the pinned flag), takes created/modified dates from the JSON
+caches when present, and preserves your exact v1 slugs
+(`Title-With-Dashes`, case kept) so existing URLs keep working. It upserts by
+slug — safe to re-run. New posts created in the editor get normal
+lowercase-kebab slugs.
 
-### HTML
+## Customizing with an AI agent
 
-You can write HTML in your Markdown file and have it render. `<script>` blocks are ignored to prevent malicious use.
+The engine is built to be restyled and reconfigured by AI coding agents
+(Claude Code, etc.). `CLAUDE.md` carries the project rules so an agent knows
+the checks to run. Paste-ready prompts:
 
-### Examples
+> Rebrand this blog: update `blog.config.ts` with my blog name "…" and a
+> description about …, and update the footer links to point at my GitHub.
 
-```markdown aiignore
-{tag}{tag2}
-# My Blog
+> Restyle the blog from dark academia to a [minimal light / brutalist /
+> retro-futuristic] theme. The full design system lives in `app/globals.css`
+> (CSS variables, ornaments, prose styles) and the fonts in `app/layout.tsx`.
+> Keep the layout structure and accessibility intact, then run
+> `npm run check` and `npm run build`.
 
-This is an example of a blog!
+> Add an RSS feed at `/feed.xml` using the existing `lib/posts.ts` query
+> helpers, following the conventions in CLAUDE.md.
+
+Useful knobs: `blog.config.ts` (identity), `app/globals.css` (palette,
+texture, type scale), `app/layout.tsx` (fonts), `components/` (cards, seals,
+controls), `lib/markdown.ts` (markdown features and sanitization).
+
+## Development
+
+```sh
+npm run dev          # dev server
+npm run check        # lint + typecheck + tests (Vitest)
+npm run build        # production build
+npm run db:generate  # generate SQL migration after schema changes
+npm run db:migrate   # apply migrations
 ```
 
-```markdown aiignore
-{pinned}
-# My Other Blog
-
-I can add
-<br />
-some HTML!
-
-> And a quote
-```
-
-## Screenshots
-
-### Screenshot 1
-
-<img src="https://i.imgur.com/K64awkB.png" alt="Screenshot 1" width="535" height="500"/>
-
-### Screenshot 2
-
-<img src="https://i.imgur.com/zfdKWFK.png" alt="Screenshot 2" width="605" height="500"/>
-
-## How it works
-
-### Right away
-
-The program, when first run, will go through each Markdown file in `MD_DIR` and compare it to our cached value. If a
-difference is detected, the blog is re-rendered and the output HTML is cached. This accounts for new blogs or changes
-to existing ones when the program isn't running.
-
-### Rendering + caching blogs
-
-Blogs are rendered using the `[markdown](https://pypi.org/project/Markdown/)` package and are cached as JSON files in
-`BLOG_DIR`. The following data is stored for each blog:
-
-- Title
-- Markdown content (raw blog post Markdown)
-- HTML content (the rendered webpage)
-- Tags
-- Pinned status
-- Date created / Date last modified
-
-The program waits for changes in `MD_DIR`, including creations, deletions, and modifications.
-
-#### Creation
-
-When a Markdown file is created, we render and cache it.
-
-#### Modification
-
-Upon modification, we reset the modification date then re-render and cache the blog.
-
-#### Deletion
-
-For deletions, we simply delete the respective blog's JSON file.
-
-### Serving web pages
-
-For individual blogs, Flask reads the blog's JSON and serves its cached HTML content. The home page, however, is
-different because of search and sorting options, so we render it live and then serve it. In the future, we may cache
-the default homepage (no search or sort) for better performance.
+CI runs the same checks on every push.
 
 ## License
 
-### MIT License
-
-This project uses the MIT License. The license text is in the `LICENSE` file.
+[MIT](LICENSE)
