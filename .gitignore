@@ -1,3 +1,8 @@
 .idea/
 __pycache__/
 .venv/
+
+# env / secrets
+.env
+.env.*
+!.env.example
