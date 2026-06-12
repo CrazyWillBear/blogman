@@ -1,12 +1,4 @@
-import {
-  desc,
-  asc,
-  eq,
-  ilike,
-  or,
-  sql,
-  type SQL,
-} from "drizzle-orm";
+import { desc, asc, eq, or, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db";
 import { posts, type NewPost, type Post } from "@/db/schema";
 
@@ -15,7 +7,7 @@ import { DEFAULT_SORT, type SortOption } from "./sort";
 export { DEFAULT_SORT, isSortOption, SORT_OPTIONS } from "./sort";
 export type { SortOption } from "./sort";
 
-/** ORDER BY terms: pinned posts always first, then the chosen criterion. */
+/** ORDER BY terms for browsing: pinned posts first, then the chosen criterion. */
 export function buildOrderBy(sort: SortOption): SQL[] {
   const column = sort.startsWith("created") ? posts.createdAt : posts.updatedAt;
   const direction = sort.endsWith("desc") ? desc : asc;
@@ -23,29 +15,61 @@ export function buildOrderBy(sort: SortOption): SQL[] {
 }
 
 /**
- * Case-insensitive substring match on title, markdown content, or any tag.
+ * Full-text match against the weighted search vector (title > tags > body).
+ * websearch_to_tsquery gives stemming, multi-word AND, quoted phrases, and
+ * `-exclusions`, and treats the input as plain text (safe to bind raw).
  * Returns undefined for a blank query (no WHERE clause).
  */
 export function buildSearchFilter(query: string): SQL | undefined {
   const trimmed = query.trim();
   if (!trimmed) return undefined;
-  const pattern = `%${trimmed.replace(/[%_\\]/g, "\\$&")}%`;
+  return sql`${posts.search} @@ websearch_to_tsquery('english', ${trimmed})`;
+}
+
+/** Relevance rank first when searching; browse ordering otherwise. */
+export function buildSearchOrderBy(query: string, sort: SortOption): SQL[] {
+  const trimmed = query.trim();
+  if (!trimmed) return buildOrderBy(sort);
+  return [
+    sql`ts_rank(${posts.search}, websearch_to_tsquery('english', ${trimmed})) desc`,
+    ...buildOrderBy(sort).slice(1),
+  ];
+}
+
+/**
+ * Trigram fallback for queries full-text search can't match (typos, partial
+ * words): similarity against the title or any tag.
+ */
+export function buildFuzzyFilter(query: string): SQL | undefined {
+  const trimmed = query.trim();
+  if (!trimmed) return undefined;
   return or(
-    ilike(posts.title, pattern),
-    ilike(posts.mdContent, pattern),
-    sql`exists (select 1 from unnest(${posts.tags}) as tag where tag ilike ${pattern})`,
+    sql`similarity(${posts.title}, ${trimmed}) > 0.3`,
+    sql`exists (select 1 from unnest(${posts.tags}) as tag where similarity(tag, ${trimmed}) > 0.3)`,
   );
+}
+
+/** Best title match first for fuzzy results. */
+export function buildFuzzyOrderBy(query: string): SQL[] {
+  return [sql`similarity(${posts.title}, ${query.trim()}) desc`];
 }
 
 export async function listPosts(
   query = "",
   sort: SortOption = DEFAULT_SORT,
 ): Promise<Post[]> {
-  return db
+  const results = await db
     .select()
     .from(posts)
     .where(buildSearchFilter(query))
-    .orderBy(...buildOrderBy(sort));
+    .orderBy(...buildSearchOrderBy(query, sort));
+  if (results.length > 0 || !query.trim()) return results;
+  // Nothing matched full-text — likely a typo or partial word; retry fuzzy.
+  return db
+    .select()
+    .from(posts)
+    .where(buildFuzzyFilter(query))
+    .orderBy(...buildFuzzyOrderBy(query));
 }
 
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {

@@ -3,8 +3,10 @@ import { describe, expect, it } from "vitest";
 process.env.DATABASE_URL ??= "postgres://test:test@localhost/test";
 
 const {
-  buildOrderBy,
   buildSearchFilter,
+  buildSearchOrderBy,
+  buildFuzzyFilter,
+  buildFuzzyOrderBy,
   isSortOption,
   slugify,
   DEFAULT_SORT,
@@ -12,12 +14,15 @@ const {
 const { db } = await import("@/db");
 const { posts } = await import("@/db/schema");
 
-function renderListQuery(query: string, sort: Parameters<typeof buildOrderBy>[0]) {
+function renderListQuery(
+  query: string,
+  sort: Parameters<typeof buildSearchOrderBy>[1],
+) {
   return db
     .select()
     .from(posts)
     .where(buildSearchFilter(query))
-    .orderBy(...buildOrderBy(sort))
+    .orderBy(...buildSearchOrderBy(query, sort))
     .toSQL();
 }
 
@@ -52,17 +57,50 @@ describe("buildSearchFilter", () => {
     expect(renderListQuery("", DEFAULT_SORT).sql).not.toContain("where");
   });
 
-  it("matches title, content, and tags case-insensitively", () => {
-    const { sql, params } = renderListQuery("forest", DEFAULT_SORT);
-    expect(sql).toContain('"posts"."title" ilike');
-    expect(sql).toContain('"posts"."md_content" ilike');
-    expect(sql).toContain("unnest");
-    expect(params).toContain("%forest%");
+  it("matches the search vector with websearch_to_tsquery", () => {
+    const { sql, params } = renderListQuery("forest walks", DEFAULT_SORT);
+    expect(sql).toContain('"posts"."search" @@ websearch_to_tsquery');
+    expect(params).toContain("forest walks");
   });
 
-  it("escapes SQL LIKE wildcards in the query", () => {
-    const { params } = renderListQuery("100%_done", DEFAULT_SORT);
-    expect(params).toContain("%100\\%\\_done%");
+  it("passes the query as a bound parameter, not interpolated SQL", () => {
+    const hostile = "'; drop table posts; --";
+    const { sql, params } = renderListQuery(hostile, DEFAULT_SORT);
+    expect(sql).not.toContain("drop table");
+    expect(params).toContain(hostile);
+  });
+});
+
+describe("buildSearchOrderBy", () => {
+  it("orders by relevance rank first when a query is present", () => {
+    const { sql } = renderListQuery("forest", DEFAULT_SORT);
+    expect(sql).toMatch(/order by ts_rank\("posts"\."search", websearch_to_tsquery/);
+    expect(sql).toMatch(/"posts"\."created_at" desc$/);
+  });
+
+  it("falls back to browse ordering (pinned first) for blank queries", () => {
+    const { sql } = renderListQuery("", DEFAULT_SORT);
+    expect(sql).toMatch(/order by "posts"\."pinned" desc, "posts"\."created_at" desc$/);
+  });
+});
+
+describe("buildFuzzyFilter", () => {
+  it("returns undefined for blank queries", () => {
+    expect(buildFuzzyFilter("")).toBeUndefined();
+    expect(buildFuzzyFilter("   ")).toBeUndefined();
+  });
+
+  it("uses trigram similarity on title and tags", () => {
+    const rendered = db
+      .select()
+      .from(posts)
+      .where(buildFuzzyFilter("postgers"))
+      .orderBy(...buildFuzzyOrderBy("postgers"))
+      .toSQL();
+    expect(rendered.sql).toContain('similarity("posts"."title"');
+    expect(rendered.sql).toContain("unnest");
+    expect(rendered.sql).toMatch(/order by similarity\("posts"\."title"/);
+    expect(rendered.params).toContain("postgers");
   });
 });
 
