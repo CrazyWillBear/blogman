@@ -90,16 +90,16 @@ describe("buildFuzzyFilter", () => {
     expect(buildFuzzyFilter("   ")).toBeUndefined();
   });
 
-  it("uses trigram similarity on title and tags", () => {
+  it("uses trigram word similarity on title and tags", () => {
     const rendered = db
       .select()
       .from(posts)
       .where(buildFuzzyFilter("postgers"))
       .orderBy(...buildFuzzyOrderBy("postgers"))
       .toSQL();
-    expect(rendered.sql).toContain('similarity("posts"."title"');
+    expect(rendered.sql).toMatch(/word_similarity\(\$\d+, "posts"\."title"\)/);
     expect(rendered.sql).toContain("unnest");
-    expect(rendered.sql).toMatch(/order by similarity\("posts"\."title"/);
+    expect(rendered.sql).toMatch(/order by word_similarity\(\$\d+, "posts"\."title"\) desc/);
     expect(rendered.params).toContain("postgers");
   });
 });

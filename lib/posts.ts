@@ -38,20 +38,22 @@ export function buildSearchOrderBy(query: string, sort: SortOption): SQL[] {
 
 /**
  * Trigram fallback for queries full-text search can't match (typos, partial
- * words): similarity against the title or any tag.
+ * words). word_similarity scores the query against the best-matching word in
+ * the title or tag — plain similarity() compares whole strings, so one typo'd
+ * word against a multi-word title dilutes below any usable threshold.
  */
 export function buildFuzzyFilter(query: string): SQL | undefined {
   const trimmed = query.trim();
   if (!trimmed) return undefined;
   return or(
-    sql`similarity(${posts.title}, ${trimmed}) > 0.3`,
-    sql`exists (select 1 from unnest(${posts.tags}) as tag where similarity(tag, ${trimmed}) > 0.3)`,
+    sql`word_similarity(${trimmed}, ${posts.title}) > 0.3`,
+    sql`exists (select 1 from unnest(${posts.tags}) as tag where word_similarity(${trimmed}, tag) > 0.3)`,
   );
 }
 
 /** Best title match first for fuzzy results. */
 export function buildFuzzyOrderBy(query: string): SQL[] {
-  return [sql`similarity(${posts.title}, ${query.trim()}) desc`];
+  return [sql`word_similarity(${query.trim()}, ${posts.title}) desc`];
 }
 
 export async function listPosts(
