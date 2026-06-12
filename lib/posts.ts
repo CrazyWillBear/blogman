@@ -10,20 +10,10 @@ import {
 import { db } from "@/db";
 import { posts, type NewPost, type Post } from "@/db/schema";
 
-export const SORT_OPTIONS = [
-  "created-desc",
-  "created-asc",
-  "modified-desc",
-  "modified-asc",
-] as const;
+import { DEFAULT_SORT, type SortOption } from "./sort";
 
-export type SortOption = (typeof SORT_OPTIONS)[number];
-
-export const DEFAULT_SORT: SortOption = "created-desc";
-
-export function isSortOption(value: string): value is SortOption {
-  return (SORT_OPTIONS as readonly string[]).includes(value);
-}
+export { DEFAULT_SORT, isSortOption, SORT_OPTIONS } from "./sort";
+export type { SortOption } from "./sort";
 
 /** ORDER BY terms: pinned posts always first, then the chosen criterion. */
 export function buildOrderBy(sort: SortOption): SQL[] {

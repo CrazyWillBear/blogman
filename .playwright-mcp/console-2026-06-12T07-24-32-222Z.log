@@ -1,0 +1,49 @@
+[    1484ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[    1530ms] [LOG] [HMR] connected @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[    1603ms] Error: No database connection string was provided to `neon()`. Perhaps an environment variable has not been set?
+    at neon (http://localhost:3100/_next/static/chunks/node_modules_0m8-s2g._.js:7587:19)
+    at module evaluation (http://localhost:3100/_next/static/chunks/_114iaz1._.js:47:179)
+    at http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1307:27
+    at runModuleExecutionHooks (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1636:13)
+    at instantiateModuleShared (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1305:9)
+    at instantiateModule (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1621:12)
+    at getOrInstantiateModuleFromParent (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1604:12)
+    at DevContext.esmImport [as i] (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:278:20)
+    at module evaluation (http://localhost:3100/_next/static/chunks/_114iaz1._.js:85:140)
+    at http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1307:27
+    at runModuleExecutionHooks (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1636:13)
+    at instantiateModuleShared (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1305:9)
+    at instantiateModule (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1621:12)
+    at getOrInstantiateModuleFromParent (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1604:12)
+    at DevContext.esmImport [as i] (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:278:20)
+    at module evaluation (http://localhost:3100/_next/static/chunks/_114iaz1._.js:155:141)
+    at http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1307:27
+    at runModuleExecutionHooks (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1636:13)
+    at instantiateModuleShared (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1305:9)
+    at instantiateModule (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1621:12)
+    at getOrInstantiateModuleFromParent (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:1604:12)
+    at DevContext.commonJsRequire [as r] (http://localhost:3100/_next/static/chunks/turbopack-_01_ro95._.js:299:12)
+    at requireModule (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-6._.js:95:84)
+    at initializeModuleChunk (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-6._.js:1110:25)
+    at readChunk (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_164kp-6._.js:846:17)
+    at Object.react_stack_bottom_frame (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:15101:20)
+    at resolveLazy (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:3866:20)
+    at beginWork (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:6665:77)
+    at runWithFiberInDEV (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:965:74)
+    at performUnitOfWork (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9555:97)
+    at workLoopConcurrentByScheduler (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9551:58)
+    at renderRootConcurrent (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9534:71)
+    at performWorkOnRoot (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_react-dom_096_9a-._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (http://localhost:3100/_next/static/chunks/node_modules_next_dist_compiled_1amofcm._.js:2647:64)
+[   34903ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   34910ms] [WARNING] [Fast Refresh] performing full reload
+
+Fast Refresh will perform a full reload when you edit a file that's imported by modules outside of the React rendering tree.
+You might have a file which exports a React component but also exports a value that is imported by a non-React component file.
+Consider migrating the non-React component export to a separate file and importing it into both files.
+
+It is also possible the parent component of the component you edited is a class component, which disables Fast Refresh.
+Fast Refresh requires at least one parent function component in your React tree. @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   34910ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
+[   34957ms] [LOG] [Fast Refresh] done in 31ms @ http://localhost:3100/_next/static/chunks/node_modules_next_dist_1ybzpk2._.js:2477
