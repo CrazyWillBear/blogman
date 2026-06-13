@@ -8,8 +8,7 @@ export const blogConfig = {
 
   /** One entry per homepage description paragraph. */
   description: [
-    "Yet another blog full of thoughts and ideas. I write about software, poetry, and whatever else crosses my mind.",
-    "Powered by blogman, a reusable blog engine you can clone and deploy yourself.",
+    "My personal writing collection. I write about AI, philosophy, and whatever else.",
   ],
 
   /** Footer line. */
