@@ -1,10 +1,30 @@
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import { blogConfig } from "@/blog.config";
 import { PostCard } from "@/components/PostCard";
 import { SearchControls } from "@/components/SearchControls";
 import { DEFAULT_SORT, isSortOption, listPosts } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
+
+const LINK = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+/** Renders a config paragraph, turning [text](url) markdown links into anchors. */
+function renderParagraph(text: string) {
+  const nodes = [];
+  let last = 0;
+  for (const match of text.matchAll(LINK)) {
+    const [whole, label, href] = match;
+    if (match.index > last) nodes.push(text.slice(last, match.index));
+    nodes.push(
+      <a key={match.index} href={href} className="ink-link">
+        {label}
+      </a>,
+    );
+    last = match.index + whole.length;
+  }
+  if (last < text.length) nodes.push(text.slice(last));
+  return nodes.map((node, i) => <Fragment key={i}>{node}</Fragment>);
+}
 
 export default async function HomePage({
   searchParams,
@@ -30,7 +50,7 @@ export default async function HomePage({
         </h1>
         <div className="mt-5 max-w-2xl space-y-3 text-lg text-muted">
           {blogConfig.description.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+            <p key={paragraph}>{renderParagraph(paragraph)}</p>
           ))}
         </div>
       </header>

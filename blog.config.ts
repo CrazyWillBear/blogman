@@ -9,6 +9,7 @@ export const blogConfig = {
   /** One entry per homepage description paragraph. */
   description: [
     "My personal writing collection. I write about AI, philosophy, and whatever else.",
+    "Powered by [blogman](https://github.com/crazywillbear/blogman), my open source blog engine.",
   ],
 
   /** Footer line. */
