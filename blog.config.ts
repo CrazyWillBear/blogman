@@ -4,7 +4,7 @@
  */
 export const blogConfig = {
   /** Shown in the masthead and the <title> tag. */
-  name: "CrazyWillBear's Blog",
+  name: "William Chastain's Blog",
 
   /** One entry per homepage description paragraph. */
   description: [

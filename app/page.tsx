@@ -25,7 +25,7 @@ export default async function HomePage({
         className="fade-up"
         style={{ "--stagger": 0 } as React.CSSProperties}
       >
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+        <h1 className="text-center text-4xl font-bold tracking-tight sm:text-5xl">
           {blogConfig.name}
         </h1>
         <div className="mt-5 max-w-2xl space-y-3 text-lg text-muted">
