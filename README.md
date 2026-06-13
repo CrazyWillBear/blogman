@@ -65,26 +65,6 @@ Import the repo in Vercel, set the same env vars (`DATABASE_URL`,
 at `https://<your-domain>/api/auth/callback/github`. No other config — there
 is no filesystem storage or long-lived process.
 
-## Migrating from blogman v1
-
-v1 stored posts as Markdown files in `md/` with rendered JSON caches in
-`blogs/`. To bring that content into the database:
-
-1. Put your v1 `md/` and `blogs/` directories at the repo root (sample content
-   ships in this repo as a demo).
-2. Run:
-
-   ```sh
-   npx tsx scripts/migrate-v1.ts
-   ```
-
-The script parses the v1 first-line `{tag}{tag2}` syntax (the magic `pinned`
-tag becomes the pinned flag), takes created/modified dates from the JSON
-caches when present, and preserves your exact v1 slugs
-(`Title-With-Dashes`, case kept) so existing URLs keep working. It upserts by
-slug — safe to re-run. New posts created in the editor get normal
-lowercase-kebab slugs.
-
 ## Customizing with an AI agent
 
 The engine is built to be restyled and reconfigured by AI coding agents

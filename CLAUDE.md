@@ -22,7 +22,6 @@ Tailwind v4, Drizzle ORM on Neon Postgres, Auth.js (GitHub) guarding the
   `sort.ts` (client-safe sort constants — keep db imports out of anything a
   client component touches), `allowlist.ts` (admin allowlist).
 - `db/` — Drizzle schema + migrations (`npm run db:generate`, `db:migrate`).
-- `scripts/migrate-v1.ts` — imports v1 (`md/` + `blogs/`) content; idempotent.
 
 ## Conventions
 

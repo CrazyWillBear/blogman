@@ -41,10 +41,20 @@ describe("renderMarkdown", () => {
     expect(html).not.toContain("javascript:");
   });
 
-  it("renders the full sample post", async () => {
-    const { readFile } = await import("node:fs/promises");
-    const raw = await readFile("md/Leaving The Forest.md", "utf8");
-    const md = raw.slice(raw.indexOf("\n") + 1);
+  it("renders a full v1-style post", async () => {
+    const md = [
+      "# Leaving The Forest",
+      "",
+      "#### By William B. Chastain",
+      "",
+      "<hr>",
+      "",
+      "At the crossroads",
+      "",
+      "<br />",
+      "",
+      "I walk slow.",
+    ].join("\n");
     const html = await renderMarkdown(md);
     expect(html).toContain("<h1>Leaving The Forest</h1>");
     expect(html).toContain("<h4>By William B. Chastain</h4>");
