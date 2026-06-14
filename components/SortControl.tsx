@@ -30,7 +30,7 @@ const segStyle = (active: boolean): React.CSSProperties => ({
 });
 
 /**
- * Segmented sort pill (Posted / Updated) plus a direction toggle. State lives in
+ * Segmented sort pill (№ / Updated) plus a direction toggle. State lives in
  * the `sort` GET param so orderings stay linkable; the `q` param is preserved.
  */
 export function SortControl({ sort }: { sort: SortOption }) {
@@ -68,7 +68,7 @@ export function SortControl({ sort }: { sort: SortOption }) {
           onClick={() => setKey("created")}
           style={segStyle(key === "created")}
         >
-          Posted
+          №
         </button>
         <button
           type="button"

@@ -1,6 +1,7 @@
 import { Fragment, Suspense } from "react";
 import Link from "next/link";
 import { blogConfig } from "@/blog.config";
+import { PinnedPill, TagPill } from "@/components/Pills";
 import { PostCard } from "@/components/PostCard";
 import { SearchBox } from "@/components/SearchControls";
 import { SortControl } from "@/components/SortControl";
@@ -11,6 +12,7 @@ import {
   getPostNumbers,
   isSortOption,
   listPosts,
+  pickFeatured,
 } from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
@@ -61,16 +63,15 @@ export default async function HomePage({
   ]);
 
   const trimmed = query.trim();
-  const showFeatured = !trimmed && posts.length > 0;
 
-  // Feature the newest-by-createdAt post, independent of the browse sort.
-  const featured = showFeatured
-    ? posts.reduce((newest, post) =>
-        post.createdAt > newest.createdAt ? post : newest,
-      )
-    : undefined;
+  // Hero the most-recently-pinned post (independent of browse sort), and drop it
+  // from the ruled list so it isn't shown twice. No pinned post → no hero card.
+  const featured = trimmed ? undefined : pickFeatured(posts);
+  const listed = featured
+    ? posts.filter((post) => post.slug !== featured.slug)
+    : posts;
 
-  const countLabel = `${posts.length} ${posts.length === 1 ? "piece" : "pieces"}`;
+  const countLabel = `${listed.length} ${listed.length === 1 ? "piece" : "pieces"}`;
 
   return (
     <div
@@ -134,26 +135,17 @@ export default async function HomePage({
           className="fade-up block"
           style={
             {
+              position: "relative",
               background: "var(--paper-shade)",
               borderRadius: "16px",
-              padding: "24px 26px",
-              margin: "24px 0 6px",
+              padding: "34px 26px 24px",
+              margin: "40px 0 6px",
               color: "inherit",
               "--stagger": 2,
             } as React.CSSProperties
           }
         >
-          <div
-            style={{
-              fontSize: "12px",
-              letterSpacing: ".1em",
-              textTransform: "uppercase",
-              color: "var(--accent)",
-              marginBottom: "7px",
-            }}
-          >
-            ✦ Lately
-          </div>
+          <PinnedPill variant="badge" />
           <h2
             style={{
               margin: 0,
@@ -164,6 +156,16 @@ export default async function HomePage({
           >
             {featured.title}
           </h2>
+          {featured.tags.length > 0 && (
+            <div
+              className="flex flex-wrap"
+              style={{ gap: "7px", marginTop: "10px" }}
+            >
+              {featured.tags.map((tag) => (
+                <TagPill key={tag} label={tag} size="md" />
+              ))}
+            </div>
+          )}
           <p
             style={{
               margin: "10px 0 0",
@@ -230,7 +232,7 @@ export default async function HomePage({
         </div>
       ) : (
         <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
-          {posts.map((post, index) => (
+          {listed.map((post, index) => (
             <PostCard
               key={post.slug}
               post={post}

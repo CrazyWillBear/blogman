@@ -8,11 +8,30 @@ const {
   buildFuzzyFilter,
   buildFuzzyOrderBy,
   isSortOption,
+  pickFeatured,
   slugify,
   DEFAULT_SORT,
 } = await import("./posts");
 const { db } = await import("@/db");
 const { posts } = await import("@/db/schema");
+
+type Post = import("@/db/schema").Post;
+
+/** Minimal Post for pickFeatured, which only reads id/pinned/createdAt. */
+function makePost(over: Partial<Post>): Post {
+  return {
+    id: 1,
+    slug: "s",
+    title: "t",
+    mdContent: "",
+    tags: [],
+    pinned: false,
+    createdAt: new Date("2025-01-01"),
+    updatedAt: new Date("2025-01-01"),
+    search: "",
+    ...over,
+  } as Post;
+}
 
 function renderListQuery(
   query: string,
@@ -110,6 +129,50 @@ describe("isSortOption", () => {
     expect(isSortOption("modified-asc")).toBe(true);
     expect(isSortOption("newest")).toBe(false);
     expect(isSortOption("")).toBe(false);
+  });
+});
+
+describe("pickFeatured", () => {
+  it("returns undefined when nothing is pinned", () => {
+    expect(pickFeatured([makePost({}), makePost({ id: 2 })])).toBeUndefined();
+  });
+
+  it("ignores unpinned posts even when newer", () => {
+    const pinned = makePost({
+      id: 1,
+      slug: "pinned",
+      pinned: true,
+      createdAt: new Date("2025-01-01"),
+    });
+    const newerUnpinned = makePost({
+      id: 2,
+      slug: "newer",
+      createdAt: new Date("2025-06-01"),
+    });
+    expect(pickFeatured([newerUnpinned, pinned])?.slug).toBe("pinned");
+  });
+
+  it("picks the most-recently-created pinned post", () => {
+    const older = makePost({
+      id: 1,
+      slug: "older",
+      pinned: true,
+      createdAt: new Date("2025-01-01"),
+    });
+    const newer = makePost({
+      id: 2,
+      slug: "newer",
+      pinned: true,
+      createdAt: new Date("2025-03-01"),
+    });
+    expect(pickFeatured([older, newer])?.slug).toBe("newer");
+  });
+
+  it("breaks createdAt ties by larger id", () => {
+    const at = new Date("2025-02-02");
+    const a = makePost({ id: 5, slug: "a", pinned: true, createdAt: at });
+    const b = makePost({ id: 9, slug: "b", pinned: true, createdAt: at });
+    expect(pickFeatured([a, b])?.slug).toBe("b");
   });
 });
 

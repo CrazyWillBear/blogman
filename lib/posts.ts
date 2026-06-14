@@ -56,6 +56,26 @@ export function buildFuzzyOrderBy(query: string): SQL[] {
   return [sql`word_similarity(${query.trim()}, ${posts.title}) desc`];
 }
 
+/**
+ * The homepage hero: the most-recently-created pinned post (id descending as a
+ * deterministic tie-break). Returns undefined when nothing is pinned — in which
+ * case the homepage shows no featured card.
+ */
+export function pickFeatured(candidates: Post[]): Post | undefined {
+  return candidates
+    .filter((post) => post.pinned)
+    .reduce<Post | undefined>(
+      (best, post) =>
+        !best ||
+        post.createdAt > best.createdAt ||
+        (post.createdAt.getTime() === best.createdAt.getTime() &&
+          post.id > best.id)
+          ? post
+          : best,
+      undefined,
+    );
+}
+
 export async function listPosts(
   query = "",
   sort: SortOption = DEFAULT_SORT,

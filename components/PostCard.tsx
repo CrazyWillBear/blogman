@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Post } from "@/db/schema";
 import { excerpt } from "@/lib/excerpt";
-import { PinMark } from "@/components/PinMark";
+import { PinnedPill, TagPill } from "@/components/Pills";
 
 const monthYear = new Intl.DateTimeFormat("en-US", {
   month: "short",
@@ -38,13 +38,15 @@ export function PostCard({
             style={{ fontSize: "22px", lineHeight: 1.15 }}
           >
             {post.title}
-            {post.pinned && (
-              <>
-                {" "}
-                <PinMark />
-              </>
-            )}
           </h3>
+          {(post.pinned || post.tags.length > 0) && (
+            <div className="flex flex-wrap" style={{ gap: "7px", marginTop: "7px" }}>
+              {post.pinned && <PinnedPill />}
+              {post.tags.map((tag) => (
+                <TagPill key={tag} label={tag} />
+              ))}
+            </div>
+          )}
           {dek && (
             <p
               style={{
