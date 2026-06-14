@@ -5,8 +5,8 @@ import { PinnedPill, TagPill } from "@/components/Pills";
 import { PostCard } from "@/components/PostCard";
 import { SearchBox } from "@/components/SearchControls";
 import { SortControl } from "@/components/SortControl";
-import type { Post } from "@/db/schema";
 import { excerpt } from "@/lib/excerpt";
+import { isVerse } from "@/lib/kicker";
 import {
   DEFAULT_SORT,
   getPostNumbers,
@@ -35,11 +35,6 @@ function renderParagraph(text: string) {
   }
   if (last < text.length) nodes.push(text.slice(last));
   return nodes.map((node, i) => <Fragment key={i}>{node}</Fragment>);
-}
-
-/** A post counts as a poem when it's tagged poem/poetry (case-insensitive). */
-function isPoem(post: Post): boolean {
-  return post.tags.some((tag) => /^(poem|poetry)$/i.test(tag.trim()));
 }
 
 /** Zero-pad a chronological number to two digits ("3" -> "03"). */
@@ -183,7 +178,7 @@ export default async function HomePage({
               color: "var(--accent)",
             }}
           >
-            Read the {isPoem(featured) ? "poem" : "essay"} →
+            Read the {isVerse(featured.tags) ? "poem" : "essay"} →
           </div>
         </Link>
       )}

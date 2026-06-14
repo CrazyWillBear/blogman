@@ -6,6 +6,9 @@ export const blogConfig = {
   /** Shown in the masthead and the <title> tag. */
   name: "William Chastain's Blog",
 
+  /** The person who writes the blog (distinct from the blog's name). */
+  author: "William Chastain",
+
   /** One entry per homepage description paragraph. */
   description: [
     "My personal writing collection. I write about AI, philosophy, and whatever else.",

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Crimson_Pro, IBM_Plex_Mono } from "next/font/google";
 import { blogConfig } from "@/blog.config";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const serif = Crimson_Pro({
@@ -17,11 +18,29 @@ const mono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: {
     default: blogConfig.name,
     template: `%s · ${blogConfig.name}`,
   },
   description: blogConfig.description[0],
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "/feed.xml" },
+  },
+  openGraph: {
+    type: "website",
+    siteName: blogConfig.name,
+    url: "/",
+    locale: "en_US",
+    title: blogConfig.name,
+    description: blogConfig.description[0],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: blogConfig.name,
+    description: blogConfig.description[0],
+  },
 };
 
 export default function RootLayout({

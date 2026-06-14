@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { blogConfig } from "@/blog.config";
 import { PinMark } from "@/components/PinMark";
+import { excerpt } from "@/lib/excerpt";
 import { formatDate } from "@/lib/format";
+import { formatKicker, isVerse } from "@/lib/kicker";
 import { renderMarkdown } from "@/lib/markdown";
 import { getPostBySlug, getPostNumber } from "@/lib/posts";
 
@@ -11,11 +13,6 @@ export const dynamic = "force-dynamic";
 
 interface Props {
   params: Promise<{ slug: string }>;
-}
-
-/** Poem/verse if any tag is "poem"/"poetry" (case-insensitive); else essay. */
-function isVerse(tags: string[]): boolean {
-  return tags.some((tag) => /^(poem|poetry)$/i.test(tag.trim()));
 }
 
 /**
@@ -33,8 +30,34 @@ function stripLeadingTitle(md: string, title: string): string {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(decodeURIComponent(slug));
-  return { title: post?.title ?? "Not found" };
+  const decoded = decodeURIComponent(slug);
+  const post = await getPostBySlug(decoded);
+  if (!post) return { title: "Not found" };
+
+  const description = excerpt(post.mdContent);
+  return {
+    title: post.title,
+    description,
+    alternates: {
+      canonical: `/${decoded}`,
+      types: { "application/rss+xml": "/feed.xml" },
+    },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description,
+      url: `/${decoded}`,
+      publishedTime: post.createdAt.toISOString(),
+      modifiedTime: post.updatedAt.toISOString(),
+      authors: [blogConfig.author],
+      tags: post.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description,
+    },
+  };
 }
 
 export default async function PostPage({ params }: Props) {
@@ -46,12 +69,8 @@ export default async function PostPage({ params }: Props) {
   const html = await renderMarkdown(stripLeadingTitle(post.mdContent, post.title));
   const number = await getPostNumber(decoded);
   const verse = isVerse(post.tags);
-  const kind = verse ? "Poem" : "Essay";
-  const kicker =
-    number === undefined
-      ? kind
-      : `${kind} № ${String(number).padStart(2, "0")}`;
-  const author = blogConfig.name;
+  const kicker = formatKicker(post.tags, number);
+  const author = blogConfig.author;
 
   return (
     <div className="mx-auto max-w-[680px] px-9 pt-10 pb-20">
