@@ -1,8 +1,17 @@
 import { Fragment, Suspense } from "react";
+import Link from "next/link";
 import { blogConfig } from "@/blog.config";
 import { PostCard } from "@/components/PostCard";
-import { SearchControls } from "@/components/SearchControls";
-import { DEFAULT_SORT, isSortOption, listPosts } from "@/lib/posts";
+import { SearchBox } from "@/components/SearchControls";
+import { SortControl } from "@/components/SortControl";
+import type { Post } from "@/db/schema";
+import { excerpt } from "@/lib/excerpt";
+import {
+  DEFAULT_SORT,
+  getPostNumbers,
+  isSortOption,
+  listPosts,
+} from "@/lib/posts";
 
 export const dynamic = "force-dynamic";
 
@@ -26,6 +35,16 @@ function renderParagraph(text: string) {
   return nodes.map((node, i) => <Fragment key={i}>{node}</Fragment>);
 }
 
+/** A post counts as a poem when it's tagged poem/poetry (case-insensitive). */
+function isPoem(post: Post): boolean {
+  return post.tags.some((tag) => /^(poem|poetry)$/i.test(tag.trim()));
+}
+
+/** Zero-pad a chronological number to two digits ("3" -> "03"). */
+function pad(num: number | undefined): string {
+  return num != null ? String(num).padStart(2, "0") : "··";
+}
+
 export default async function HomePage({
   searchParams,
 }: {
@@ -35,85 +54,191 @@ export default async function HomePage({
   const query = params.q ?? "";
   const sort =
     params.sort && isSortOption(params.sort) ? params.sort : DEFAULT_SORT;
-  const posts = await listPosts(query, sort);
-  const pinned = posts.filter((post) => post.pinned);
-  const rest = posts.filter((post) => !post.pinned);
+
+  const [posts, numbers] = await Promise.all([
+    listPosts(query, sort),
+    getPostNumbers(),
+  ]);
+
+  const trimmed = query.trim();
+  const showFeatured = !trimmed && posts.length > 0;
+
+  // Feature the newest-by-createdAt post, independent of the browse sort.
+  const featured = showFeatured
+    ? posts.reduce((newest, post) =>
+        post.createdAt > newest.createdAt ? post : newest,
+      )
+    : undefined;
+
+  const countLabel = `${posts.length} ${posts.length === 1 ? "piece" : "pieces"}`;
 
   return (
-    <div className="mx-auto max-w-3xl px-6 pt-16 sm:pt-24">
+    <div
+      style={{
+        maxWidth: "620px",
+        margin: "0 auto",
+        padding: "72px 32px 96px",
+      }}
+    >
       <header
         className="fade-up"
         style={{ "--stagger": 0 } as React.CSSProperties}
       >
-        <h1 className="text-center text-4xl font-bold tracking-tight sm:text-5xl">
+        <div
+          style={{
+            width: "40px",
+            height: "2px",
+            background: "var(--accent)",
+            marginBottom: "22px",
+          }}
+        />
+        <h1
+          style={{
+            margin: 0,
+            fontWeight: 600,
+            fontSize: "clamp(38px, 9vw, 52px)",
+            lineHeight: 1.04,
+            letterSpacing: "-.01em",
+          }}
+        >
           {blogConfig.name}
         </h1>
-        <div className="mt-5 max-w-2xl space-y-3 text-lg text-muted">
-          {blogConfig.description.map((paragraph) => (
-            <p key={paragraph}>{renderParagraph(paragraph)}</p>
+        <div
+          style={{
+            marginTop: "18px",
+            fontSize: "20px",
+            lineHeight: 1.65,
+            color: "var(--muted)",
+          }}
+        >
+          {blogConfig.description.map((paragraph, i) => (
+            <p key={paragraph} style={{ margin: i === 0 ? 0 : "0.6em 0 0" }}>
+              {renderParagraph(paragraph)}
+            </p>
           ))}
         </div>
       </header>
 
       <div
-        className="fade-up mt-12"
-        style={{ "--stagger": 1 } as React.CSSProperties}
+        className="fade-up"
+        style={{ marginTop: "32px", "--stagger": 1 } as React.CSSProperties}
       >
         <Suspense>
-          <SearchControls query={query} sort={sort} />
+          <SearchBox query={query} />
+        </Suspense>
+      </div>
+
+      {featured && (
+        <Link
+          href={`/${featured.slug}`}
+          className="fade-up block"
+          style={
+            {
+              background: "var(--paper-shade)",
+              borderRadius: "16px",
+              padding: "24px 26px",
+              margin: "24px 0 6px",
+              color: "inherit",
+              "--stagger": 2,
+            } as React.CSSProperties
+          }
+        >
+          <div
+            style={{
+              fontSize: "12px",
+              letterSpacing: ".1em",
+              textTransform: "uppercase",
+              color: "var(--accent)",
+              marginBottom: "7px",
+            }}
+          >
+            ✦ Lately
+          </div>
+          <h2
+            style={{
+              margin: 0,
+              fontWeight: 600,
+              fontSize: "27px",
+              lineHeight: 1.1,
+            }}
+          >
+            {featured.title}
+          </h2>
+          <p
+            style={{
+              margin: "10px 0 0",
+              fontSize: "17px",
+              lineHeight: 1.55,
+              color: "#6f6155",
+            }}
+          >
+            {excerpt(featured.mdContent)}
+          </p>
+          <div
+            style={{
+              marginTop: "13px",
+              fontSize: "16px",
+              color: "var(--accent)",
+            }}
+          >
+            Read the {isPoem(featured) ? "poem" : "essay"} →
+          </div>
+        </Link>
+      )}
+
+      <div
+        className="fade-up"
+        style={
+          {
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            margin: "24px 0 2px",
+            "--stagger": 3,
+          } as React.CSSProperties
+        }
+      >
+        <span
+          style={{
+            fontSize: "15px",
+            color: "var(--faint)",
+            fontStyle: "italic",
+          }}
+        >
+          {countLabel}
+        </span>
+        <Suspense>
+          <SortControl sort={sort} />
         </Suspense>
       </div>
 
       {posts.length === 0 ? (
-        <p
-          className="fade-up mt-14 italic text-faint"
-          style={{ "--stagger": 2 } as React.CSSProperties}
+        <div
+          className="fade-up"
+          style={
+            {
+              padding: "40px 0",
+              textAlign: "center",
+              fontStyle: "italic",
+              fontSize: "19px",
+              color: "var(--faint)",
+              "--stagger": 4,
+            } as React.CSSProperties
+          }
         >
-          Nothing here matches{query ? ` “${query}”` : ""}.
-        </p>
-      ) : pinned.length === 0 ? (
-        <ul className="mt-10 divide-y divide-hairline border-t border-hairline">
-          {rest.map((post, index) => (
-            <PostCard key={post.slug} post={post} stagger={index + 2} />
+          Nothing here matches “{query}”. Try another word.
+        </div>
+      ) : (
+        <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+          {posts.map((post, index) => (
+            <PostCard
+              key={post.slug}
+              post={post}
+              num={pad(numbers.get(post.slug))}
+              stagger={index + 4}
+            />
           ))}
         </ul>
-      ) : (
-        <>
-          <section className="mt-10">
-            <h2
-              className="smallcaps fade-up text-sm text-faint"
-              style={{ "--stagger": 2 } as React.CSSProperties}
-            >
-              Pinned
-            </h2>
-            <ul className="mt-3 divide-y divide-hairline border-t border-hairline">
-              {pinned.map((post, index) => (
-                <PostCard key={post.slug} post={post} stagger={index + 3} />
-              ))}
-            </ul>
-          </section>
-          {rest.length > 0 && (
-            <section className="mt-12">
-              <h2
-                className="smallcaps fade-up text-sm text-faint"
-                style={
-                  { "--stagger": pinned.length + 3 } as React.CSSProperties
-                }
-              >
-                All posts
-              </h2>
-              <ul className="mt-3 divide-y divide-hairline border-t border-hairline">
-                {rest.map((post, index) => (
-                  <PostCard
-                    key={post.slug}
-                    post={post}
-                    stagger={pinned.length + index + 4}
-                  />
-                ))}
-              </ul>
-            </section>
-          )}
-        </>
       )}
     </div>
   );

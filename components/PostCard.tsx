@@ -1,33 +1,69 @@
 import Link from "next/link";
 import type { Post } from "@/db/schema";
-import { formatDate } from "@/lib/format";
+import { excerpt } from "@/lib/excerpt";
+import { PinMark } from "@/components/PinMark";
 
-/** One ruled row in the homepage post index. */
-export function PostCard({ post, stagger }: { post: Post; stagger: number }) {
+const monthYear = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  year: "numeric",
+});
+
+/** One ruled row in the homepage index: number · title/dek · short date. */
+export function PostCard({
+  post,
+  num,
+  stagger,
+}: {
+  post: Post;
+  num: string;
+  stagger: number;
+}) {
+  const dek = excerpt(post.mdContent);
+
   return (
-    <li
-      className="fade-up"
-      style={{ "--stagger": stagger } as React.CSSProperties}
-    >
+    <li className="fade-up" style={{ "--stagger": stagger } as React.CSSProperties}>
       <Link
         href={`/${post.slug}`}
-        className="group flex items-baseline justify-between gap-6 py-5"
+        className="group flex items-baseline gap-[18px] py-[18px]"
+        style={{ borderTop: "1px solid var(--hairline)", color: "inherit" }}
       >
-        <div className="min-w-0">
-          <h2 className="text-2xl font-bold leading-snug underline decoration-transparent decoration-1 underline-offset-4 transition-colors duration-200 group-hover:decoration-ink">
+        <span
+          style={{ fontSize: "18px", color: "var(--accent)", flex: "0 0 30px" }}
+        >
+          {num}
+        </span>
+        <div className="min-w-0 flex-1">
+          <h3
+            className="font-semibold underline decoration-transparent decoration-1 underline-offset-4 transition-colors duration-200 group-hover:decoration-ink"
+            style={{ fontSize: "22px", lineHeight: 1.15 }}
+          >
             {post.title}
-          </h2>
-          {post.tags.length > 0 && (
-            <p className="mt-1 text-sm text-faint">
-              {post.tags.join(" · ")}
+            {post.pinned && (
+              <>
+                {" "}
+                <PinMark />
+              </>
+            )}
+          </h3>
+          {dek && (
+            <p
+              style={{
+                margin: "5px 0 0",
+                fontSize: "16px",
+                lineHeight: 1.5,
+                color: "var(--muted)",
+              }}
+            >
+              {dek}
             </p>
           )}
         </div>
         <time
           dateTime={post.createdAt.toISOString()}
-          className="shrink-0 text-sm text-faint"
+          className="shrink-0"
+          style={{ fontSize: "15px", color: "var(--faint)" }}
         >
-          {formatDate(post.createdAt)}
+          {monthYear.format(post.createdAt)}
         </time>
       </Link>
     </li>

@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Merriweather } from "next/font/google";
+import { Crimson_Pro, IBM_Plex_Mono } from "next/font/google";
 import { blogConfig } from "@/blog.config";
 import "./globals.css";
 
-const serif = Merriweather({
+const serif = Crimson_Pro({
   variable: "--font-serif",
   subsets: ["latin"],
-  weight: ["300", "400", "700"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
 });
 
-const mono = JetBrains_Mono({
+const mono = IBM_Plex_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {

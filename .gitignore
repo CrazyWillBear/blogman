@@ -45,3 +45,8 @@ next-env.d.ts
 .playwright-mcp/
 /home.png
 /post.png
+/*-after*.png
+
+# design reference (comp source, not part of the engine)
+/Blogman.zip
+/.blogman_design/

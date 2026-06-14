@@ -1,4 +1,4 @@
-import { desc, asc, eq, or, sql, type SQL } from "drizzle-orm";
+import { and, asc, desc, eq, or, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db";
 import { posts, type NewPost, type Post } from "@/db/schema";
 
@@ -77,6 +77,39 @@ export async function listPosts(
 export async function getPostBySlug(slug: string): Promise<Post | undefined> {
   const rows = await db.select().from(posts).where(eq(posts.slug, slug));
   return rows[0];
+}
+
+/**
+ * Stable chronological post numbers, oldest = 1. Maps each slug to its rank by
+ * created_at ascending (id ascending as a deterministic tie-break), so the
+ * author's first-ever post is №1 regardless of the browse sort.
+ */
+export async function getPostNumbers(): Promise<Map<string, number>> {
+  const rows = await db
+    .select({ slug: posts.slug })
+    .from(posts)
+    .orderBy(asc(posts.createdAt), asc(posts.id));
+  return new Map(rows.map((row, index) => [row.slug, index + 1]));
+}
+
+/**
+ * Chronological number for a single slug: one more than the count of posts that
+ * precede it (older created_at, or equal created_at with a smaller id). Returns
+ * undefined when the slug doesn't exist.
+ */
+export async function getPostNumber(slug: string): Promise<number | undefined> {
+  const post = await getPostBySlug(slug);
+  if (!post) return undefined;
+  const rows = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(posts)
+    .where(
+      or(
+        sql`${posts.createdAt} < ${post.createdAt}`,
+        and(eq(posts.createdAt, post.createdAt), sql`${posts.id} < ${post.id}`),
+      ),
+    );
+  return rows[0].count + 1;
 }
 
 /** New posts get lowercase-kebab slugs; migrated v1 slugs are preserved as-is. */

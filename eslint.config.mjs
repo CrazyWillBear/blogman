@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Design reference artifacts (vendored comp + its runtime) — not source.
+    ".blogman_design/**",
   ]),
 ]);
 

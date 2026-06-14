@@ -1,8 +1,13 @@
-/** Quiet label marking a pinned post. */
+/** Quiet glyph marking a pinned post, tuned to the faint tertiary tone. */
 export function PinMark() {
   return (
-    <span className="smallcaps align-middle text-sm font-normal text-faint">
-      Pinned
+    <span
+      aria-label="Pinned"
+      title="Pinned"
+      className="text-faint"
+      style={{ fontSize: "13px", lineHeight: 1 }}
+    >
+      ✦
     </span>
   );
 }
