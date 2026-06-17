@@ -52,6 +52,19 @@ body {
   text-decoration-color: var(--ink);
 }
 
+/* visually hidden, still read by screen readers (e.g. the GFM "Footnotes" label) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* staggered fade-up on load; honor reduced motion */
 @keyframes fade-up {
   from {
@@ -193,6 +206,44 @@ body {
 .prose img {
   max-width: 100%;
   border: 1px solid var(--hairline);
+}
+
+/* ——— references: footnotes as end notes, citations as ⁽ⁿ⁾ ——— */
+
+/* GFM footnotes block — set apart below the essay, hushed and smaller */
+.prose .footnotes {
+  margin-top: 2.8em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--hairline);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.prose .footnotes .data-footnote-backref {
+  margin-left: 0.25em;
+}
+
+/* superscript link targets keep the number clean — no body-text underline */
+.prose sup a {
+  border-bottom: none;
+}
+
+.prose sup a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 2px;
+}
+
+/* numeric citations: bracketed ⁽ⁿ⁾, distinct from footnotes' bare superscript */
+.prose sup.citation {
+  font-size: 0.7em;
+  margin-left: 0.08em;
+}
+
+.prose sup.citation a {
+  color: var(--accent);
+  font-variant-numeric: lining-nums;
 }
 
 /* ——— verse variant: poems breathe, never justify ——— */
