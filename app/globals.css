@@ -219,6 +219,7 @@ body {
   line-height: 1.6;
   color: var(--muted);
 }
+
 .prose .footnotes .data-footnote-backref {
   margin-left: 0.25em;
 }
@@ -227,6 +228,7 @@ body {
 .prose sup a {
   border-bottom: none;
 }
+
 .prose sup a:hover {
   text-decoration: underline;
   text-decoration-color: var(--accent);
@@ -238,6 +240,7 @@ body {
   font-size: 0.7em;
   margin-left: 0.08em;
 }
+
 .prose sup.citation a {
   color: var(--accent);
   font-variant-numeric: lining-nums;

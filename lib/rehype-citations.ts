@@ -25,6 +25,11 @@ import type { Plugin } from "unified";
 const isElement = (n: ElementContent): n is Element => n.type === "element";
 const isText = (n: ElementContent): n is Text => n.type === "text";
 const isBlank = (n: ElementContent): boolean => isText(n) && n.value.trim() === "";
+const isBr = (n: ElementContent): boolean => isElement(n) && n.tagName === "br";
+
+/** Subtrees whose `[n]` must be left alone: code, and the source list itself. */
+const isSkippable = (el: Element, sources: Set<Element>): boolean =>
+  el.tagName === "code" || el.tagName === "pre" || sources.has(el);
 
 /** A bracketed-superscript citation link: `<sup class="citation"><a href="#cite-n">(n)</a></sup>`. */
 function citation(n: number): Element {
@@ -65,6 +70,12 @@ function linkify(value: string, nums: Set<number>): ElementContent[] | null {
   return out;
 }
 
+/** Replace `[n]` refs in a text node, unless we're inside an anchor already. */
+function replaceText(node: Text, insideAnchor: boolean, nums: Set<number>): ElementContent[] {
+  if (insideAnchor) return [node];
+  return linkify(node.value, nums) ?? [node];
+}
+
 /** Collect every `<p>` element in the tree (source lists are paragraphs). */
 function collectParagraphs(node: Root | Element, acc: Element[]): void {
   for (const child of node.children as ElementContent[]) {
@@ -75,73 +86,87 @@ function collectParagraphs(node: Root | Element, acc: Element[]): void {
   }
 }
 
-/**
- * If `p` is a source list (≥2 non-empty `<br>`-separated lines, each starting
- * with `[n]`), return the set of numbers; otherwise `null`. Requiring every
- * non-empty line to match avoids false positives on prose that merely mentions
- * a bracketed number.
- */
-function analyzeSource(p: Element): Set<number> | null {
+/** Split a paragraph's children into lines on `<br>` boundaries. */
+function splitLines(p: Element): ElementContent[][] {
   const lines: ElementContent[][] = [[]];
   for (const child of p.children) {
-    if (isElement(child) && child.tagName === "br") lines.push([]);
+    if (isBr(child)) lines.push([]);
     else lines[lines.length - 1].push(child);
   }
+  return lines;
+}
+
+/** The citation number a line opens with (`[n] ...`), or `null`. */
+function lineStartsWithCite(line: ElementContent[]): number | null {
+  const first = line.find((n) => !isBlank(n));
+  if (!first || !isText(first)) return null;
+  const mm = first.value.match(/^\s*\[(\d+)\]/);
+  return mm ? Number(mm[1]) : null;
+}
+
+/**
+ * If `p` is a source list (≥2 non-empty lines, each starting with `[n]`), return
+ * the set of numbers; otherwise `null`. Requiring every non-empty line to match
+ * avoids false positives on prose that merely mentions a bracketed number.
+ */
+function analyzeSource(p: Element): Set<number> | null {
   const nums = new Set<number>();
   let nonEmpty = 0;
   let matched = 0;
-  for (const line of lines) {
-    const first = line.find((n) => !isBlank(n));
-    if (!first) continue;
+  for (const line of splitLines(p)) {
+    if (line.every(isBlank)) continue;
     nonEmpty++;
-    if (isText(first)) {
-      const mm = first.value.match(/^\s*\[(\d+)\]/);
-      if (mm) {
-        matched++;
-        nums.add(Number(mm[1]));
-      }
+    const n = lineStartsWithCite(line);
+    if (n !== null) {
+      matched++;
+      nums.add(n);
     }
   }
   return nonEmpty >= 2 && matched === nonEmpty ? nums : null;
 }
 
-/** Wrap each source line's leading `[n]` in `<span id="cite-n">[n]</span>`. */
+/** Wrap a line-opening `[n]` text node in `<span id="cite-n">[n]</span>`; else `null`. */
+function markerNodes(child: ElementContent): ElementContent[] | null {
+  if (!isText(child)) return null;
+  const mm = child.value.match(/^(\s*)\[(\d+)\]/);
+  if (!mm) return null;
+  const nodes: ElementContent[] = [];
+  if (mm[1]) nodes.push({ type: "text", value: mm[1] });
+  nodes.push({
+    type: "element",
+    tagName: "span",
+    properties: { id: `cite-${mm[2]}` },
+    children: [{ type: "text", value: `[${mm[2]}]` }],
+  });
+  const rest = child.value.slice(mm[0].length);
+  if (rest) nodes.push({ type: "text", value: rest });
+  return nodes;
+}
+
+/** Anchor each source line's leading `[n]` as a `#cite-n` target. */
 function tagSourceMarkers(p: Element): void {
   const out: ElementContent[] = [];
-  let atLineStart = true;
+  let lineStart = true;
   for (const child of p.children) {
-    if (isElement(child) && child.tagName === "br") {
+    const marker = lineStart ? markerNodes(child) : null;
+    if (isBr(child)) {
       out.push(child);
-      atLineStart = true;
-      continue;
+      lineStart = true;
+    } else if (marker) {
+      out.push(...marker);
+      lineStart = false;
+    } else {
+      out.push(child);
+      if (!isBlank(child)) lineStart = false;
     }
-    if (atLineStart && isText(child)) {
-      const mm = child.value.match(/^(\s*)\[(\d+)\]/);
-      if (mm) {
-        const n = Number(mm[2]);
-        if (mm[1]) out.push({ type: "text", value: mm[1] });
-        out.push({
-          type: "element",
-          tagName: "span",
-          properties: { id: `cite-${n}` },
-          children: [{ type: "text", value: `[${n}]` }],
-        });
-        const rest = child.value.slice(mm[0].length);
-        if (rest) out.push({ type: "text", value: rest });
-        atLineStart = false;
-        continue;
-      }
-    }
-    if (!isBlank(child)) atLineStart = false;
-    out.push(child);
   }
   p.children = out;
 }
 
 /**
- * Recurse the tree, replacing `[n]` in text nodes with citation links. Subtrees
- * rooted at `<code>`/`<pre>` and the source list(s) are skipped; replacement is
- * suppressed inside `<a>` to avoid nested anchors.
+ * Recurse the tree, replacing `[n]` in text nodes with citation links. `<code>`/
+ * `<pre>` and the source list(s) are skipped; replacement is suppressed inside
+ * `<a>` to avoid nested anchors.
  */
 function walk(
   children: ElementContent[],
@@ -151,18 +176,12 @@ function walk(
 ): ElementContent[] {
   const out: ElementContent[] = [];
   for (const child of children) {
-    if (isElement(child)) {
-      if (child.tagName === "code" || child.tagName === "pre" || sources.has(child)) {
-        out.push(child);
-        continue;
-      }
-      const anchorNow = insideAnchor || child.tagName === "a";
-      child.children = walk(child.children, anchorNow, nums, sources);
+    if (isText(child)) {
+      out.push(...replaceText(child, insideAnchor, nums));
+    } else if (isElement(child) && !isSkippable(child, sources)) {
+      const anchored = insideAnchor || child.tagName === "a";
+      child.children = walk(child.children, anchored, nums, sources);
       out.push(child);
-    } else if (isText(child) && !insideAnchor) {
-      const repl = linkify(child.value, nums);
-      if (repl) out.push(...repl);
-      else out.push(child);
     } else {
       out.push(child);
     }
