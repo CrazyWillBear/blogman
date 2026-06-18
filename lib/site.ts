@@ -24,6 +24,12 @@ export function siteUrl(): string {
   return LOCALHOST;
 }
 
+/** The bare host (with port, no scheme) of {@link siteUrl} — used as a source
+ *  stamp on the OG card. */
+export function siteHost(): string {
+  return new URL(siteUrl()).host;
+}
+
 /** Join a path onto {@link siteUrl}, tolerating a leading slash (or not). */
 export function absoluteUrl(path: string): string {
   const base = siteUrl();
