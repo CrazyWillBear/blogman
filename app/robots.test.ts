@@ -26,4 +26,8 @@ describe("robots", () => {
       expect(rule?.allow).toBeUndefined();
     }
   });
+
+  it("points crawlers at the sitemap", () => {
+    expect(result.sitemap).toMatch(/\/sitemap\.xml$/);
+  });
 });
