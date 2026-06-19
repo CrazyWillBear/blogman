@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { absoluteUrl } from "@/lib/site";
 
 /**
  * Crawlers that harvest pages to train (or feed) large language models.
@@ -35,5 +36,6 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "*", allow: "/", disallow: "/admin" },
       ...AI_TRAINING_BOTS.map((userAgent) => ({ userAgent, disallow: "/" })),
     ],
+    sitemap: absoluteUrl("/sitemap.xml"),
   };
 }
