@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { absoluteUrl, siteUrl } from "./site";
+import { absoluteUrl, siteHost, siteUrl } from "./site";
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -84,5 +84,23 @@ describe("absoluteUrl", () => {
     expect(absoluteUrl("/sitemap.xml")).toBe(
       "http://localhost:3000/sitemap.xml",
     );
+  });
+});
+
+describe("siteHost", () => {
+  it("returns the bare host from SITE_URL", () => {
+    vi.stubEnv("SITE_URL", "https://blog.williamchastain.com");
+    expect(siteHost()).toBe("blog.williamchastain.com");
+  });
+
+  it("drops the scheme and any trailing slash", () => {
+    vi.stubEnv("SITE_URL", "https://example.com/");
+    expect(siteHost()).toBe("example.com");
+  });
+
+  it("includes a non-default port", () => {
+    vi.stubEnv("SITE_URL", "");
+    vi.stubEnv("VERCEL_PROJECT_PRODUCTION_URL", "");
+    expect(siteHost()).toBe("localhost:3000");
   });
 });
