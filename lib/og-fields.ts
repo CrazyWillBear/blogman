@@ -12,10 +12,10 @@ import { formatDate } from "./format";
  */
 export function ogTitleSize(title: string): number {
   const len = title.length;
-  if (len <= 30) return 76;
-  if (len <= 48) return 66;
-  if (len <= 72) return 56;
-  return 48;
+  if (len <= 30) return 88;
+  if (len <= 48) return 76;
+  if (len <= 72) return 64;
+  return 54;
 }
 
 /** The tag row: the first three tags, middot-joined (extras dropped). */

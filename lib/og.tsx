@@ -77,7 +77,8 @@ function monogram(size: number) {
   );
 }
 
-/** Per-post body: the post header, faithfully — chrome up top, mark at foot. */
+/** Per-post body: the post header, faithfully — kicker/tags + mark up top,
+ *  domain stamp at foot. */
 function postBody(p: Extract<OgCardProps, { variant: "post" }>) {
   return [
     <div key="head" style={{ display: "flex", flexDirection: "column" }}>
@@ -87,19 +88,32 @@ function postBody(p: Extract<OgCardProps, { variant: "post" }>) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          marginTop: 16,
-          fontSize: 24,
-          textTransform: "uppercase",
-          letterSpacing: "0.16em",
+          marginTop: 20,
         }}
       >
-        <div style={{ display: "flex", color: KICKER, fontWeight: 600 }}>{p.kicker}</div>
-        {p.tags && <div style={{ display: "flex", color: FAINT }}>{p.tags}</div>}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            textTransform: "uppercase",
+            letterSpacing: "0.16em",
+          }}
+        >
+          <div style={{ display: "flex", fontSize: 30, color: KICKER, fontWeight: 600 }}>
+            {p.kicker}
+          </div>
+          {p.tags && (
+            <div style={{ display: "flex", marginTop: 10, fontSize: 26, color: FAINT }}>
+              {p.tags}
+            </div>
+          )}
+        </div>
+        {monogram(96)}
       </div>
       <div
         style={{
           display: "flex",
-          marginTop: 30,
+          marginTop: 28,
           fontSize: ogTitleSize(p.title),
           fontWeight: 600,
           lineHeight: 1.05,
@@ -109,29 +123,36 @@ function postBody(p: Extract<OgCardProps, { variant: "post" }>) {
       >
         {p.title}
       </div>
-      <div style={{ display: "flex", marginTop: 22, fontSize: 26, color: MUTED }}>
+      <div style={{ display: "flex", marginTop: 40, fontSize: 32, color: MUTED }}>
         {p.byline}
       </div>
       <div style={{ display: "flex", width: "100%", height: 2, backgroundColor: INK, marginTop: 24 }} />
     </div>,
-    <div key="foot" style={{ display: "flex", alignItems: "center" }}>
-      {monogram(56)}
-      <div style={{ display: "flex", marginLeft: 18, fontSize: 26, color: MUTED }}>
-        {p.domain}
-      </div>
+    <div key="foot" style={{ display: "flex", fontSize: 22, color: MUTED }}>
+      {p.domain}
     </div>,
   ];
 }
 
-/** Home body: short accent rule, prominent mark, name, tagline; domain at foot. */
+/** Home body: short accent rule + prominent mark up top, then name, tagline;
+ *  domain at foot. */
 function homeBody(p: Extract<OgCardProps, { variant: "home" }>) {
   return [
     <div key="head" style={{ display: "flex", flexDirection: "column" }}>
-      <div style={{ display: "flex", width: 48, height: 3, backgroundColor: ACCENT, marginBottom: 30 }} />
-      <div style={{ display: "flex", marginBottom: 30 }}>{monogram(84)}</div>
       <div
         style={{
           display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <div style={{ display: "flex", width: 64, height: 3, backgroundColor: ACCENT }} />
+        {monogram(108)}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          marginTop: 40,
           fontSize: ogTitleSize(p.title),
           fontWeight: 600,
           lineHeight: 1.05,
@@ -144,9 +165,9 @@ function homeBody(p: Extract<OgCardProps, { variant: "home" }>) {
       <div
         style={{
           display: "flex",
-          marginTop: 22,
+          marginTop: 24,
           maxWidth: 820,
-          fontSize: 30,
+          fontSize: 34,
           lineHeight: 1.4,
           color: MUTED,
         }}
@@ -154,7 +175,7 @@ function homeBody(p: Extract<OgCardProps, { variant: "home" }>) {
         {p.tagline}
       </div>
     </div>,
-    <div key="foot" style={{ display: "flex", fontSize: 26, color: MUTED }}>
+    <div key="foot" style={{ display: "flex", fontSize: 22, color: MUTED }}>
       {p.domain}
     </div>,
   ];

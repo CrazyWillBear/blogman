@@ -4,23 +4,23 @@ import { ogByline, ogTags, ogTitleSize } from "./og-fields";
 
 describe("ogTitleSize", () => {
   it("uses the largest size for short titles", () => {
-    expect(ogTitleSize("Hearth")).toBe(76);
-    expect(ogTitleSize("x".repeat(30))).toBe(76); // boundary
+    expect(ogTitleSize("Hearth")).toBe(88);
+    expect(ogTitleSize("x".repeat(30))).toBe(88); // boundary
   });
 
   it("steps down once past 30 characters", () => {
-    expect(ogTitleSize("x".repeat(31))).toBe(66);
-    expect(ogTitleSize("x".repeat(48))).toBe(66); // boundary
+    expect(ogTitleSize("x".repeat(31))).toBe(76);
+    expect(ogTitleSize("x".repeat(48))).toBe(76); // boundary
   });
 
   it("steps down again past 48 characters", () => {
-    expect(ogTitleSize("x".repeat(49))).toBe(56);
-    expect(ogTitleSize("x".repeat(72))).toBe(56); // boundary
+    expect(ogTitleSize("x".repeat(49))).toBe(64);
+    expect(ogTitleSize("x".repeat(72))).toBe(64); // boundary
   });
 
   it("uses the smallest size for very long titles", () => {
-    expect(ogTitleSize("x".repeat(73))).toBe(48);
-    expect(ogTitleSize("x".repeat(200))).toBe(48);
+    expect(ogTitleSize("x".repeat(73))).toBe(54);
+    expect(ogTitleSize("x".repeat(200))).toBe(54);
   });
 });
 
